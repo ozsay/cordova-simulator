@@ -1,7 +1,8 @@
 {
   "name": "cordova-simulator",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "homepage": "https://github.com/ozsay/cordova-simulator",
+  "description": "Cordova plugins simulator, mainly for browsers",
   "authors": [
     "ozsayag <ozsayag@gmail.com>"
   ],

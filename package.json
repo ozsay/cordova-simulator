@@ -1,7 +1,7 @@
 {
   "name": "cordova-simulator",
-  "version": "0.1.2",
-  "description": "",
+  "version": "0.1.4",
+  "description": "Cordova plugins simulator, mainly for browsers",
   "preferGlobal": true,
   "bin": "./bin/cli.js",
   "repository": {
@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/ozsay/cordova-simulator",
   "dependencies": {
-    "express.io": "^1.1.13"
+    "express.io": "^1.1.13",
+    "open": "0.0.5",
+    "yargs": "^1.3.3"
   }
 }
