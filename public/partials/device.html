@@ -1,0 +1,9 @@
+<div>
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{deviceId}} <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="toggleOrientation()">{{isLandscape ? 'Portrait' : 'Landscape'}}</a></li>
+        </ul>
+    </div>
+    <iframe id="{{deviceId}}" src="/www"></iframe>
+</div>

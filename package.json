@@ -1,0 +1,27 @@
+{
+  "name": "cordova-simulator",
+  "version": "0.1.2",
+  "description": "",
+  "preferGlobal": true,
+  "bin": "./bin/cli.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ozsay/cordova-simulator.git"
+  },
+  "author": "ozsayag <ozsayag@gmail.com> (https://github.com/ozsay/)",
+  "keywords": [
+    "cordova",
+    "ionic",
+    "mobile",
+    "mock",
+    "simulator"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ozsay/cordova-simulator/issues"
+  },
+  "homepage": "https://github.com/ozsay/cordova-simulator",
+  "dependencies": {
+    "express.io": "^1.1.13"
+  }
+}

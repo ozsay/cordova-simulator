@@ -1,0 +1,27 @@
+body {
+    padding-top: 70px;
+}
+
+.device {
+    display: block !important;
+    float: left !important;
+    padding: 30px !important;
+}
+
+.device .dropdown {
+    margin: 5px;
+}
+
+.device iframe {
+    border: none;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
+}
+
+.presetsConfig-width, .presetsConfig-height {
+    width: 80px !important;
+}
+
+#presetsConfig .modal-body, #devicesConfig .modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+}

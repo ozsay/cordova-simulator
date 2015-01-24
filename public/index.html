@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="cordovaSimulator">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cordova Simulator</title>
+        <link href="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        <link href="lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+        <link href="css/app.css" rel="stylesheet">
+    </head>
+    <body ng-controller="mainController">
+        <ng-include src="'partials/navbar.html'"></ng-include>
+        <div class="container">
+            <ul class="list-inline">
+                <li class="device" ng-repeat="device in devices"><device device-id="{{device.id}}"></device></li>
+            </ul>
+        </div>
+        <ng-include src="'partials/devicesConfig.html'"></ng-include>
+        <ng-include src="'partials/presetsConfig.html'"></ng-include>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="lib/jquery/dist/jquery.js"></script>
+        <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="lib/angular/angular.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/services.js"></script>
+        <script src="js/controllers.js"></script>
+        <script src="js/filters.js"></script>
+        <script src="js/directives.js"></script>
+        <script src="js/plugins.js"></script>
+    </body>
+</html>
