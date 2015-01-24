@@ -24,5 +24,5 @@ Options:
 | ------------- | ------------------- | -------------- |
 | -p, --port    | The server's port   | 80             |
 | -l            | Launch in browser   | false          |
-| -h, --help    | Show help           |                |
-| -v, --version | Show version number |                |
+| -h, --help    | Show help           | &nbsp;         |
+| -v, --version | Show version number | &nbsp;         |
