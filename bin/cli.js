@@ -23,7 +23,7 @@ var argv = require('yargs')
 var run = require('../');
 
 run({
-    dir: argv._[0],
+    dir: argv._[0] || 'www/',
     port: argv.port,
     launch: argv.l
 });

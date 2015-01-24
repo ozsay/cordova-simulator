@@ -24,5 +24,6 @@ Options:
 | ------------- | ------------------- | -------------- |
 | -p, --port    | The server's port   | 80             |
 | -l            | Launch in browser   | false          |
+| folder        | App folder          | 'www/'         |
 | -h, --help    | Show help           | &nbsp;         |
 | -v, --version | Show version number | &nbsp;         |
