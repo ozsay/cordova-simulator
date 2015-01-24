@@ -10,7 +10,7 @@ var argv = require('yargs')
     })
     .options('l', {
         default : false,
-        describe: 'Launching browser'
+        describe: 'Launch in browser'
     })
     .help('h').alias('h', 'help')
     .version(version, 'v').alias('v', 'version')
