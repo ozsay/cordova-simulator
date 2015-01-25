@@ -26,16 +26,16 @@ angular.module('cordovaSimulator.plugins', [])
 });
 
 angular.module('cordovaSimulator.plugins')
-.provider('platformClass', function(pluginsProvider) {
+.provider('plugins.platformClass', function(pluginsProvider) {
     pluginsProvider.register('platformClass', this);
     
     this.$get = [function() {
         return {
             wire: function(obj) {
                 if (obj.window.ionic != undefined) {
-                    obj.window.ionic.Platform.setPlatform(obj.preset.platform);
+                    obj.window.ionic.Platform.setPlatform(obj.device.preset.platform);
                 } else {
-                    var platformClass = "platform-" + obj.preset.platform;
+                    var platformClass = "platform-" + obj.device.preset.platform;
                     obj.iframe.contents().find('body').removeClass(platformClass).addClass(platformClass);
                 }
             }
@@ -44,7 +44,7 @@ angular.module('cordovaSimulator.plugins')
 });
 
 angular.module('cordovaSimulator.plugins')
-.provider('reload', function(pluginsProvider) {
+.provider('plugins.reload', function(pluginsProvider) {
     pluginsProvider.register('reload', this);
     
     this.$get = ['socket', function(socket) {
@@ -53,6 +53,29 @@ angular.module('cordovaSimulator.plugins')
                 socket.on('reload', function() {
                     obj.iframe.attr("src", obj.iframe.attr("src"));
                 });
+            }
+        };
+    }];
+});
+
+angular.module('cordovaSimulator.plugins')
+.provider('plugins.device', function(pluginsProvider) {
+    pluginsProvider.register('device', this);
+    
+    function Device(device) {
+        this.available = true;
+        this.platform = device.preset.platform;
+        this.version = device.preset.platformVersion;
+        this.uuid = '1A2FDEF0-C09D-4DB4-A8BE-7EC2F4A6E49A';
+        this.cordova = '4.2.0';
+        this.model = device.preset.model;
+    }
+    
+    this.$get = [function() {
+        return {
+            wire: function(obj) {
+                obj.window.device = 
+                    new Device(obj.device);
             }
         };
     }];

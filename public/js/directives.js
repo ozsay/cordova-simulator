@@ -7,13 +7,12 @@ angular.module('cordovaSimulator.directives', [])
     scope: {
         deviceId: '@deviceId'
     },
-    controller: function($scope, device, configuration) {
-        $scope.device = device.get($scope.deviceId);
-        $scope.preset = configuration.get().presets[$scope.device.preset];
+    controller: function($scope, configuration) {
+        $scope.device = configuration.get().devices[$scope.deviceId];
         
-        $scope.width = $scope.preset.width;
-        $scope.height = $scope.preset.height;
-        $scope.platform = $scope.preset.platform;
+        $scope.width = $scope.device.preset.width;
+        $scope.height = $scope.device.preset.height;
+        $scope.platform = $scope.device.preset.platform;
         $scope.isLandscape = $scope.width > $scope.height;
         
         $scope.toggleOrientation = function() {
@@ -23,20 +22,20 @@ angular.module('cordovaSimulator.directives', [])
             $scope.isLandscape = !$scope.isLandscape;
         }
         
-        $scope.$watch('preset.width', function(value) {
+        $scope.$watch('device.preset.width', function(value) {
             if ($scope.isLandscape)
                 $scope.height = value;
             else $scope.width = value;
         });
         
         
-        $scope.$watch('preset.height', function(value) {
+        $scope.$watch('device.preset.height', function(value) {
             if ($scope.isLandscape)
                 $scope.width = value;
             else $scope.height = value;
         });
         
-        $scope.$watch('preset.platform', function(value) {
+        $scope.$watch('device.preset.platform', function(value) {
             $scope.platform = value;
         });
     },
@@ -48,8 +47,7 @@ angular.module('cordovaSimulator.directives', [])
             plugins.wire({
                 window: iframeWindow,
                 iframe: iframe,
-                device: scope.device,
-                preset: scope.preset
+                device: scope.device
             });
         });
         
