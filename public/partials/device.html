@@ -1,9 +1,11 @@
 <div>
     <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{deviceId}} <span class="caret"></span></button>
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{device.id}} <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="reload()">Reload</a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="toggleOrientation()">{{isLandscape ? 'Portrait' : 'Landscape'}}</a></li>
         </ul>
     </div>
-    <iframe id="{{deviceId}}" src="/www"></iframe>
+    <div class="deviceWidget" ng-if="widget != undefined" ng-include="widget"></div>
+    <iframe id="{{app.name + '_' + device.id}}" ng-style="null | phoneOrientation:device.preset.width:device.preset.height:isLandscape"></iframe>
 </div>

@@ -6,13 +6,18 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-  expanded="false">Configuration <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">App</a></li>
+                        <li><a href="#" ng-repeat="app in apps">{{app.name}}</a></li>
+                        <li class="divider"></li>
                         <li><a href="#" data-toggle="modal" data-target="#devicesConfig">Devices</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#presetsConfig">Presets</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#presetsConfig">Plugins</a></li>
                         <li class="divider"></li>
                         <li><a href="#" ng-click="loadFromGist()">Load from gist</a></li>
                         <li><a href="#" ng-click="save()">Save</a></li>
                         <li><a href="#" ng-click="reset()">Reset</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" input-file="import">Import</a></li>
+                        <li><a href="#" ng-click="export()">Export</a></li>
                     </ul>
                 </li>
             </ul>

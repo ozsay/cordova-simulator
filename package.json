@@ -23,7 +23,9 @@
   "homepage": "https://github.com/ozsay/cordova-simulator",
   "dependencies": {
     "express.io": "^1.1.13",
+    "mime": "^1.2.11",
     "open": "0.0.5",
+    "recursive-readdir": "^1.2.1",
     "yargs": "^1.3.3"
   }
 }

@@ -2,7 +2,7 @@
 
 Web application for simulating cordova plugins.
 
-The app is a substitute for `cordova serve` (`ionic serve` for ionic users).
+The app is an alternative for `cordova serve` (`ionic serve` for ionic users).
 
 ## Installing
 
@@ -15,18 +15,20 @@ $ npm install -g cordova-simulator
 ## Usage
 
 ```bash
-$ cordova-simulator [-l] [-p num | --port=num] [folder]
+$ cordova-simulator [-l | --launch] [-d | --demo] [-p num | --port=num] [-a app1[,app2...] | --apps=app1[,app2...]] [-r resource_folder1[,resource_folder2...] | --resources=resource_folder1[,resource_folder2...]]
 ```
 
 Options:
 
-| Param         | Description         | Default Value  |
-| ------------- | ------------------- | -------------- |
-| -p, --port    | The server's port   | 80             |
-| -l            | Launch in browser   | false          |
-| folder        | App folder          | 'www/'         |
-| -h, --help    | Show help           | &nbsp;         |
-| -v, --version | Show version number | &nbsp;         |
+| Param           | Description            | Default Value  |
+| --------------- | ---------------------- | -------------- |
+| -p, --port      | The server's port      | 80             |
+| -l, --launch    | Launch in browser      | false          |
+| -d, --demo      | Include the demo       | false          |
+| -a, --apps      | Apps folders           | ['www/']       |
+| -r, --resources | Resources folders      | []             |
+| -h, --help      | Show help              | &nbsp;         |
+| -v, --version   | Show version number    | &nbsp;         |
 
 ## Custom behavior
 
@@ -42,4 +44,9 @@ The simulator will reload the devices whenever a file is changed in the app fold
 
 ## Supported plugins
 
+- [App Version](https://github.com/whiteoctober/cordova-plugin-app-version)
+- [Clipboard](https://github.com/VersoSolutions/CordovaClipboard)
 - [Device](https://github.com/apache/cordova-plugin-device) *
+- [Vibration](https://github.com/apache/cordova-plugin-vibration) *
+
+`* official Apache Cordova Plugin`

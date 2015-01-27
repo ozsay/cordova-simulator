@@ -3,26 +3,28 @@ var path = require('path');
 var express = require('express.io');
 var open = require("open");
 
-var reload = require('./lib/reload');
+var appsServing = require('./lib/apps');
+var resourcesServing = require('./lib/resources');
 
-module.exports = function(obj) {
+module.exports = function(properties) {
+    if (properties.demo) {
+        properties.apps.push({
+            name: 'demo',
+            path: path.join(__dirname, 'demo')
+        });
+    }
+    
     var app = express();
-
     app.http().io();
 
-    app.get('/www/cordova.js', function (req, res) {
-        res.set('Content-Type', 'application/javascript');
-        res.end();
-    });
-
-    app.use('/www', express.static(obj.dir));
-
+    appsServing(app, properties.apps, true);
+    resourcesServing(app, properties.resources);
+    
     app.use(express.static(path.join(__dirname, 'public')));
 
-    reload(app, obj.dir);
-    app.listen(obj.port);
+    app.listen(properties.port);
     
-    if (obj.launch) {
-        open("http://localhost:" + obj.port);
+    if (properties.launch) {
+        open("http://localhost:" + properties.port);
     }
 }

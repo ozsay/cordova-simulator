@@ -12,12 +12,16 @@ body {
     margin: 5px;
 }
 
+.device .deviceWidget {
+    position: absolute;
+}
+
 .device iframe {
     border: none;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
 }
 
-.presetsConfig-width, .presetsConfig-height {
+.presetsConfig-width, .presetsConfig-height, .presetsConfig-version, .presetsConfig-model {
     width: 80px !important;
 }
 

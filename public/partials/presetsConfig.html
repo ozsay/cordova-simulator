@@ -1,4 +1,4 @@
-<div class="modal fade" id="presetsConfig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="presetsConfig">
+<div class="modal fade" id="presetsConfig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,27 +6,8 @@
                 <h4 class="modal-title" id="myModalLabel">Presets Configuration</h4>
             </div>
             <div class="modal-body">
-                <div class="panel panel-default" ng-repeat="(name, preset) in presets">
-                    <div class="panel-heading">{{name}}</div>
-                    <div class="panel-body">
-                        <form class="form-inline" >
-                            <div class="form-group">
-                                <label>Platform</label>
-                                <select class="form-control" ng-model="preset.platform" ng-options="p as p for p in platforms"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>Width</label>
-                                <input type="number" class="form-control presetsConfig-width" placeholder="Width" ng-model="preset.width">
-                            </div>
-                            <div class="form-group">
-                                <label>Height</label>
-                                <input type="number" class="form-control presetsConfig-height" placeholder="Height" ng-model="preset.height">
-                            </div>
-                            <button class="btn btn-default pull-right" ng-click="deletePreset(name)">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                
+                <preset-config new></preset-config>
+                <preset-config ng-repeat="(name, preset) in presets"></preset-config>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
