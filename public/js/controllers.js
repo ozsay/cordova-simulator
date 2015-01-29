@@ -1,13 +1,18 @@
-'use strict';
+/*global define */
+/*jslint white: true */
 
-angular.module('cordovaSimulator.controllers', [])
-.controller('mainController', ['$scope', '$location', 'configuration', 'api', function($scope, $location, configuration, api) {
-    $scope.save = configuration.save;
-    $scope.reset = configuration.reset;
-    $scope.loadFromGist = configuration.loadFromGist;
-    
-    $scope.export = configuration.export;
-    $scope.import = function(files) {
-        configuration.import(JSON.parse(files[0].content));        
-    };
-}]);
+define(['angular'], function(angular) {
+    'use strict';
+
+    angular.module('cordovaSimulator.controllers', [])
+    .controller('mainController', ['$scope', '$location', 'configuration', function($scope, $location, configuration) {
+        $scope.save = configuration.save;
+        $scope.reset = configuration.reset;
+        $scope.loadFromGist = configuration.loadFromGist;
+
+        $scope.exportConfiguration = configuration.exportConfiguration;
+        $scope.importConfiguration = function(files) {
+            configuration.importConfiguration(JSON.parse(files[0].content));        
+        };
+    }]);
+});

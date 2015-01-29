@@ -1,0 +1,12 @@
+<ion-view view-title="Battery Status">
+    <ion-content>
+        <div ng-class="['list', 'card', status]">
+            <div class="padding">
+                The device is{{isPlugged ? '' : ' not'}} plugged in.
+            </div>
+            <div class="padding">
+                Battery level is {{battery}}
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

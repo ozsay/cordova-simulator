@@ -20,6 +20,9 @@
     "bootstrap": "~3.3.2",
     "csshake": "*",
     "Blob": "*",
-    "FileSaver": "*"
+    "FileSaver": "*",
+    "requirejs": "~2.1.15",
+    "requirejs-domready": "~2.0.1",
+    "require-css": "~0.1.8"
   }
 }

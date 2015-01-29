@@ -1,6 +1,6 @@
 <div class="panel panel-default">
-    <div class="panel-heading" ng-if="new != true">{{preset.name}}</div>
-    <div class="panel-heading" ng-if="new == true"><input type="text" class="form-control" ng-model="preset.name"></div>
+    <div class="panel-heading" ng-if="newPreset != true">{{preset.name}}</div>
+    <div class="panel-heading" ng-if="newPreset == true"><input type="text" class="form-control" ng-model="preset.name"></div>
     <div class="panel-body">
         <form class="form-inline">
             <div class="form-group">
@@ -25,8 +25,8 @@
                 <label>Model</label>
                 <input type="text" class="form-control presetsConfig-model" ng-model="preset.model">
             </div>
-            <button class="btn btn-default pull-right" ng-click="deletePreset()" ng-if="new != true">Delete</button>
-            <button class="btn btn-default pull-right" ng-click="addPreset()" ng-if="new == true">Add</button>
+            <button class="btn btn-default pull-right" ng-click="deletePreset()" ng-if="newPreset != true">Delete</button>
+            <button class="btn btn-default pull-right" ng-click="addPreset()" ng-if="newPreset == true">Add</button>
         </form>
     </div>
 </div>

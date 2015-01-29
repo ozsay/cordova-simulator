@@ -21,7 +21,8 @@ var argv = require('yargs')
     })
     .options('a', {
         alias : 'apps',
-        default : ['www'],
+        //default : ['www'],
+        default : [],
         describe: 'Serve the specified apps'
     })
     .options('r', {

@@ -22,6 +22,14 @@ angular.module('demo.plugins', [])
     clipboard: {
         title: 'Clipboard',
         controller: true
+    },
+    flashlight: {
+        title: 'Flashlight',
+        controller: true
+    },
+    batterystatus: {
+        title: 'Battery Status',
+        controller: true
     }
 })
 .controller('deviceController', function($scope, $cordovaDevice) {
@@ -49,4 +57,26 @@ angular.module('demo.plugins', [])
     $scope.vibrate = function(duration) {
         $cordovaVibration.vibrate(duration);
     }
+})
+.controller('flashlightController', function($scope, $cordovaFlashlight) {
+    $scope.on = $cordovaFlashlight.switchOn;
+    $scope.off = $cordovaFlashlight.switchOff;
+    $scope.toggle = $cordovaFlashlight.toggle;
+})
+.controller('batterystatusController', function($scope, $rootScope, $cordovaBatteryStatus) {
+    window.addEventListener("batterystatus", onBatteryStatus, false);
+
+function onBatteryStatus(info) {
+    console.log(info);
+    // Handle the online event
+    console.log("Level: " + info.level + " isPlugged: " + info.isPlugged);
+}
+    
+    
+    
+    $rootScope.$on('$cordovaBatteryStatus:status', function (event, result) {
+        $scope.level = result.info.level;
+        $scope.isPlugged = result.info.isPlugged;
+        $scope.status = result.info.status;
+    });
 });

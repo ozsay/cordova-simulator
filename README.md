@@ -47,6 +47,7 @@ The simulator will reload the devices whenever a file is changed in the app fold
 - [App Version](https://github.com/whiteoctober/cordova-plugin-app-version)
 - [Clipboard](https://github.com/VersoSolutions/CordovaClipboard)
 - [Device](https://github.com/apache/cordova-plugin-device) *
+- [Flashlight](https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin)
 - [Vibration](https://github.com/apache/cordova-plugin-vibration) *
 
 `* official Apache Cordova Plugin`

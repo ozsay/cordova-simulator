@@ -1,14 +1,22 @@
-'use strict';
+/*global define */
+/*jslint white: true */
 
-angular.module('cordovaSimulator', [
-    'cordovaSimulator.filters',
-    'cordovaSimulator.services',
-    'cordovaSimulator.directives',
-    'cordovaSimulator.controllers',
-    'cordovaSimulator.plugins'
-])
-.run(['configuration', '$rootScope', function(configuration, $rootScope) {
-    configuration.load().then(function() {
-        $rootScope.appReady = true;
-    });
-}]);
+define(['angular', 'app/services', 'app/directives', 'app/filters', 'app/controllers', 'app/plugins'], function(angular) {
+    'use strict';
+
+    var app = angular.module('cordovaSimulator', [
+        'cordovaSimulator.api',
+        'cordovaSimulator.filters',
+        'cordovaSimulator.services',
+        'cordovaSimulator.directives',
+        'cordovaSimulator.controllers',
+        'cordovaSimulator.plugins'
+    ])
+    .run(['configuration', '$rootScope', function(configuration, $rootScope) {
+        configuration.load().then(function() {
+            $rootScope.appReady = true;
+        });
+    }]);
+    
+    return app;
+});
