@@ -98,5 +98,6 @@ run({
     launch: argv.launch,
     demo: argv.demo,
     apps: argv.apps,
-    resources: argv.resources
+    resources: argv.resources,
+    dir: 'dist'
 });

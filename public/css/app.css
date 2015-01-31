@@ -79,7 +79,7 @@ body {
     width: 80px !important;
 }
 
-#presetsConfig .modal-body, #devicesConfig .modal-body {
+.presetsConfig , .devicesConfig {
     max-height: 400px;
     overflow-y: auto;
 }

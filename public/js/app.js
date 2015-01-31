@@ -1,7 +1,7 @@
 /*global define */
 /*jslint white: true */
 
-define(['angular', 'app/services', 'app/directives', 'app/filters', 'app/controllers', 'app/plugins'], function(angular) {
+define(['angular', 'app/services', 'app/directives', 'app/filters', 'app/controllers', 'plugins/app'], function(angular) {
     'use strict';
 
     var app = angular.module('cordovaSimulator', [

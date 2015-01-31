@@ -8,9 +8,9 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#" ng-repeat="app in apps">{{app.name}}</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" data-toggle="modal" data-target="#devicesConfig">Devices</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#presetsConfig">Presets</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#pluginsConfig">Plugins</a></li>
+                        <li><a href="#" show-modal="Devices Config" modal-template="partials/devicesConfig.html" modal-class="devicesConfig">Devices</a></li>
+                        <li><a href="#" show-modal="Presets Config" modal-template="partials/presetsConfig.html" modal-class="presetsConfig">Presets</a></li>
+                        <li><a href="#">Plugins</a></li>
                         <li class="divider"></li>
                         <li><a href="#" ng-click="loadFromGist()">Load from gist</a></li>
                         <li><a href="#" ng-click="save()">Save</a></li>

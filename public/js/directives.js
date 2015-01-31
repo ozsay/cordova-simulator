@@ -26,7 +26,8 @@ define(['angular', 'jquery'], function(angular, $) {
         link: function(scope, element, attrs) {
             var iframe = element.find('iframe');
             scope.appName = attrs.appName;
-
+            scope.bounds = {width: scope.device.preset.width, height: scope.device.preset.height};
+            
             iframe.attr("src", '/apps/' + scope.appName);
 
             scope.reload = function() {
@@ -34,18 +35,25 @@ define(['angular', 'jquery'], function(angular, $) {
             };
 
             iframe.on('load', function() {
-                /*var iframeWindow = document.getElementById(scope.appName + '_' + scope.device.id).contentWindow;
-                plugins.wire({
+                var iframeWindow = document.getElementById(scope.appName + '_' + scope.device.id).contentWindow,
+                    obj = {
                     window: iframeWindow,
                     iframe: iframe,
                     device: scope.devices[scope.device.id],
                     app: scope.apps[scope.appName],
                     scope: scope
+                };
+                
+                iframeWindow.cordova.require('cordova/platform').id = scope.device.preset.platform;
+                iframeWindow.simulatorExec = function(success, fail, service, action, args) {
+                    plugins.execCommand(obj, success, fail, service, action, args);
+                };
+                
+                iframeWindow.cordova.require('cordova/channel').onCordovaReady.subscribe(function() {
+                    iframeWindow.cordova.require('cordova/channel').onCordovaInfoReady.fire();
                 });
                 
-                var event = iframeWindow.document.createEvent('Events');
-                event.initEvent('deviceready', false, false);
-                iframeWindow.document.dispatchEvent(event);*/
+                iframeWindow.cordova.require('cordova/channel').onNativeReady.fire();
             });
 
             scope.$watch('device.preset.platform', function(value) {
@@ -109,14 +117,54 @@ define(['angular', 'jquery'], function(angular, $) {
 
                     if (element.find('.alert').length > 3) {
                         $('.alert:last-child').on('closed.bs.alert', function () {
-                            createAlert(childScope);
-                            childScope.$digest();
+                            childScope.$apply(function() {
+                                createAlert(childScope);
+                            });
                         });
 
                         $('.alert:last-child').alert('close');
                     } else {
                         createAlert(childScope);
                     }
+                });
+            }
+        };
+    }])
+    .directive('showModal', ['$compile', '$rootScope', function($compile, $rootScope) {
+        var template = 
+'<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalLabel" aria-hidden="true">' +
+    '<div class="modal-dialog">' +
+        '<div class="modal-content">' +
+            '<div class="modal-header">' +
+             '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> ' +
+                '<h4 class="modal-title" id="showModalLabel" ng-bind="title"></h4>' +
+            '</div>' +
+            '<div class="modal-body" ng-include="template" ng-class="class">' +
+            '</div>' +
+            '<div class="modal-footer">' +
+                '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>' +
+            '</div>' +
+        '</div>' +
+    '</div>' +
+'</div>',
+        widgetScope;
+        
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                var body = $('body');
+                
+                if (body.find('#showModal').length === 0) {
+                    widgetScope = $rootScope.$new(false);
+                    body.append($compile(template)(widgetScope));
+                }
+                
+                $(element).attr({'data-toggle':"modal", 'data-target':"#showModal"}).click(function() {
+                    widgetScope.$apply(function() {
+                        widgetScope.title = attrs.showModal;
+                        widgetScope.template = attrs.modalTemplate;
+                        widgetScope.class = attrs.modalClass;
+                    });
                 });
             }
         };

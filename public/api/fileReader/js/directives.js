@@ -26,9 +26,9 @@ define(['angular', 'jquery', 'api/fileReader/js/services'], function(angular, $)
                     api.read(e, scope.inputFile);
                 });
 
-                element.after(input);
+                $(element).after(input);
 
-                element.click(function () {
+                $(element).click(function () {
                     input.focus().click();
                 });
             }

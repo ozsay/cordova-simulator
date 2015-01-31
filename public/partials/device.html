@@ -28,7 +28,7 @@
         </div>
         <div>
             <div class="deviceWidget" ng-if="widget != undefined" ng-include="widget"></div>
-            <iframe id="{{app.name + '_' + device.id}}" ng-style="null | deviceOrientation:device.preset.width:device.preset.height:isLandscape"></iframe>
+            <iframe id="{{app.name + '_' + device.id}}" ng-style="bounds | deviceOrientation:isLandscape"></iframe>
         </div>
     </div>
 </div>

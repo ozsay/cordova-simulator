@@ -16,3 +16,15 @@
 .platform-wp8 .platformClass {
     background: green;
 }
+
+.battery.ok {
+    background: green;
+}
+
+.battery.low {
+    background: yellow;
+}
+
+.battery.critical {
+    background: red;
+}

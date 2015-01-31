@@ -33,11 +33,11 @@ define(['angular'], function(angular) {
                 android: {
                     id: 'android',
                     preset: 'genericAndroid'
-                },
+                }/*,
                 iphone: {
                     id: 'iphone',
                     preset: 'genericIphone'
-                }
+                }*/
             }
         };
 

@@ -2,7 +2,7 @@
 
 Web application for simulating cordova plugins.
 
-The app is an alternative for `cordova serve` (`ionic serve` for ionic users).
+The app is an alternative to `cordova serve` (`ionic serve` for ionic users).
 
 ## Installing
 
@@ -34,7 +34,7 @@ Options:
 
 #### # platform classes
 
-Based on the platform, the simulator will add `'platform-*'` classes to the body of the device.
+Based on the platform, the simulator will add `'platform-*'` classes to the body of the app html.
 
 #### # live reload
 
@@ -45,6 +45,7 @@ The simulator will reload the devices whenever a file is changed in the app fold
 ## Supported plugins
 
 - [App Version](https://github.com/whiteoctober/cordova-plugin-app-version)
+- [Battery Status](https://github.com/apache/cordova-plugin-battery-status) *
 - [Clipboard](https://github.com/VersoSolutions/CordovaClipboard)
 - [Device](https://github.com/apache/cordova-plugin-device) *
 - [Flashlight](https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin)

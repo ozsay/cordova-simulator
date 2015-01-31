@@ -4,8 +4,8 @@
             <div class="padding">
                 The device is{{isPlugged ? '' : ' not'}} plugged in.
             </div>
-            <div class="padding">
-                Battery level is {{battery}}
+            <div ng-class="['padding', 'battery', status]">
+                Battery level is {{level}}
             </div>
         </div>
     </ion-content>

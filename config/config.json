@@ -1,0 +1,85 @@
+{
+    "requirejs": {
+        "baseUrl": "/",
+        "map": {
+            "*": {
+                "style": "lib/require-css/css"
+            }
+        },
+        "paths": {
+            "app": "/js",
+            "api": "/api",
+            "plugins": "/plugins"
+        },
+        "shim": {
+            "angular": {
+                "exports": "angular",
+                "deps": [
+                    "jquery"
+                ]
+            },
+            "bootstrap": {
+                "deps": [
+                    "jquery"
+                ] 
+            },
+            "Blob": {
+                "exports": "Blob"
+            }
+        }
+    },
+    "libs": {
+        "dev": {
+            "socketio": "socket.io/socket.io",
+            "domReady": "lib/requirejs-domready/domReady",
+            "jquery": "lib/jquery/dist/jquery",
+            "bootstrap": "lib/bootstrap/dist/js/bootstrap",
+            "angular": "lib/angular/angular",
+            "Blob": "lib/Blob/Blob",
+            "saveAs": "lib/FileSaver/FileSaver"
+        },
+        "prod": {
+            "socketio": "socket.io/socket.io",
+            "domReady": "lib/requirejs-domready/domReady",
+            "jquery": "lib/jquery/dist/jquery",
+            "bootstrap": "lib/bootstrap/dist/js/bootstrap",
+            "angular": "lib/angular/angular",
+            "Blob": "lib/Blob/Blob",
+            "saveAs": "lib/FileSaver/FileSaver"
+        },
+        "site": {
+            "domReady": "lib/requirejs-domready/domReady",
+            "jquery": "lib/jquery/dist/jquery",
+            "bootstrap": "lib/bootstrap/dist/js/bootstrap",
+            "angular": "lib/angular/angular",
+            "Blob": "lib/Blob/Blob",
+            "saveAs": "lib/FileSaver/FileSaver"
+        }
+    },
+    "css": [
+        "style!lib/bootstrap/dist/css/bootstrap", 
+        "style!lib/bootstrap/dist/css/bootstrap-theme", 
+        "style!lib/csshake/csshake",
+        "style!css/app"
+    ],
+    "mainDeps": [
+        "domReady!", 
+        "angular",
+        "app/app",
+        "bootstrap"
+    ],
+    "apis": [
+        "fileReader", 
+        "storage", 
+        "fileSaver", 
+        "server"
+    ],
+    "plugins": {
+        "clipboard": {"id": "com.verso.cordova.clipboard", "url": "https://github.com/VersoSolutions/CordovaClipboard"},
+        "flashlight": {"id": "nl.x-services.plugins.flashlight", "url": "https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin.git"},
+        "batterystatus": {"id": "org.apache.cordova.battery-status"},
+        "device": {"id": "org.apache.cordova.device"},
+        "vibration": {"id": "org.apache.cordova.vibration"},
+        "appversion": {"id": "uk.co.whiteoctober.cordova.appversion", "url": "https://github.com/whiteoctober/cordova-plugin-app-version.git"}
+    }
+}

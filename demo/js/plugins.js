@@ -64,19 +64,19 @@ angular.module('demo.plugins', [])
     $scope.toggle = $cordovaFlashlight.toggle;
 })
 .controller('batterystatusController', function($scope, $rootScope, $cordovaBatteryStatus) {
-    window.addEventListener("batterystatus", onBatteryStatus, false);
+    $rootScope.$on('$cordovaBatteryStatus:status', function (e, result) {
+        $scope.level = result.level;
+        $scope.isPlugged = result.isPlugged;
+        
+        if (result.level > 20) {
+            $scope.status = "ok";
+        }
+    });
+    $rootScope.$on('$cordovaBatteryStatus:critical', function (e, result) {
+      $scope.status = "critical";
+    });
 
-function onBatteryStatus(info) {
-    console.log(info);
-    // Handle the online event
-    console.log("Level: " + info.level + " isPlugged: " + info.isPlugged);
-}
-    
-    
-    
-    $rootScope.$on('$cordovaBatteryStatus:status', function (event, result) {
-        $scope.level = result.info.level;
-        $scope.isPlugged = result.info.isPlugged;
-        $scope.status = result.info.status;
+    $rootScope.$on('$cordovaBatteryStatus:low', function (e, result) {
+      $scope.status = "low";
     });
 });

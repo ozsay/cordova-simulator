@@ -6,18 +6,15 @@ define(['angular'], function(angular) {
 
     angular.module('cordovaSimulator.filters', [])
     .filter('deviceOrientation', [function() {
-        return function(input, width, height, isLandscape) {
+        return function(input, isLandscape) {
             if (isLandscape) {
                 return {
-                    width: height,
-                    height: width
+                    width: input.height,
+                    height: input.width
                 };
             }
             else {
-                return {
-                    width: width,
-                    height: height
-                };
+                return input;
             }
         };
     }]).filter('flashlight', [function() {
