@@ -2,13 +2,16 @@
 
 require.config({{ requirejs | json(4) }});
 
-require({{deps | json(4) }}, function(document, angular) {
+require({{deps | json(4) }}, function(domReady, angular) {
     
-    angular.module('cordovaSimulator.api', [
-{%- for api in apis %}
-        'cordovaSimulator.api.{{ api }}',
-{%- endfor %}
-    ]);
+    domReady(function(doc) {
+        angular.module('cordovaSimulator.api', [
+    {%- for api in apis %}
+            'cordovaSimulator.api.{{ api }}',
+    {%- endfor %}
+        ]);
+
+        angular.bootstrap(doc, ['cordovaSimulator']);
+    });
     
-    angular.bootstrap(document, ['cordovaSimulator']);
 });

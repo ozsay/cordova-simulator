@@ -2,7 +2,7 @@
   "name": "cordova-simulator",
   "version": "0.2.0",
   "homepage": "https://github.com/ozsay/cordova-simulator",
-  "description": "Cordova plugins simulator, mainly for browsers",
+  "description": "Cordova plugins simulator in browser",
   "authors": [
     "ozsayag <ozsayag@gmail.com>"
   ],

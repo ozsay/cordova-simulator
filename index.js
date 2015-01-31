@@ -5,7 +5,6 @@ var open = require('open');
 
 var appsServing = require('./lib/apps');
 var resourcesServing = require('./lib/resources');
-var pluginsServing = require('./lib/plugins');
 
 module.exports = function(properties) {
     var filesDir = path.join(__dirname, properties.dir);
@@ -19,12 +18,14 @@ module.exports = function(properties) {
     
     var app = express();
     app.http().io();
-
-    appsServing(app, properties.apps, true, filesDir);
-    resourcesServing(app, properties.resources);
-    pluginsServing(app, filesDir);
+    var mainServe = express.static(path.join(filesDir, 'public'), 
+                                   {index: properties.offline ? 'index-offline.html' :
+                                                                'index.html'});
     
-    app.use(express.static(path.join(filesDir, 'public')));
+    appsServing(app, properties.apps, true, mainServe);
+    resourcesServing(app, properties.resources);
+    
+    app.use(mainServe);
 
     app.listen(properties.port);
     
