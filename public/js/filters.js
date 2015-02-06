@@ -17,9 +17,15 @@ define(['angular'], function(angular) {
                 return input;
             }
         };
-    }]).filter('flashlight', [function() {
-        return function(input) {
-            return input ? 'flashlight on' : 'flashlight';
+    }]).filter('widgetStyle', [function() {
+        return function(input, bounds, margin) {
+            if (margin !== undefined) {
+                input.margin = margin;
+            }
+            input['max-height'] = bounds.height;
+            input['max-width'] = bounds.width;
+            
+            return input;
         };
     }]);
 });

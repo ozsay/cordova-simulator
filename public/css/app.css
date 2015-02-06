@@ -54,21 +54,58 @@ body {
 }
 
 .device .deviceControls .network .dropdown-menu {
-    min-width: 40px;
+    min-width: 60px;
 }
 
 .device .deviceControls .network .dropdown-menu li a {
-    width: 40px;    
+    width: 60px;    
     padding: 3px 3px;
 }
 
 .device .deviceControls .battery input {
     position: absolute;
     width: 60px;
+    z-index: 12;
 }
 
 .device .deviceWidget {
     position: absolute;
+    z-index: 11;
+}
+
+.device .deviceWidget.center {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.device .deviceWidget.top {
+    left: 50%;
+    top: 0px;
+    transform: translate(-50%, 0);
+}
+
+
+.device .deviceWidget.bottom {
+    left: 50%;
+    bottom: 0px;
+    transform: translate(-50%, 0);
+}
+
+.device .backdrop {
+    position: absolute;
+    display: none;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.device .backdrop.on {
+    background: black;
+    opacity: 0.6;
+    display: block;
 }
 
 .device iframe {

@@ -8,7 +8,7 @@
     </div>
     <div class="actual">
         <div class="deviceControls">
-            <div ng-class="flashlight | flashlight"></div>
+            <div ng-class="['flashlight', flashlight === true ? 'on' : '']"></div>
             <div class="network">
                 <div class="dropdown">
                     <button class="btn btn-link" type="button" data-toggle="dropdown" aria-expanded="true">
@@ -26,8 +26,9 @@
                 <input type="number" ng-model="battery" ng-model-options="{ updateOn: 'blur' }" ng-show="showBattery === true">
             </div>
         </div>
-        <div>
-            <div class="deviceWidget" ng-if="widget != undefined" ng-include="widget"></div>
+        <div style="position: relative;">
+            <div ng-class="['backdrop', widget.backdrop ? 'on' : '']" ng-click="backdropClick()"></div>
+            <div ng-if="widget != undefined" ng-include="widget.template" ng-class="['deviceWidget', widget.location === undefined ? 'center' : widget.location]" ng-style="{} | widgetStyle:(bounds | deviceOrientation:isLandscape):widget.margin"></div>
             <iframe id="{{app.name + '_' + device.id}}" ng-style="bounds | deviceOrientation:isLandscape"></iframe>
         </div>
     </div>

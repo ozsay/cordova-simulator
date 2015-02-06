@@ -81,9 +81,3 @@ define(['angular', 'plugins/services'], function(angular) {
 
     return app;
 });
-
-//obj.iframe.addClass("shake shake-constant");  
-//
-//setTimeout(function() {
-//    obj.iframe.removeClass("shake shake-constant");
-//}, arr[0]);

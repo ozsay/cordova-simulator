@@ -15,7 +15,7 @@ define(['angular'], function(angular) {
                     platform: 'android',
                     platformVersion: '5.0',
                     model: 'SG4',
-                    networks: ['3G', '4G', 'WIFI', 'OFF'],
+                    networks: ['ethernet', 'cellular', '2g', '3g', '4g', 'wifi', 'none'],
                     width: 337,
                     height: 667
                 },
@@ -24,7 +24,7 @@ define(['angular'], function(angular) {
                     platform: 'ios',
                     platformVersion: '7.0',
                     model: 'iphone6',
-                    networks: ['3G', '4G', 'WIFI', 'OFF'],
+                    networks: ['ethernet', 'cellular', '2g', '3g', '4g', 'wifi', 'none'],
                     width: 337,
                     height: 667
                 }
@@ -33,11 +33,11 @@ define(['angular'], function(angular) {
                 android: {
                     id: 'android',
                     preset: 'genericAndroid'
-                }/*,
+                },
                 iphone: {
                     id: 'iphone',
                     preset: 'genericIphone'
-                }*/
+                }
             }
         };
 

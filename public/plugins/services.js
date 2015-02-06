@@ -7,15 +7,24 @@ define(['angular'], function(angular) {
     var app = angular.module('cordovaSimulator.plugins.services', [])
     .factory('plugins', ['$q', function($q) {
         var actions = {},
-            directPlugins = {};
+            directPlugins = {},
+            customPlugins = {};
         
         return {
-            register: function(plugin, fn) {
-                directPlugins[plugin] = fn;
+            register: function(plugin, type, fn) {
+                if (type === "direct") {
+                    directPlugins[plugin] = fn;
+                } else if (type === "custom") {
+                    customPlugins[plugin] = fn;
+                }
             },
-            wire: function(cordova) {
+            wire: function(obj, cordova) {
                 angular.forEach(directPlugins, function(plugin, name) {
                     cordova.define(name, plugin);
+                });
+                
+                angular.forEach(customPlugins, function(plugin, name) {
+                    plugin(obj);
                 });
             },
             registerCommand: function(plugin, method, fn) {
@@ -52,6 +61,22 @@ define(['angular'], function(angular) {
                     }
                 }
             }
+        };
+    }])
+    .factory('platformClass', [function() {
+        return function(obj) {
+            if (obj.window.ionic !== undefined) {
+                obj.window.ionic.Platform.setPlatform(obj.device.preset.platform);
+            }
+            var platformClass = "platform-" + obj.device.preset.platform;
+            obj.iframe.contents().find('body').removeClass(platformClass).addClass(platformClass);
+        };
+    }])
+    .factory('reload', ['serverApi', function(serverApi) {
+        return function(obj) {
+            serverApi.on('reload', function() {
+                obj.iframe.attr("src", obj.iframe.attr("src"));
+            });
         };
     }]);
     

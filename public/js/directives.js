@@ -22,6 +22,21 @@ define(['angular', 'jquery'], function(angular, $) {
             $scope.setNet = function(net) {
                 $scope.currNet = net;
             };
+            
+            $scope.showWidget = function(widget) {
+                $scope.widget = widget;
+            };
+            
+            $scope.backdropClick = function() {
+                if ($scope.widget.backdropCb !== undefined) {
+                    $scope.widget.backdropCb();
+                    $scope.removeWidget();
+                }
+            };
+            
+            $scope.removeWidget = function() {
+                $scope.widget = undefined;
+            };
         }],
         link: function(scope, element, attrs) {
             var iframe = element.find('iframe');
@@ -33,18 +48,21 @@ define(['angular', 'jquery'], function(angular, $) {
             scope.reload = function() {
                 iframe.attr("src", iframe.attr("src"));
             };
-
+            
             iframe.on('load', function() {
                 var iframeWindow = document.getElementById(scope.appName + '_' + scope.device.id).contentWindow,
                     obj = {
-                    window: iframeWindow,
-                    iframe: iframe,
-                    device: scope.devices[scope.device.id],
-                    app: scope.apps[scope.appName],
-                    scope: scope
-                };
+                        window: iframeWindow,
+                        iframe: iframe,
+                        device: scope.devices[scope.device.id],
+                        app: scope.apps[scope.appName],
+                        scope: scope
+                    };
+                
+                plugins.wire(obj, iframeWindow.cordova);
                 
                 iframeWindow.cordova.require('cordova/platform').id = scope.device.preset.platform;
+                
                 iframeWindow.simulatorExec = function(success, fail, service, action, args) {
                     plugins.execCommand(obj, success, fail, service, action, args);
                 };
@@ -139,7 +157,7 @@ define(['angular', 'jquery'], function(angular, $) {
              '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> ' +
                 '<h4 class="modal-title" id="showModalLabel" ng-bind="title"></h4>' +
             '</div>' +
-            '<div class="modal-body" ng-include="template" ng-class="class">' +
+            '<div class="modal-body" ng-include="template" ng-class="cssclass">' +
             '</div>' +
             '<div class="modal-footer">' +
                 '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>' +
@@ -163,9 +181,10 @@ define(['angular', 'jquery'], function(angular, $) {
                     widgetScope.$apply(function() {
                         widgetScope.title = attrs.showModal;
                         widgetScope.template = attrs.modalTemplate;
-                        widgetScope.class = attrs.modalClass;
+                        widgetScope.cssclass = attrs.modalClass;
                     });
                 });
+                
             }
         };
     }]);

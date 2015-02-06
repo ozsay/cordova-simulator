@@ -5,6 +5,8 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var addsrc = require('gulp-add-src');
 var watch = require('gulp-watch');
+var gulpif = require('gulp-if');
+var flatten = require('gulp-flatten');
 var rjs = require('requirejs');
 var merge = require('merge-stream');
 var del = require('del');
@@ -13,6 +15,7 @@ var cordova = require('cordova-lib').cordova;
 var cordovajs = require('cordova-js/tasks/lib/bundle');
 var fs = require('fs-extra');
 var path = require('path');
+var Q = require('q');
 
 var argv = require('yargs')
     .options('port', {
@@ -82,6 +85,19 @@ function generateMain(file) {
     file.contents = new Buffer(res);
 };
 
+function generatePluginFiles(opts) {
+    var appTemplate = fs.readFileSync('templates/plugins.app.js', {encoding: 'utf8'});
+    var servicesTemplate = fs.readFileSync('templates/plugins.services.js', {encoding: 'utf8'});
+    
+    var env = new nunjucks.Environment();
+    
+    var app = env.renderString(appTemplate, opts);
+    var services = env.renderString(servicesTemplate, opts);
+
+    fs.outputFileSync('plugins/' + opts.id + "/client/js/app.js", app);
+    fs.outputFileSync('plugins/' + opts.id + "/client/js/services.js", services);
+}
+
 gulp.task('clean', function (done) {
     del(['dev', 'tmp', 'dist'], done);
 });
@@ -92,16 +108,24 @@ gulp.task('demo', ['clean'], function () {
 });
 
 gulp.task('simulator', ['clean'], function () {
-    var simulator = gulp.src('./main.js')
+    var simulator = gulp.src('./templates/main.js')
             .pipe(tap(generateMain))
             .pipe(rename('js/main.js'))
-            .pipe(addsrc('public/**/*'))
+            .pipe(addsrc(['public/!(css)/**/*', 'public/index.html']))
             .pipe(gulp.dest(destDir + 'public/'));
 
-    var plugins = gulp.src('./plugins/**/*')
+    var plugins = gulp.src('./plugins/*/client/js/*')
             .pipe(gulp.dest(destDir + '/public/plugins'));
+    
+    var pluginsPartials = gulp.src('plugins/*/client/partials/*')
+            .pipe(flatten())
+            .pipe(gulp.dest(destDir + '/public/partials'));
 
-    return merge(simulator, plugins);
+    var allCss = gulp.src(['public/css/*', 'plugins/*/client/css/*'])
+            .pipe(concat('app.css'))
+            .pipe(gulp.dest(destDir + '/public/css'));
+    
+    return merge(simulator, plugins, pluginsPartials, allCss);
 });
 
 gulp.task('createCordova', ['clean'], function (done) {
@@ -138,7 +162,14 @@ gulp.task('plugin', [], function (done) {
                 url: argv.u
             };
             
-            fs.writeJson('./config/config.json', config, done);
+            fs.writeJson('./config/config.json', config, function() {
+                generatePluginFiles({
+                    id: argv.i,
+                    name: argv.n
+                });
+                
+                done();
+            });
         });
     }
 });
@@ -175,14 +206,22 @@ gulp.task('serve', [], function () {
         demo: true,
         apps: [],
         resources: [],
-        dir: 'dist'
+        dir: 'dev'
     });
     
-    var watch1 = watch('public/**/*', {verbose: true}).pipe(gulp.dest('dev/public/'));
-    var watch2 = watch('plugins/**/*', {verbose: true}).pipe(gulp.dest('dev/public/plugins'));
-    var watch3 = watch('demo/**/*', {verbose: true}).pipe(gulp.dest('dev/demo'));
+    var watchPublic = watch(['public/!(css|lib)/**/*', 'public/index.html'], {verbose: true}).pipe(gulp.dest('dev/public/'));
+    var watchPlugins = watch('plugins/*/client/js/*', {verbose: true}).pipe(gulp.dest('dev/public/plugins'));
+    var watchPluginsPartials = watch('plugins/*/client/partials/*', {verbose: true}).pipe(flatten()).pipe(gulp.dest('dev/public/partials'));
     
-    return merge(watch1, watch2, watch3);
+    var watchAllCss = watch(['public/css/*', 'plugins/*/client/css/*'], {verbose: true}, function() {
+        gulp.src(['public/css/*', 'plugins/*/client/css/*'])
+            .pipe(concat('app.css'))
+            .pipe(gulp.dest(destDir + '/public/css'));
+    });
+    
+    var watchDemo = watch('demo/**/*', {verbose: true}).pipe(gulp.dest('dev/demo'));
+    
+    return merge(watchPublic, watchPlugins, watchPluginsPartials, watchAllCss, watchDemo);
 });
 
 gulp.task('build', ['simulator', 'cordova', 'demo'], function (done) {
