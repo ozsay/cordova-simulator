@@ -9,11 +9,11 @@ define(['angular', 'plugins/services'], function(angular) {
         return {
             start: function(obj, success, fail, args) {
                 obj.scope.batteryWatcher = obj.scope.$watch('battery', function(value) {
-                    success({level: value, isPlugged: obj.scope.isPlugged});
+                    success({level: obj.scope.battery, isPlugged: obj.scope.isPlugged});
                 });
                 
                 obj.scope.isPluggedWatcher = obj.scope.$watch('isPlugged', function(value) {
-                    success({level: value, isPlugged: obj.scope.isPlugged});
+                    success({level: obj.scope.battery, isPlugged: obj.scope.isPlugged});
                 });
             },
             stop: function(obj) {
