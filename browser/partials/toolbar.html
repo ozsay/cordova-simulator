@@ -1,0 +1,73 @@
+<md-menu-bar class="menu-container" ng-controller="toolbarCtrl as toolbar" layout="row" padding="5">
+  <md-menu flex>
+    <button ng-click="$mdOpenMenu()">
+      Configuration
+    </button>
+    <md-menu-content>
+    <md-menu-item>
+        <md-menu>
+          <md-button ng-click="$mdOpenMenu()">New</md-button>
+          <md-menu-content>
+            <md-menu-item><md-button ng-click="toolbar.openAppConfig(toolbar.indicator)">App</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="toolbar.openPresetConfig(toolbar.indicator)">Preset</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="toolbar.openDeviceConfig(toolbar.indicator)">Device</md-button></md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </md-menu-item>
+      <md-menu-divider></md-menu-divider>
+      <md-menu-item>
+        <md-button ng-click="toolbar.loadFromGithub()">
+          Load presets and devices from Github
+        </md-button>
+      </md-menu-item>
+      <md-menu-divider></md-menu-divider>
+      <md-menu-item>
+        <md-button ng-click="toolbar.importFromClipboard()">
+          Import from clipboard
+        </md-button>
+      </md-menu-item>
+      <md-menu-item>
+        <md-button ng-click="toolbar.exportToClipboard()">
+          Export to clipboard
+        </md-button>
+      </md-menu-item>
+      <md-menu-item>
+        <md-button ng-click="toolbar.showConfigFile()">
+          Show configuration file
+        </md-button>
+      </md-menu-item>
+    </md-menu-content>
+  </md-menu>
+  <md-autocomplete flex="20"
+      md-input-name="preset"
+      md-selected-item="toolbar.selectedPreset"
+      md-selected-item-change="toolbar.openPresetConfig(toolbar.selectedPreset.name)"
+      md-search-text="toolbar.searchPreset"
+      md-items="preset in configuration.presets | objectToArray | filter:{name: toolbar.searchPreset}"
+      md-item-text="preset.name"
+      md-no-cache="true"
+      placeholder="Search preset...">
+      <md-item-template>
+        <span md-highlight-text="toolbar.searchPreset">{{preset.name}}</span>
+      </md-item-template>
+      <md-not-found>
+      No matches found for "{{toolbar.searchPreset}}".
+    </md-not-found>
+  </md-autocomplete>
+  <md-autocomplete flex="20"
+      md-input-name="device"
+      md-selected-item="toolbar.selectedDevice"
+      md-selected-item-change="toolbar.openDeviceConfig(toolbar.selectedDevice.name)"
+      md-search-text="toolbar.searchDevice"
+      md-items="device in configuration.devices | objectToArray | filter:{name: toolbar.searchDevice}"
+      md-item-text="device.name"
+      md-no-cache="true"
+      placeholder="Search device...">
+      <md-item-template>
+        <span md-highlight-text="toolbar.searchDevice">{{device.name}}</span>
+      </md-item-template>
+      <md-not-found>
+      No matches found for "{{toolbar.searchDevice}}".
+    </md-not-found>
+  </md-autocomplete>
+</md-menu-bar>

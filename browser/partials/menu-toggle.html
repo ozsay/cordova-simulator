@@ -1,0 +1,12 @@
+<md-button class="md-button-toggle" ng-click="toggle()">
+  <div flex layout="row">
+    {{title}}
+    <span flex></span>
+    <span class="md-toggle-icon" ng-class="{'toggled' : isOpen}">
+      <md-icon>expand_less</md-icon>
+    </span>
+  </div>
+</md-button>
+<div class="menu-toggle-content">
+  <div ng-transclude></div>
+</div>

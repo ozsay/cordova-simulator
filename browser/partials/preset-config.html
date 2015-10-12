@@ -1,0 +1,88 @@
+<md-dialog flex="40" class="config-dialog">
+  <form name="presetForm">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>{{dialog.model.name ? dialog.model.name : '&lt;Preset name&gt;'}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="dialog.discard()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column" layout-padding>
+    <div layout="row">
+      <md-input-container flex="60">
+        <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
+        <input name="name" ng-model="dialog.model.name" required ng-disabled="!dialog.isNew">
+        <div ng-messages="presetForm.name.$error">
+          <div ng-message="required">This is required.</div>
+        </div>
+      </md-input-container>
+      <md-input-container flex>
+        <label>Width</label>
+        <input name="width" ng-model="dialog.model.width" required>
+        <div ng-messages="presetForm.width.$error">
+          <div ng-message="required">This is required.</div>
+        </div>
+      </md-input-container>
+      <md-input-container flex>
+        <label>Height</label>
+        <input name="height" ng-model="dialog.model.height" required>
+        <div ng-messages="presetForm.height.$error">
+          <div ng-message="required">This is required.</div>
+        </div>
+      </md-input-container>
+    </div>
+    <div layout="row">
+      <md-input-container flex>
+        <label>Platform</label>
+        <md-select ng-model="dialog.model.platform">
+          <md-option ng-repeat="item in dialog.options.supportedPlatforms" value="{{item}}">
+            {{item}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container flex>
+        <label>Platform version</label>
+        <input name="platformVersion" ng-model="dialog.model.platformVersion">
+      </md-input-container>
+      <md-input-container flex>
+        <label>Model</label>
+        <input name="model" ng-model="dialog.model.model">
+      </md-input-container>
+    </div>
+    <md-chips ng-model="dialog.model.availableFeatues" md-autocomplete-snap md-require-match="true">
+      <md-autocomplete
+          md-selected-item="dialog.selectedFeature"
+          md-search-text="dialog.searchFeature"
+          md-items="item in dialog.options.features  | filter:dialog.options.predicateFn | filter:dialog.searchFeature"
+          md-item-text="item"
+          md-no-cache="true"
+          placeholder="+Add Feature">
+          <md-item-template>
+            <span md-highlight-text="dialog.searchFeature">{{item}}</span>
+          </md-item-template>
+          <md-not-found>
+          No matches found for "{{dialog.searchFeature}}".
+        </md-not-found>
+      </md-autocomplete>
+    </md-chips>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="dialog.discard()">
+     Discard
+    </md-button>
+    <span flex></span>
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew">
+     Delete
+    </md-button>
+    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew">
+     Clone
+    </md-button>
+    <span flex></span>
+    <md-button ng-click="dialog.apply()">
+      Apply
+    </md-button>
+  </div>
+  </form>
+</md-dialog>

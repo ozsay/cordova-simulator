@@ -1,0 +1,61 @@
+<md-sidenav md-component-id="left" class="md-sidenav-left sidenav" md-is-locked-open="true">
+  <div ng-controller="sidenavCtrl as sidenav" layout="column">
+    <header class="sidenav-item">
+      <h1 class="app-title" ng-click="sidenav.openSite()">Cordova Simulator</h1>
+    </header>
+    <menu-toggle flex title="Apps" class="sidenav-item">
+      <ul class="list-menu">
+        <li ng-repeat="app in configuration.apps">
+          <md-menu>
+            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" ng-dblclick="app.enabled = !app.enabled" class="list-menu-button">
+              <div flex layout="row">
+                {{app.name}}
+                <span flex></span>
+                <md-icon>{{!app.enabled ? 'indeterminate_check_box' : 'check_box'}}</md-icon>
+              </div>
+            </md-button>
+            <md-menu-content width="4">
+              <md-menu-item>
+                <md-button ng-click="app.enabled = !app.enabled">
+                  <md-icon>{{app.enabled ? 'indeterminate_check_box' : 'check_box'}}</md-icon>
+                  {{app.enabled ? 'Disable' : 'Enable'}}
+                </md-button>
+              </md-menu-item>
+              <md-menu-divider></md-menu-divider>
+              <md-menu-item>
+                <md-button ng-click="sidenav.openAppConfig(app)">
+                  <md-icon>settings</md-icon>
+                  Configuration
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </li>
+      </ul>
+    </menu-toggle>
+    <menu-toggle flex title="Devices" class="sidenav-item">
+      <ul class="list-menu">
+        <li ng-repeat="device in configuration.devices">
+          <md-menu>
+            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" class="list-menu-button">
+              <div flex layout="row">
+                {{device.name}}
+              </div>
+            </md-button>
+            <md-menu-content width="4">
+              <md-menu-divider></md-menu-divider>
+              <md-menu-item>
+                <md-button ng-click="sidenav.openDeviceConfig(device)">
+                  <md-icon>settings</md-icon>
+                  Configuration
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </li>
+      </ul>
+    </menu-toggle>
+    <menu-toggle flex title="Resources" class="sidenav-item">
+    </menu-toggle>
+  </div>
+</md-sidenav>

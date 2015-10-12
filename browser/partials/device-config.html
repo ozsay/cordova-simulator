@@ -1,0 +1,52 @@
+<md-dialog flex="40" class="config-dialog">
+  <form name="deviceForm">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>{{dialog.model.name ? dialog.model.name : '&lt;Device name&gt;'}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="dialog.discard()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column" layout-padding>
+    <md-input-container>
+      <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
+      <input name="name" ng-model="dialog.model.name" required ng-disabled="!dialog.isNew">
+      <div ng-messages="deviceForm.name.$error">
+        <div ng-message="required">This is required.</div>
+      </div>
+    </md-input-container>
+    <md-autocomplete required
+          md-input-name="preset"
+          md-selected-item="dialog.model.preset"
+          md-search-text="dialog.searchPreset"
+          md-items="item in dialog.options.presets | objectToArray | filter:{name: dialog.searchPreset}"
+          md-item-text="item.name"
+          md-floating-label="Preset">
+          <md-item-template>
+            <span md-highlight-text="dialog.searchPreset">{{item.name}}</span>
+          </md-item-template>
+          <md-not-found>
+          No matches found for "{{dialog.searchPreset}}".
+        </md-not-found>
+    </md-autocomplete>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="dialog.discard()">
+     Discard
+    </md-button>
+    <span flex></span>
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew">
+     Delete
+    </md-button>
+    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew">
+     Clone
+    </md-button>
+    <span flex></span>
+    <md-button ng-click="dialog.apply()">
+      Apply
+    </md-button>
+  </div>
+  </form>
+</md-dialog>

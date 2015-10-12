@@ -1,0 +1,149 @@
+/* scrollbar start */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(192, 192, 192, 0.8);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+	background-color:rgba(192, 192, 192, 0.3);
+}
+
+/* scrollbar end */
+
+/* sidenav start */
+.sidenav-container {
+  background-color: #F5F7F8;
+  border-right: 1px solid #DDD;
+}
+
+.sidenav-container:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 304px;
+  height: 50px;
+  border-right: 1px solid #F5F7F8;
+}
+
+.sidenav {
+  background-color: transparent;
+}
+
+.app-title {
+  text-align: center;
+  font-size: 20px;
+  color: #737072;
+  -webkit-user-select: none;
+  cursor: pointer;
+  outline: none;
+  padding-bottom: 25px;
+  padding-top: 25px;
+}
+
+.sidenav-item {
+  border-bottom: 1px solid #DDD;
+}
+
+.sidenav .list-menu {
+  margin: 0;
+  padding: 0;
+}
+
+.sidenav  .list-menu-button {
+  padding: 0 0 0 50px;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+}
+
+/* sidenav end */
+
+/* menu start */
+
+.menu-container {
+  background-color: #F5F7F8;
+  border-bottom: 1px solid #DDD;
+  padding-right: 20%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.menu-container md-autocomplete {
+  margin-right: 10px;
+}
+/* menu end */
+
+/* common config dialog start */
+
+.config-dialog .md-actions {
+  background-color: rgb(192, 188, 241);
+}
+
+/* common config dialog end */
+
+/* app-config start */
+
+.config-dialog .app-type-label {
+  color: rgba(0, 0, 0, 0.541176);
+  font-size: 12px;
+}
+
+/* app-config end */
+
+/* menu-toggle start */
+
+button.md-button-toggle {
+  border-radius: 0;
+  color: #737072;
+  cursor: pointer;
+  display: block;
+  align-items: inherit;
+  line-height: 40px;
+  margin: 0;
+  max-height: 40px;
+  overflow: hidden;
+  padding: 0 0 0 16px;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  width: 100%;
+}
+
+.md-button-toggle .md-toggle-icon {
+  display: block;
+  margin-left: auto;
+  speak: none;
+  vertical-align: middle;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+  -webkit-transition: -webkit-transform 0.3s ease-in-out;
+}
+
+.md-button-toggle .md-toggle-icon.toggled {
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+}
+
+.menu-toggle-content {
+  padding: 0;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+/* menu-toggle end */

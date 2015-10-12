@@ -1,0 +1,54 @@
+{
+  "name": "cordova-simulator",
+  "version": "0.4.0",
+  "description": "Cordova plugins simulator in browser",
+  "preferGlobal": true,
+  "main": "main/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ozsay/cordova-simulator.git"
+  },
+  "author": "ozsayag <ozsayag@gmail.com> (https://github.com/ozsay/)",
+  "keywords": [
+    "cordova",
+    "ionic",
+    "mobile",
+    "mock",
+    "simulator"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ozsay/cordova-simulator/issues"
+  },
+  "homepage": "https://github.com/ozsay/cordova-simulator",
+  "dependencies": {
+    "jsonfile": "^2.2.2"
+  },
+  "devDependencies": {
+    "cordova-js": "^4.1.1",
+    "cordova-lib": "^5.3.3",
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-rename": "^1.2.2",
+    "yargs": "^3.27.0"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "browser"
+    },
+    "dependencies": {
+      "angular": "npm:angular@^1.4.7",
+      "angular-animate": "npm:angular-animate@^1.4.7",
+      "angular-aria": "npm:angular-aria@^1.4.7",
+      "angular-material": "npm:angular-material@^0.11.2",
+      "angular-messages": "npm:angular-messages@^1.4.7",
+      "material-design-icons-iconfont": "npm:material-design-icons-iconfont@^2.0.3"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
+}

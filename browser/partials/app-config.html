@@ -1,0 +1,58 @@
+<md-dialog flex="40" class="config-dialog">
+  <form name="appForm">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>{{dialog.model.name ? dialog.model.name : '&lt;App name&gt;'}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="dialog.discard()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column" layout-padding>
+    <md-input-container>
+      <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
+      <input name="name" ng-model="dialog.model.name" required ng-disabled="!dialog.isNew">
+      <div ng-messages="appForm.name.$error">
+        <div ng-message="required">This is required.</div>
+      </div>
+    </md-input-container>
+    <md-input-container ng-if="!dialog.model.isMeteor">
+      <label>Path</label>
+      <input name="path" required ng-model="dialog.model.path">
+      <div ng-messages="appForm.path.$error">
+        <div ng-message="required">This is required. Choose a path via file chooser or by dragging the app folder.</div>
+      </div>
+    </md-input-container>
+    <md-input-container ng-if="dialog.model.isMeteor">
+      <label>URL</label>
+      <input name="url" required ng-model="dialog.model.url">
+      <div ng-messages="appForm.url.$error">
+        <div ng-message="required">This is required. Please type the URL to your meteor application.</div>
+      </div>
+    </md-input-container>
+    <md-radio-group ng-init="dialog.model.isMeteor = false" ng-model="dialog.model.isMeteor">
+      <label class="app-type-label">Application Type</label>
+      <md-radio-button ng-value="true">Meteor</md-radio-button>
+      <md-radio-button ng-value="false">Regular</md-radio-button>
+    </md-radio-group>
+    <md-divider></md-divider>
+    <md-checkbox ng-model="dialog.model.enabled">
+      {{ dialog.model.enabled ? 'Enabled' : 'Disabled' }}
+    </md-checkbox>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="dialog.discard()">
+     Discard
+    </md-button>
+    <span flex></span>
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew">
+     Delete
+    </md-button>
+    <span flex></span>
+    <md-button ng-click="dialog.apply()">
+      Apply
+    </md-button>
+  </div>
+  </form>
+</md-dialog>

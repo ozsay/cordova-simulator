@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="cordova-simulator">
+<head>
+  <meta name="viewport" content="initial-scale=1"/>
+  <script src="jspm_packages/system.js"></script>
+  <script src="config.js"></script>
+  <script>
+    System.import('material-design-icons-iconfont/dist/material-design-icons.css!');
+    System.import('./styles/app.css!');
+    System.import('./js/app');
+  </script>
+</head>
+<body layout="row" ng-controller="appCtrl as app">
+  <ng-include flex ng-if="!app.appReady" src="'partials/loading.html'"></ng-include>
+  <ng-include ng-if="app.appReady" src="'partials/sidenav.html'" class="sidenav-container"></ng-include>
+  <div flex layout="column" ng-if="app.appReady">
+    <md-toolbar ng-include="'partials/toolbar.html'" class="md-menu-toolbar">
+    </md-toolbar>
+    <md-content flex md-scroll-y ng-include="'partials/content.html'">
+    </md-content>
+  </div>
+</body>
+</html>
