@@ -2,7 +2,7 @@
   <form name="deviceForm">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>{{dialog.model.name ? dialog.model.name : '&lt;Device name&gt;'}}</h2>
+      <h2>{{dialog.device.name ? dialog.device.name : '&lt;Device name&gt;'}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="dialog.discard()">
         <md-icon>close</md-icon>
@@ -12,16 +12,17 @@
   <md-dialog-content layout="column" layout-padding>
     <md-input-container>
       <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
-      <input name="name" ng-model="dialog.model.name" required ng-disabled="!dialog.isNew">
+      <input name="name" ng-model="dialog.device.name" required ng-disabled="!dialog.isNew"  maxlength="25" md-maxlength="25">
       <div ng-messages="deviceForm.name.$error">
-        <div ng-message="required">This is required.</div>
+        <div ng-message="required">Required.</div>
+        <div ng-message-exp="['maxlength']">Name is too long.</div>
       </div>
     </md-input-container>
     <md-autocomplete required
           md-input-name="preset"
-          md-selected-item="dialog.model.preset"
+          md-selected-item="dialog.device.preset"
           md-search-text="dialog.searchPreset"
-          md-items="item in dialog.options.presets | objectToArray | filter:{name: dialog.searchPreset}"
+          md-items="item in dialog.presets | objectToArray | filter:{name: dialog.searchPreset}"
           md-item-text="item.name"
           md-floating-label="Preset">
           <md-item-template>
@@ -30,6 +31,9 @@
           <md-not-found>
           No matches found for "{{dialog.searchPreset}}".
         </md-not-found>
+        <div ng-messages="deviceForm.preset.$error">
+          <div ng-message="required">Required.</div>
+        </div>
     </md-autocomplete>
   </md-dialog-content>
   <div class="md-actions" layout="row">
@@ -37,14 +41,14 @@
      Discard
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew">
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew" ng-disabled="!dialog.canDelete()">
      Delete
     </md-button>
-    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew">
+    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew" ng-disabled="deviceForm.$invalid">
      Clone
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.apply()">
+    <md-button ng-click="dialog.apply()" ng-disabled="deviceForm.$invalid">
       Apply
     </md-button>
   </div>

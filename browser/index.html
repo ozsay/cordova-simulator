@@ -16,7 +16,7 @@
   <div flex layout="column" ng-if="app.appReady">
     <md-toolbar ng-include="'partials/toolbar.html'" class="md-menu-toolbar">
     </md-toolbar>
-    <md-content flex md-scroll-y ng-include="'partials/content.html'">
+    <md-content layout="row" layout-padding layout-wrap layout-align="center" md-scroll-y ng-include="'partials/content.html'">
     </md-content>
   </div>
 </body>

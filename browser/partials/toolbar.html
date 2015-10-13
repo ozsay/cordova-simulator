@@ -8,9 +8,9 @@
         <md-menu>
           <md-button ng-click="$mdOpenMenu()">New</md-button>
           <md-menu-content>
-            <md-menu-item><md-button ng-click="toolbar.openAppConfig(toolbar.indicator)">App</md-button></md-menu-item>
-            <md-menu-item><md-button ng-click="toolbar.openPresetConfig(toolbar.indicator)">Preset</md-button></md-menu-item>
-            <md-menu-item><md-button ng-click="toolbar.openDeviceConfig(toolbar.indicator)">Device</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="toolbar.openAppConfig()">App</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="toolbar.openPresetConfig()">Preset</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="toolbar.openDeviceConfig()">Device</md-button></md-menu-item>
           </md-menu-content>
         </md-menu>
       </md-menu-item>
@@ -41,7 +41,7 @@
   <md-autocomplete flex="20"
       md-input-name="preset"
       md-selected-item="toolbar.selectedPreset"
-      md-selected-item-change="toolbar.openPresetConfig(toolbar.selectedPreset.name)"
+      md-selected-item-change="toolbar.openPresetConfig(toolbar.selectedPreset)"
       md-search-text="toolbar.searchPreset"
       md-items="preset in configuration.presets | objectToArray | filter:{name: toolbar.searchPreset}"
       md-item-text="preset.name"
@@ -57,7 +57,7 @@
   <md-autocomplete flex="20"
       md-input-name="device"
       md-selected-item="toolbar.selectedDevice"
-      md-selected-item-change="toolbar.openDeviceConfig(toolbar.selectedDevice.name)"
+      md-selected-item-change="toolbar.openDeviceConfig(toolbar.selectedDevice)"
       md-search-text="toolbar.searchDevice"
       md-items="device in configuration.devices | objectToArray | filter:{name: toolbar.searchDevice}"
       md-item-text="device.name"

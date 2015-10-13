@@ -67,6 +67,14 @@
   text-align: left;
 }
 
+.list-menu-button.dragged {
+  box-shadow: inset 0px 0px 0px 2px green;
+}
+
+.list-menu-button.dropped {
+  box-shadow: inset 0px 0px 0px 2px aqua;
+}
+
 /* sidenav end */
 
 /* menu start */
@@ -147,3 +155,42 @@ button.md-button-toggle {
 }
 
 /* menu-toggle end */
+
+/* device start */
+
+.device {
+  transition: 0.75s;
+  margin: 5px;
+}
+
+.device-header {
+  height: 52px;
+}
+
+.device-header span {
+  padding: 17px 0 0 10px;
+}
+
+.device-controls {
+  height: 48px;
+}
+
+.device-controls-button {
+  margin: 0 !important;
+}
+
+.device-controls-battery-menu {
+  padding: 0 !important;
+}
+
+.device-controls-battery-input {
+  padding-bottom: 0;
+  width: 100px;
+}
+
+.device-content webview {
+  display: block;
+  transition: 0.75s;
+}
+
+/* device end */

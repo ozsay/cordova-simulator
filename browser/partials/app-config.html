@@ -2,7 +2,7 @@
   <form name="appForm">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>{{dialog.model.name ? dialog.model.name : '&lt;App name&gt;'}}</h2>
+      <h2>{{dialog.app.name ? dialog.app.name : '&lt;App name&gt;'}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="dialog.discard()">
         <md-icon>close</md-icon>
@@ -12,33 +12,34 @@
   <md-dialog-content layout="column" layout-padding>
     <md-input-container>
       <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
-      <input name="name" ng-model="dialog.model.name" required ng-disabled="!dialog.isNew">
+      <input name="name" ng-model="dialog.app.name" required ng-disabled="!dialog.isNew" minlength="2" maxlength="25" md-maxlength="25">
       <div ng-messages="appForm.name.$error">
-        <div ng-message="required">This is required.</div>
+        <div ng-message="required">Required.</div>
+        <div ng-message-exp="['minlength', 'maxlength']">Must be between 2 and 25 characters.</div>
       </div>
     </md-input-container>
-    <md-input-container ng-if="!dialog.model.isMeteor">
+    <md-input-container ng-if="!dialog.app.isMeteor" ng-drop="dialog.fileDrop($event)" ng-drag-over="dialog.dropHelper($event)" ng-drag-end="dialog.dropHelper($event)" ng-drag-leave="dialog.dropHelper($event)">
       <label>Path</label>
-      <input name="path" required ng-model="dialog.model.path">
+      <input name="path" required ng-model="dialog.app.path" ng-click="dialog.openFileDialog()">
       <div ng-messages="appForm.path.$error">
-        <div ng-message="required">This is required. Choose a path via file chooser or by dragging the app folder.</div>
+        <div ng-message="required">Required. Choose a path via file chooser or by dragging the app folder.</div>
       </div>
     </md-input-container>
-    <md-input-container ng-if="dialog.model.isMeteor">
+    <md-input-container ng-if="dialog.app.isMeteor">
       <label>URL</label>
-      <input name="url" required ng-model="dialog.model.url">
+      <input name="url" required ng-model="dialog.app.url">
       <div ng-messages="appForm.url.$error">
-        <div ng-message="required">This is required. Please type the URL to your meteor application.</div>
+        <div ng-message="required">Required. Please type the URL to your meteor application.</div>
       </div>
     </md-input-container>
-    <md-radio-group ng-init="dialog.model.isMeteor = false" ng-model="dialog.model.isMeteor">
+    <md-radio-group ng-init="dialog.app.isMeteor = false" ng-model="dialog.app.isMeteor">
       <label class="app-type-label">Application Type</label>
       <md-radio-button ng-value="true">Meteor</md-radio-button>
       <md-radio-button ng-value="false">Regular</md-radio-button>
     </md-radio-group>
     <md-divider></md-divider>
-    <md-checkbox ng-model="dialog.model.enabled">
-      {{ dialog.model.enabled ? 'Enabled' : 'Disabled' }}
+    <md-checkbox ng-model="dialog.app.enabled">
+      {{ dialog.app.enabled ? 'Enabled' : 'Disabled' }}
     </md-checkbox>
   </md-dialog-content>
   <div class="md-actions" layout="row">
@@ -46,11 +47,11 @@
      Discard
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew">
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew" ng-disabled="!dialog.canDelete()">
      Delete
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.apply()">
+    <md-button ng-click="dialog.apply()" ng-disabled="appForm.$invalid">
       Apply
     </md-button>
   </div>

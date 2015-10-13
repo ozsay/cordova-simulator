@@ -1,28 +1,23 @@
 /*jshint esnext: true */
 
-const indicator = '';
-
 export default class ToolbarCtrl {
   constructor(config) {
     this.config = config;
-    this.indicator = indicator;
   }
 
-  openAppConfig(name) {
-    if (name !== undefined) {
-      this.config.openAppConfig(name);
+  openAppConfig(app) {
+    this.config.openAppConfig(app);
+  }
+
+  openDeviceConfig(device) {
+    if (device !== null) {
+      this.config.openDeviceConfig(device);
     }
   }
 
-  openDeviceConfig(name) {
-    if (name !== undefined) {
-      this.config.openDeviceConfig(name);
-    }
-  }
-
-  openPresetConfig(name) {
-    if (name !== undefined) {
-      this.config.openPresetConfig(name);
+  openPresetConfig(preset) {
+    if (preset !== null) {
+      this.config.openPresetConfig(preset);
     }
   }
 

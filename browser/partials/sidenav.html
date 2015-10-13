@@ -7,7 +7,7 @@
       <ul class="list-menu">
         <li ng-repeat="app in configuration.apps">
           <md-menu>
-            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" ng-dblclick="app.enabled = !app.enabled" class="list-menu-button">
+            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" ng-dblclick="app.enabled = !app.enabled" class="list-menu-button" draggable="true" ng-drag-start="sidenav.dragAppStart($event, app)" ng-drag-end="sidenav.dragAppEnd($event)">
               <div flex layout="row">
                 {{app.name}}
                 <span flex></span>
@@ -37,7 +37,7 @@
       <ul class="list-menu">
         <li ng-repeat="device in configuration.devices">
           <md-menu>
-            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" class="list-menu-button">
+            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" class="list-menu-button" ng-drop="sidenav.dropApp($event, device)" ng-drag-over="sidenav.allowDrop($event)" ng-drag-enter="sidenav.dragOverStart($event)" ng-drag-leave="sidenav.dragOverEnd($event)">
               <div flex layout="row">
                 {{device.name}}
               </div>

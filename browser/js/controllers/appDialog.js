@@ -1,0 +1,51 @@
+/*jshint esnext: true */
+
+import BasicDialog from './basicDialog';
+
+let fileDialog = require('remote').require('dialog');
+
+export default class AppDialog extends BasicDialog {
+  constructor($rootScope, $timeout, $mdDialog, app) {
+    super($mdDialog, app === undefined, app !== undefined ? angular.copy(app) : {});
+
+    this.$timeout = $timeout;
+    this.$rootScope = $rootScope;
+
+    this.dialogType = 'app';
+    this.app = this.model;
+  }
+
+  fileDrop(event) {
+    event.preventDefault();
+    this.app.path = event.dataTransfer.files[0].path;
+  }
+
+  dropHelper(event) {
+    event.preventDefault();
+  }
+
+  openFileDialog() {
+    fileDialog.showOpenDialog(null, {
+      filters: [{name: 'HTML files', extensions: ['html']}],
+      properties: ['openFile']
+    }, (files) => {
+      if (files) {
+        this.$timeout(() => this.app.path = files[0], 0);
+      }
+    });
+  }
+
+  canDelete() {
+    var canDelete = true;
+
+    angular.forEach(this.$rootScope.configuration.simulator.runningDevices, (runningDevice) => {
+      if (runningDevice.app.name === this.app.name) {
+        canDelete = false;
+      }
+    });
+
+    return canDelete;
+  }
+}
+
+AppDialog.$inject = ['$rootScope', '$timeout', '$mdDialog', 'model'];

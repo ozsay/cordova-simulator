@@ -2,7 +2,7 @@
   <form name="presetForm">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>{{dialog.model.name ? dialog.model.name : '&lt;Preset name&gt;'}}</h2>
+      <h2>{{dialog.preset.name ? dialog.preset.name : '&lt;Preset name&gt;'}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="dialog.discard()">
         <md-icon>close</md-icon>
@@ -13,49 +13,55 @@
     <div layout="row">
       <md-input-container flex="60">
         <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
-        <input name="name" ng-model="dialog.model.name" required ng-disabled="!dialog.isNew">
+        <input name="name" ng-model="dialog.preset.name" required ng-disabled="!dialog.isNew" maxlength="25" md-maxlength="25">
         <div ng-messages="presetForm.name.$error">
-          <div ng-message="required">This is required.</div>
+          <div ng-message="required">Required.</div>
+          <div ng-message-exp="['maxlength']">Name is too long.</div>
         </div>
       </md-input-container>
       <md-input-container flex>
         <label>Width</label>
-        <input name="width" ng-model="dialog.model.width" required>
+        <input type="number" name="width" ng-model="dialog.preset.width" required min="1">
         <div ng-messages="presetForm.width.$error">
-          <div ng-message="required">This is required.</div>
+          <div ng-message="required">Required.</div>
+          <div ng-message="min">Width must be positive.</div>
         </div>
       </md-input-container>
       <md-input-container flex>
         <label>Height</label>
-        <input name="height" ng-model="dialog.model.height" required>
+        <input type="number" name="height" ng-model="dialog.preset.height" required min="1">
         <div ng-messages="presetForm.height.$error">
-          <div ng-message="required">This is required.</div>
+          <div ng-message="required">Required.</div>
+          <div ng-message="min">Height must be positive.</div>
         </div>
       </md-input-container>
     </div>
     <div layout="row">
       <md-input-container flex>
         <label>Platform</label>
-        <md-select ng-model="dialog.model.platform">
-          <md-option ng-repeat="item in dialog.options.supportedPlatforms" value="{{item}}">
+        <md-select name="platform" ng-model="dialog.preset.platform" required>
+          <md-option ng-repeat="item in dialog.SUPPORTED_PLATFORMS" value="{{item}}">
             {{item}}
           </md-option>
         </md-select>
+        <div ng-messages="presetForm.platform.$error">
+          <div ng-message="required">Required.</div>
+        </div>
       </md-input-container>
       <md-input-container flex>
         <label>Platform version</label>
-        <input name="platformVersion" ng-model="dialog.model.platformVersion">
+        <input name="platformVersion" ng-model="dialog.preset.platformVersion">
       </md-input-container>
       <md-input-container flex>
         <label>Model</label>
-        <input name="model" ng-model="dialog.model.model">
+        <input name="model" ng-model="dialog.preset.model">
       </md-input-container>
     </div>
-    <md-chips ng-model="dialog.model.availableFeatues" md-autocomplete-snap md-require-match="true">
+    <md-chips ng-model="dialog.preset.availableFeatues" md-autocomplete-snap md-require-match="true">
       <md-autocomplete
           md-selected-item="dialog.selectedFeature"
           md-search-text="dialog.searchFeature"
-          md-items="item in dialog.options.features  | filter:dialog.options.predicateFn | filter:dialog.searchFeature"
+          md-items="item in dialog.FEATURES  | filter:dialog.featureFilter | filter:dialog.searchFeature"
           md-item-text="item"
           md-no-cache="true"
           placeholder="+Add Feature">
@@ -73,14 +79,14 @@
      Discard
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew">
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew" ng-disabled="!dialog.canDelete()">
      Delete
     </md-button>
-    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew">
+    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew" ng-disabled="presetForm.$invalid">
      Clone
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.apply()">
+    <md-button ng-click="dialog.apply()" ng-disabled="presetForm.$invalid">
       Apply
     </md-button>
   </div>
