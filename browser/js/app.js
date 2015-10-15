@@ -3,6 +3,8 @@
 import angular from 'angular';
 import 'angular-material';
 import 'angular-messages';
+import 'cordova-plugins';
+
 import AppCtrl from './controllers/app';
 import AppDialog from './controllers/appDialog';
 import DeviceDialog from './controllers/deviceDialog';
@@ -26,7 +28,7 @@ const DRAG_EVENTS = [
   {name: 'dragend', directive: 'ngDragEnd'}
 ];
 
-angular.module('cordova-simulator', ['ngMessages', 'ngMaterial'])
+angular.module('cordova-simulator', ['ngMessages', 'ngMaterial', 'cordova-simulator.plugins'])
   .controller('appCtrl', AppCtrl)
   .controller('appDialog', AppDialog)
   .controller('deviceDialog', DeviceDialog)

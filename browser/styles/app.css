@@ -164,11 +164,17 @@ button.md-button-toggle {
 }
 
 .device-header {
+  position: relative;
   height: 52px;
 }
 
 .device-header span {
   padding: 17px 0 0 10px;
+}
+
+.device-actions {
+  position: absolute;
+  right: 0;
 }
 
 .device-controls {

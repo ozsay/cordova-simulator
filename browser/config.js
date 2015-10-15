@@ -1,5 +1,5 @@
 System.config({
-  baseURL: "./",
+  baseURL: "../",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -9,15 +9,16 @@ System.config({
     ]
   },
   paths: {
-    "github:*": "jspm_packages/github/*",
-    "npm:*": "jspm_packages/npm/*"
+    "github:*": "browser/jspm_packages/github/*",
+    "npm:*": "browser/jspm_packages/npm/*"
   },
 
   map: {
+    "cordova-plugins": "plugins/browser/module",
     "angular": "npm:angular@1.4.7",
     "angular-animate": "npm:angular-animate@1.4.7",
     "angular-aria": "npm:angular-aria@1.4.7",
-    "angular-material": "npm:angular-material@0.11.2",
+    "angular-material": "npm:angular-material@0.11.4",
     "angular-messages": "npm:angular-messages@1.4.7",
     "babel": "npm:babel-core@5.8.25",
     "babel-runtime": "npm:babel-runtime@5.8.25",
@@ -45,7 +46,7 @@ System.config({
     "npm:angular-animate@1.4.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:angular-material@0.11.2": {
+    "npm:angular-material@0.11.4": {
       "angular": "github:angular/bower-angular@1.4.7",
       "angular-animate": "github:angular/bower-angular-animate@1.4.7",
       "angular-aria": "github:angular/bower-angular-aria@1.4.7",

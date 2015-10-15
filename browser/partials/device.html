@@ -1,7 +1,7 @@
 <div class="device md-whiteframe-1dp">
   <div class="device-header" layout="row">
-    <span flex>{{device.name}} running {{app.name}}</span>
-    <md-fab-speed-dial md-direction="down" class="md-fling">
+    <span>{{device.name}} running {{app.name}}</span>
+    <md-fab-speed-dial md-direction="down" class="md-fling device-actions">
       <md-fab-trigger>
         <md-button aria-label="menu" class="md-fab md-mini">
           <md-tooltip>
@@ -10,7 +10,7 @@
           <md-icon>menu</md-icon>
         </md-button>
       </md-fab-trigger>
-      <md-fab-actions style="height: 0">
+      <md-fab-actions>
         <md-button aria-label="Rotation" class="md-fab md-raised md-mini md-primary" ng-click="rotateDevice()">
           <md-tooltip>
             Rotate screen
@@ -67,6 +67,6 @@
     </md-menu>
   </div>
   <div class="device-content">
-    <webview ng-src="{{app.path}}"></webview>
+    <webview ng-src="{{app.path}}" nodeintegration></webview>
   </div>
 </div>
