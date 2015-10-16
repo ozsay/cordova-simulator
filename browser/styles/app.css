@@ -107,6 +107,10 @@
   font-size: 12px;
 }
 
+.config-dialog .app-path.dropped {
+  box-shadow: inset 0px 0px 0px 2px aqua;
+}
+
 /* app-config end */
 
 /* menu-toggle start */

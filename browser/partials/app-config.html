@@ -18,7 +18,7 @@
         <div ng-message-exp="['minlength', 'maxlength']">Must be between 2 and 25 characters.</div>
       </div>
     </md-input-container>
-    <md-input-container ng-if="!dialog.app.isMeteor" ng-drop="dialog.fileDrop($event)" ng-drag-over="dialog.dropHelper($event)" ng-drag-end="dialog.dropHelper($event)" ng-drag-leave="dialog.dropHelper($event)">
+    <md-input-container ng-if="!dialog.app.isMeteor" drop="dialog.fileDrop(files)" class="app-path">
       <label>Path</label>
       <input name="path" required ng-model="dialog.app.path" ng-click="dialog.openFileDialog()">
       <div ng-messages="appForm.path.$error">

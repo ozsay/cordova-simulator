@@ -1,7 +1,7 @@
 node_modules/
 npm-debug.log
 
-browser/jspm_packages
+jspm_packages/
 browser/js/cordova.js
 
 main/index.js

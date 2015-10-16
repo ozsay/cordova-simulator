@@ -39,9 +39,7 @@
     "yargs": "^3.27.0"
   },
   "jspm": {
-    "directories": {
-      "baseURL": "browser"
-    },
+    "configFile": "browser/config.js",
     "dependencies": {
       "angular": "npm:angular@^1.4.7",
       "angular-animate": "npm:angular-animate@^1.4.7",

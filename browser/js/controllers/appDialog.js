@@ -15,13 +15,8 @@ export default class AppDialog extends BasicDialog {
     this.app = this.model;
   }
 
-  fileDrop(event) {
-    event.preventDefault();
-    this.app.path = event.dataTransfer.files[0].path;
-  }
-
-  dropHelper(event) {
-    event.preventDefault();
+  fileDrop(files) {
+    this.app.path = files[0].path;
   }
 
   openFileDialog() {

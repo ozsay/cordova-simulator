@@ -21,32 +21,12 @@ export default class SidenavCtrl {
     this.configuration.openDeviceConfig(device);
   }
 
-  dragAppStart(event, app) {
-    angular.element(event.target).addClass('dragged');
-    event.dataTransfer.setData("appName", app.name);
-  }
-
-  dragAppEnd(event) {
-    angular.element(event.target).removeClass('dragged');
-  }
-
-  dropApp(event, device) {
-    var appName = event.dataTransfer.getData('appName');
-    angular.element(event.target).removeClass('dropped');
-
-    this.configuration.addRunningDevice(device.name, appName);
-  }
-
-  allowDrop(event) {
-    event.preventDefault();
-  }
-
-  dragOverStart(event) {
-    angular.element(event.target).addClass('dropped');
-  }
-
-  dragOverEnd(event) {
-    angular.element(event.target).removeClass('dropped');
+  dropApp(deviceName, appName, files) {
+    if (files.length > 0) {
+      
+    } else {
+      this.configuration.addRunningDevice(deviceName, appName);
+    }
   }
 
   openSite() {

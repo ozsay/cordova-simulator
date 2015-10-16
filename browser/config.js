@@ -9,12 +9,11 @@ System.config({
     ]
   },
   paths: {
-    "github:*": "browser/jspm_packages/github/*",
-    "npm:*": "browser/jspm_packages/npm/*"
+    "github:*": "jspm_packages/github/*",
+    "npm:*": "jspm_packages/npm/*"
   },
 
   map: {
-    "cordova-plugins": "plugins/browser/module",
     "angular": "npm:angular@1.4.7",
     "angular-animate": "npm:angular-animate@1.4.7",
     "angular-aria": "npm:angular-aria@1.4.7",
@@ -22,6 +21,7 @@ System.config({
     "angular-messages": "npm:angular-messages@1.4.7",
     "babel": "npm:babel-core@5.8.25",
     "babel-runtime": "npm:babel-runtime@5.8.25",
+    "cordova-plugins": "plugins/browser/module",
     "core-js": "npm:core-js@1.2.1",
     "css": "github:systemjs/plugin-css@0.1.18",
     "material-design-icons-iconfont": "npm:material-design-icons-iconfont@2.0.3",
