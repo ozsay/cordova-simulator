@@ -1,3 +1,15 @@
+/* common start */
+
+.ng-messages-info {
+  color: black !important;
+}
+
+.no-text-transform {
+  text-transform: none !important;
+}
+
+/* common end */
+
 /* scrollbar start */
 
 ::-webkit-scrollbar {

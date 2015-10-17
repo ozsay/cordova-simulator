@@ -1,50 +1,30 @@
 <md-dialog flex="40" class="config-dialog">
-  <form name="deviceForm">
+  <ng-form name="deviceForm">
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h2>{{dialog.device.name ? dialog.device.name : '&lt;Device name&gt;'}}</h2>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="dialog.discard()">
+      <md-button class="md-icon-button" ng-click="dialog.discard()" type="button">
         <md-icon>close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
-  <md-dialog-content layout="column" layout-padding>
-    <md-input-container>
-      <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
-      <input name="name" ng-model="dialog.device.name" required ng-disabled="!dialog.isNew"  maxlength="25" md-maxlength="25">
-      <div ng-messages="deviceForm.name.$error">
-        <div ng-message="required">Required.</div>
-        <div ng-message-exp="['maxlength']">Name is too long.</div>
-      </div>
-    </md-input-container>
-    <md-autocomplete required
-          md-input-name="preset"
-          md-selected-item="dialog.device.preset"
-          md-search-text="dialog.searchPreset"
-          md-items="item in dialog.presets | objectToArray | filter:{name: dialog.searchPreset}"
-          md-item-text="item.name"
-          md-floating-label="Preset">
-          <md-item-template>
-            <span md-highlight-text="dialog.searchPreset">{{item.name}}</span>
-          </md-item-template>
-          <md-not-found>
-          No matches found for "{{dialog.searchPreset}}".
-        </md-not-found>
-        <div ng-messages="deviceForm.preset.$error">
-          <div ng-message="required">Required.</div>
-        </div>
-    </md-autocomplete>
+  <md-dialog-content>
+    <md-tabs md-border-bottom>
+      <md-tab label="Main"><ng-include src="'partials/device-config-main.html'"></ng-include></md-tab>
+      <md-tab label="Status"><ng-include src="'partials/device-config-status.html'"></ng-include></md-tab>
+      </md-tab>
+    </md-tabs>
   </md-dialog-content>
   <div class="md-actions" layout="row">
-    <md-button ng-click="dialog.discard()">
+    <md-button ng-click="dialog.discard()" type="button">
      Discard
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew" ng-disabled="!dialog.canDelete()">
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew" ng-disabled="!dialog.canDelete()" type="button">
      Delete
     </md-button>
-    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew" ng-disabled="deviceForm.$invalid">
+    <md-button ng-click="dialog.clone()" ng-if="!dialog.isNew" ng-disabled="deviceForm.$invalid" type="button">
      Clone
     </md-button>
     <span flex></span>
@@ -52,5 +32,5 @@
       Apply
     </md-button>
   </div>
-  </form>
+</ng-form>
 </md-dialog>

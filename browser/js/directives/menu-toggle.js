@@ -10,7 +10,7 @@ export default class MenuToggle {
   link(scope, elem, attrs) {
     var $div = angular.element(elem.children()[1]);
 
-    scope.title = attrs.title;
+    scope.title = attrs.menuTitle;
     scope.isOpen = false;
     scope.height = $div.prop('scrollHeight');
 

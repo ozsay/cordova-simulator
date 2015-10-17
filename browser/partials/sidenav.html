@@ -3,20 +3,25 @@
     <header class="sidenav-item">
       <h1 class="app-title" ng-click="sidenav.openSite()">Cordova Simulator</h1>
     </header>
-    <menu-toggle flex title="Apps" class="sidenav-item">
+    <menu-toggle flex menu-title="Apps" class="sidenav-item">
       <ul class="list-menu">
         <li ng-repeat="app in configuration.apps">
           <md-menu>
-            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" ng-dblclick="app.enabled = !app.enabled" class="list-menu-button" drag drag-effect="link" drag-data="{{app.name}}">
-              <div flex layout="row">
+            <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" ng-dblclick="sidenav.changeAppState(app)" class="list-menu-button" drag drag-effect="link" drag-data="{{app.name}}">
+              <div flex layout="row" class="no-text-transform">
                 {{app.name}}
                 <span flex></span>
-                <md-icon>{{!app.enabled ? 'indeterminate_check_box' : 'check_box'}}</md-icon>
+                <md-icon>
+                  {{!app.enabled ? 'indeterminate_check_box' : 'check_box'}}
+                  <md-tooltip>
+                    {{!app.enabled ? 'App is disabled' : 'App is enabled'}}
+                  </md-tooltip>
+                </md-icon>
               </div>
             </md-button>
             <md-menu-content width="4">
               <md-menu-item>
-                <md-button ng-click="app.enabled = !app.enabled">
+                <md-button ng-click="sidenav.changeAppState(app)">
                   <md-icon>{{app.enabled ? 'indeterminate_check_box' : 'check_box'}}</md-icon>
                   {{app.enabled ? 'Disable' : 'Enable'}}
                 </md-button>
@@ -33,12 +38,12 @@
         </li>
       </ul>
     </menu-toggle>
-    <menu-toggle flex title="Devices" class="sidenav-item">
+    <menu-toggle flex menu-title="Devices" class="sidenav-item">
       <ul class="list-menu">
         <li ng-repeat="device in configuration.devices">
           <md-menu>
             <md-button right-click="sidenav.openMenu($mdOpenMenu, $event)" class="list-menu-button" drop="sidenav.dropApp(device.name, data, files)">
-              <div flex layout="row">
+              <div flex layout="row" class="no-text-transform">
                 {{device.name}}
               </div>
             </md-button>
@@ -55,7 +60,7 @@
         </li>
       </ul>
     </menu-toggle>
-    <menu-toggle flex title="Resources" class="sidenav-item">
+    <menu-toggle flex menu-title="Resources" class="sidenav-item">
     </menu-toggle>
   </div>
 </md-sidenav>

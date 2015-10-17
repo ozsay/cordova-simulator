@@ -1,0 +1,42 @@
+<md-content>
+  <ng-form name="mainForm" layout="column" layout-padding>
+    <div layout="row">
+      <md-input-container flex="30">
+        <label>Name {{!dialog.isNew ? ' (Disabled)' : ''}}</label>
+        <input name="name" ng-model="dialog.device.name" required ng-disabled="!dialog.isNew"  maxlength="25" md-maxlength="25" device-exists>
+        <div ng-messages="deviceForm.mainForm.name.$error">
+          <div ng-message="required">Required.</div>
+          <div ng-message="maxlength">Name is too long.</div>
+          <div ng-message="deviceExists">Device already exists.</div>
+        </div>
+      </md-input-container>
+      <md-input-container flex>
+        <label>UUID</label>
+        <input name="uuid" ng-model="dialog.device.uuid"  ng-pattern="dialog.pattern">
+        <div ng-messages="{pattern: deviceForm.mainForm.uuid.$error.pattern, empty: !dialog.device.uuid}">
+          <div ng-message="pattern">UUID must be valid.</div>
+          <div ng-message="empty" class="ng-messages-info">If UUID will not be set, the simulator will generate it.</div>
+        </div>
+      </md-input-container>
+    </div>
+    <input type="hidden" name="hiddenPreset" ng-model="dialog.device.preset" required />
+    <md-autocomplete required
+          md-input-name="preset"
+          md-selected-item="dialog.device.preset"
+          md-search-text="dialog.searchPreset"
+          md-items="item in dialog.presets | objectToArray | filter:{name: dialog.searchPreset}"
+          md-item-text="item.name"
+          md-floating-label="Preset">
+          <md-item-template>
+            <span md-highlight-text="dialog.searchPreset">{{item.name}}</span>
+          </md-item-template>
+          <md-not-found>
+          No matches found for "{{dialog.searchPreset}}".
+        </md-not-found>
+        <div ng-messages="{required: deviceForm.mainForm.preset.$error.required, valid: !dialog.device.preset}">
+          <div ng-message="required">Required.</div>
+          <div ng-message="valid">Please choose a preset from the list.</div>
+        </div>
+    </md-autocomplete>
+  </ng-form>
+</md-content>

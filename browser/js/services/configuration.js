@@ -1,20 +1,33 @@
 /*jshint esnext: true */
 
-import {SUPPORTED_PLATFORMS, FEATURES} from '../globals.js';
+import {SUPPORTED_PLATFORMS, FEATURES, UUID_PATTERN} from '../globals.js';
 
-const FILE_PATH = require('remote').require('path').join(require('remote').require('os').homedir(), '.cordovaSimulatorConfig.json');
+let jsonfile = require('remote').require('jsonfile');
+let path = require('remote').require('path');
+let shell = require('shell');
+let clipboard = require('clipboard');
+
+const FILE_PATH = path.join(require('remote').require('os').homedir(), '.cordovaSimulatorConfig.json');
 const DEFAULT_FILE_PATH = '';
 const GIST_URL = 'https://api.github.com/gists/6b6ae17c1997cf20703f';
 const GIST_FILE_NAME = 'cordova-simulator-config';
-
-let jsonfile = require('remote').require('jsonfile');
-let shell = require('shell');
-let clipboard = require('clipboard');
 
 let $http;
 let $rootScope;
 let $mdDialog;
 let alert;
+
+let isUndefined = angular.isUndefined;
+let isNumber = angular.isNumber;
+let isBoolean  = function(val) {
+  return typeof val === 'boolean';
+};
+let isTrue  = function(val) {
+  return val === true;
+};
+let isFalse  = function(val) {
+  return val === false || isUndefined(val);
+};
 
 let configuration;
 
@@ -29,36 +42,46 @@ export default class Configuration {
   _validate(config) {
     var isValid = true;
 
-    if (config.simulator === undefined || config.simulator.runningDevices === undefined) {
+    if (isUndefined(config.simulator) || isUndefined(config.simulator.runningDevices)) {
       isValid = false;
     } else {
       angular.forEach(config.simulator.runningDevices, function(runningDevice) {
-        if (config.apps[runningDevice.app] === undefined || config.devices[runningDevice.device] === undefined) {
+        if (isUndefined(config.apps[runningDevice.app]) || isUndefined(config.devices[runningDevice.device])) {
           isValid = false;
         }
       });
     }
 
     angular.forEach(config.apps, (app) => {
-      if ((app.name === undefined) ||
-          (app.isMeteor && app.url === undefined) ||
-          (!app.isMeteor && app.path === undefined)) {
+      if (isUndefined(app.name) ||
+          isTrue(app.isMeteor) && isUndefined(app.url) ||
+          isFalse(app.isMeteor) && isUndefined(app.path)) {
           isValid = false;
       }
     });
 
     angular.forEach(config.devices, (device) => {
-      if ((device.name === undefined) ||
-          (config.presets[device.preset] === undefined)) {
+      if (isUndefined(device.name) ||
+          isUndefined(config.presets[device.preset]) ||
+          isUndefined(device.uuid) ||
+          !UUID_PATTERN.test(device.uuid) ||
+          isUndefined(device.status) ||
+          !isBoolean(device.status.wifi) ||
+          !isBoolean(device.status.isFlashlightOn) ||
+          !isBoolean(device.status.isLandscape) ||
+          isUndefined(device.status.battery) ||
+          !isBoolean(device.status.battery.isCharging) ||
+          !isNumber(device.status.battery.level) ||
+          (device.status.battery.level < 0 || device.status.battery.level > 100)) {
           isValid = false;
       }
     });
 
     angular.forEach(config.presets, (preset) => {
-      if ((preset.name === undefined) ||
-          (preset.width === undefined) ||
-          (preset.height === undefined) ||
-          (SUPPORTED_PLATFORMS.indexOf(preset.platform) === -1)) {
+      if (isUndefined(preset.name) ||
+          isUndefined(preset.width) ||
+          isUndefined(preset.height) ||
+          isUndefined(SUPPORTED_PLATFORMS[preset.platform])) {
           isValid = false;
       }
 
@@ -169,8 +192,16 @@ export default class Configuration {
   }
 
   addRunningDevice(deviceName, appName) {
-    configuration.simulator.runningDevices[deviceName + '_' + appName] = {device: configuration.devices[deviceName], app: configuration.apps[appName]};
-    this.save(() => {});
+    if (configuration.apps[appName].enabled) {
+      if (isUndefined(configuration.simulator.runningDevices[deviceName + '_' + appName])) {
+        configuration.simulator.runningDevices[deviceName + '_' + appName] = {device: configuration.devices[deviceName], app: configuration.apps[appName]};
+        this.save(() => {});
+      } else {
+        alert.warning(appName + ' is already running on ' + deviceName);
+      }
+    } else {
+      alert.warning(appName + ' is not enabled');
+    }
   }
 
   removeRunningDevice(deviceName, appName) {
@@ -178,16 +209,82 @@ export default class Configuration {
     this.save(() => {});
   }
 
+  applyFields(source, target) {
+    angular.forEach(source, (val, key) => {
+      target[key] = val;
+    });
+  }
+
+  createFileFromLocation(deviceName, appLocation) {
+    var locArr = appLocation.split(path.sep);
+
+    if (locArr.length > 3) {
+      var appName = locArr[locArr.length - 3];
+
+      configuration.apps[appName] = {
+        name: appName,
+        path: appLocation,
+        enabled: true
+      };
+
+      this.addRunningDevice(deviceName, appName);
+    }
+  }
+
+  isAppExists(appName) {
+    return !isUndefined(configuration.apps[appName]);
+  }
+
+  isPresetExists(presetName) {
+    return !isUndefined(configuration.presets[presetName]);
+  }
+
+  isDeviceExists(deviceName) {
+    return !isUndefined(configuration.devices[deviceName]);
+  }
+
+  changeAppState(app) {
+    app.enabled = !app.enabled;
+
+    if (!app.enabled) {
+      angular.forEach(configuration.simulator.runningDevices, (runningDevice, key) => {
+        if (runningDevice.app === app) {
+          delete configuration.simulator.runningDevices[key];
+        }
+      });
+    }
+
+    this.save(() => {});
+  }
+
   openAppConfig(_app) {
-    this._openDialog(_app, 'partials/app-config.html', 'appDialog', (app) => configuration.apps[app.name] = app, (app) => delete configuration.apps[app.name]);
+    this._openDialog(_app, 'partials/app-config.html', 'appDialog', (app) => {
+      if (_app === undefined) {
+        configuration.apps[app.name] = app;
+      } else {
+        this.applyFields(app, _app);
+      }
+    }, (app) => delete configuration.apps[app.name]);
   }
 
   openPresetConfig(_preset) {
-    this._openDialog(_preset, 'partials/preset-config.html', 'presetDialog', (preset) => configuration.presets[preset.name] = preset, (preset) => delete configuration.presets[preset.name]);
+    this._openDialog(_preset, 'partials/preset-config.html', 'presetDialog', (preset) => {
+      if (_preset === undefined || _preset.name !== preset.name) {
+        configuration.presets[preset.name] = preset;
+      } else {
+        this.applyFields(preset, _preset);
+      }
+    }, (preset) => delete configuration.presets[preset.name]);
   }
 
   openDeviceConfig(_device) {
-    this._openDialog(_device, 'partials/device-config.html', 'deviceDialog', (device) => configuration.devices[device.name] = device, (device) => delete configuration.devices[device.name]);
+    this._openDialog(_device, 'partials/device-config.html', 'deviceDialog', (device) => {
+      if (_device === undefined || _device.name !== device.name) {
+        configuration.devices[device.name] = device;
+      } else {
+        this.applyFields(device,  _device);
+      }
+    }, (device) => delete configuration.devices[device.name]);
   }
 
   _openDialog(model, templateUrl, controller, applyFn, deleteFn) {

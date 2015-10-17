@@ -3,73 +3,86 @@
 let configuration;
 let plugins;
 
-export default class Device {
-  constructor() {
-    this.templateUrl = 'partials/device.html';
-    this.restrict = 'E';
-    this.scope = {
-      device: "=",
-      app: "="
-    };
+class DeviceCtrl {
+  constructor(elem) {
+    this.elem = elem;
+    this.webViewElement = angular.element(elem.children().children()[2]).children()[0];
+    this.webView = angular.element(this.webViewElement);
+
+    this.resizeDevice();
+    this.startListening();
+    this.reloadApp();
   }
 
-  link(scope, elem, attrs) {
-    var webView = angular.element(angular.element(elem.children().children()[2]).children()[0]);
-
-    elem.children().css({width: scope.device.preset.width + 'px', height: (scope.device.preset.height + 100) + 'px'});
-    webView.css({width: scope.device.preset.width + 'px', height: scope.device.preset.height + 'px'});
-
-    webView[0].addEventListener('ipc-message', function(event) {
-      plugins.execCommand({device: scope.device}, event.args[1], event.args[2], event.args[3])
+  startListening() {
+    this.webViewElement.addEventListener('ipc-message', (event) => {
+      plugins.execCommand(this, event.args[1], event.args[2], event.args[3])
       .then((result) => {
         if (event.args[0] !== undefined) {
-          webView[0].send('cordova-simulator', event.args[0], result);
+          this.webViewElement.send('cordova-simulator', event.args[0], result);
         }
       })
       .catch((err) => {
         if (event.args[0] !== undefined) {
-          webView[0].send('cordova-simulator', event.args[0], undefined, err);
+          this.webViewElement.send('cordova-simulator', event.args[0], undefined, err);
         }
       });
     });
+  }
 
-    scope.status = {
-      wifi: true,
-      isFlashlightOn: false,
-      battery: {
-        level: 100,
-        isCharging: false
-      },
-      isLandscape: false
+  reloadApp() {
+    if (this.app.path !== undefined) {
+      this.webViewElement.src = 'simulator-file://' + this.app.path;
+    }
+  }
+
+  resizeDevice() {
+    if (this.device.status.isLandscape) {
+      this.elem.children().css({width: this.device.preset.height + 'px', height: (this.device.preset.width + 100) + 'px'});
+      this.webView.css({width: this.device.preset.height + 'px', height: this.device.preset.width + 'px'});
+    } else {
+      this.elem.children().css({width: this.device.preset.width + 'px', height: (this.device.preset.height + 100) + 'px'});
+      this.webView.css({width: this.device.preset.width + 'px', height: this.device.preset.height + 'px'});
+    }
+  }
+
+  rotateDevice() {
+    this.device.status.isLandscape = !this.device.status.isLandscape;
+
+    this.resizeDevice();
+  }
+
+  openDevTools() {
+    this.webViewElement.openDevTools();
+  }
+
+  closeApp() {
+    configuration.removeRunningDevice(this.device.name, this.app.name);
+  }
+
+  changeWifi() {
+    this.device.status.wifi = !this.device.status.wifi;
+  }
+
+  changeBatteryCharging() {
+    this.device.status.battery.isCharging = !this.device.status.battery.isCharging;
+  }
+}
+
+DeviceCtrl.$inject = ['$element'];
+
+export default class Device {
+  constructor() {
+    this.templateUrl = 'partials/device.html';
+    this.restrict = 'E';
+    this.scope = {};
+    this.bindToController = {
+      device: "=",
+      app: "="
     };
-
-    scope.reloadApp = () => {
-      webView[0].src = scope.app.path;
-    };
-
-    scope.openDevTools = () => {
-      webView[0].openDevTools();
-    };
-
-    scope.closeApp = () => {
-      configuration.removeRunningDevice(scope.device.name, scope.app.name);
-    };
-
-    scope.rotateDevice = () => {
-      scope.status.isLandscape = !scope.status.isLandscape;
-
-      if (scope.status.isLandscape) {
-        elem.children().css({width: scope.device.preset.height + 'px', height: (scope.device.preset.width + 100) + 'px'});
-        webView.css({width: scope.device.preset.height + 'px', height: scope.device.preset.width + 'px'});
-      } else {
-        elem.children().css({width: scope.device.preset.width + 'px', height: (scope.device.preset.height + 100) + 'px'});
-        webView.css({width: scope.device.preset.width + 'px', height: scope.device.preset.height + 'px'});
-      }
-    };
-
-    scope.changeWifi = () => {
-      scope.status.wifi = !scope.status.wifi;
-    };
+    this.controller = DeviceCtrl;
+    this.controllerAs = "runningDevice";
+    this.require = "device";
   }
 
   static directiveFactory(_configuration, _plugins) {

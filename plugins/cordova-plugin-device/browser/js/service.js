@@ -8,12 +8,12 @@ export default class DevicePlugin {
 
     plugins.registerCommand('Device', 'getDeviceInfo', this.getDeviceInfo);
   }
-  
+
   getDeviceInfo(obj) {
     return {
       platform: obj.device.preset.platform,
       version: obj.device.preset.platformVersion,
-      uuid: '1A2FDEF0-C09D-4DB4-A8BE-7EC2F4A6E49A',
+      uuid: obj.device.uuid,
       model: obj.device.preset.model
     };
   }

@@ -1,6 +1,6 @@
 <div class="device md-whiteframe-1dp">
   <div class="device-header" layout="row">
-    <span>{{device.name}} running {{app.name}}</span>
+    <span>{{runningDevice.device.name}} running {{runningDevice.app.name}}</span>
     <md-fab-speed-dial md-direction="down" class="md-fling device-actions">
       <md-fab-trigger>
         <md-button aria-label="menu" class="md-fab md-mini">
@@ -11,25 +11,25 @@
         </md-button>
       </md-fab-trigger>
       <md-fab-actions>
-        <md-button aria-label="Rotation" class="md-fab md-raised md-mini md-primary" ng-click="rotateDevice()">
+        <md-button aria-label="Rotation" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.rotateDevice()">
           <md-tooltip>
             Rotate screen
           </md-tooltip>
           <md-icon aria-label="Rotation">screen_rotation</md-icon>
         </md-button>
-        <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="reloadApp()">
+        <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.reloadApp()">
           <md-tooltip>
             Reload app
           </md-tooltip>
           <md-icon aria-label="Refresh">refresh</md-icon>
         </md-button>
-        <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="openDevTools()">
+        <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.openDevTools()">
           <md-tooltip>
             Open developer tools
           </md-tooltip>
           <md-icon aria-label="Refresh">developer_mode</md-icon>
         </md-button>
-        <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="closeApp()">
+        <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.closeApp()">
           <md-tooltip>
             Close app
           </md-tooltip>
@@ -41,32 +41,32 @@
   <div class="device-controls">
     <md-button class="md-icon-button md-mini device-controls-button">
       <md-tooltip>
-        Flashlight is {{status.isFlashlightOn ? 'on' : 'off'}}
+        Flashlight is {{runningDevice.device.status.isFlashlightOn ? 'on' : 'off'}}
       </md-tooltip>
-      <md-icon md-svg-src="{{status.isFlashlightOn ? 'partials/icons/flashlight.svg' : 'partials/icons/flashlight-off.svg'}}"></md-icon>
+      <md-icon md-svg-src="{{runningDevice.device.status.isFlashlightOn ? 'partials/icons/flashlight.svg' : 'partials/icons/flashlight-off.svg'}}"></md-icon>
     </md-button>
-    <md-button class="md-icon-button md-mini device-controls-button" ng-click="changeWifi()">
+    <md-button class="md-icon-button md-mini device-controls-button" ng-click="runningDevice.changeWifi()">
       <md-tooltip>
-        Turn Wifi {{status.wifi ? 'off' : 'on'}}
+        Turn Wifi {{runningDevice.device.status.wifi ? 'off' : 'on'}}
       </md-tooltip>
-      <md-icon>{{status.wifi ? 'network_wifi' : 'signal_wifi_off'}}</md-icon>
+      <md-icon>{{runningDevice.device.status.wifi ? 'network_wifi' : 'signal_wifi_off'}}</md-icon>
     </md-button>
     <md-menu class="device-controls-battery-menu">
-      <md-button aria-label="Open demo menu" class="md-icon-button md-mini device-controls-button" ng-click="$mdOpenMenu($event)" right-click="status.battery.isCharging = !status.battery.isCharging">
+      <md-button aria-label="Open demo menu" class="md-icon-button md-mini device-controls-button" ng-click="$mdOpenMenu($event)" right-click="runningDevice.changeBatteryCharging()">
         <md-tooltip>
           Left click: level, Right click: charging
         </md-tooltip>
-        <md-icon>{{status.battery.isCharging ? 'battery_charging_full' : 'battery_full'}}</md-icon>
+        <md-icon>{{runningDevice.device.status.battery.isCharging ? 'battery_charging_full' : 'battery_full'}}</md-icon>
       </md-button>
       <md-menu-content>
         <md-input-container class="device-controls-battery-input">
           <label>Battery level</label>
-          <input type="number" min="0" max="100" ng-model="status.battery.level">
+          <input type="number" min="0" max="100" ng-model="runningDevice.device.status.battery.level">
         </md-input-container>
       </md-menu-content>
     </md-menu>
   </div>
   <div class="device-content">
-    <webview ng-src="{{app.path}}" nodeintegration></webview>
+    <webview nodeintegration></webview>
   </div>
 </div>

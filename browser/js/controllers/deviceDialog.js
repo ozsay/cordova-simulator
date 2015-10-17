@@ -1,16 +1,39 @@
 /*jshint esnext: true */
 
 import BasicDialog from './basicDialog';
+import uuid from 'node-uuid';
+import {UUID_PATTERN} from '../globals.js';
+
+const DEVICE_TEMPLATE = {
+  status: {
+    wifi: true,
+    isFlashlightOn: false,
+    battery: {
+      level: 100,
+      isCharging: true
+    },
+    isLandscape: false
+  }
+};
 
 export default class DeviceDialog extends BasicDialog {
   constructor($rootScope, $mdDialog, device) {
-    super($mdDialog, device === undefined, device !== undefined ? DeviceDialog.copyDevice(device) : {});
+    super($mdDialog, device === undefined, device !== undefined ? DeviceDialog.copyDevice(device) : DeviceDialog.newDevice(device));
 
     this.$rootScope = $rootScope;
 
     this.dialogType = 'device';
     this.device = this.model;
     this.presets = this.$rootScope.configuration.presets;
+    this.pattern = UUID_PATTERN;
+  }
+
+  apply() {
+    if (this.device.uuid === undefined || this.device.uuid === '') {
+      this.device.uuid = uuid();
+    }
+
+    super.apply();
   }
 
   clone() {
@@ -27,6 +50,10 @@ export default class DeviceDialog extends BasicDialog {
     });
 
     return canDelete;
+  }
+
+  static newDevice() {
+    return angular.copy(DEVICE_TEMPLATE);
   }
 
   static copyDevice(device) {

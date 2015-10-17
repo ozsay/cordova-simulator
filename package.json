@@ -44,9 +44,10 @@
       "angular": "npm:angular@^1.4.7",
       "angular-animate": "npm:angular-animate@^1.4.7",
       "angular-aria": "npm:angular-aria@^1.4.7",
-      "angular-material": "npm:angular-material@^0.11.4",
+      "angular-material": "npm:angular-material@^0.11.3",
       "angular-messages": "npm:angular-messages@^1.4.7",
-      "material-design-icons-iconfont": "npm:material-design-icons-iconfont@^2.0.3"
+      "material-design-icons-iconfont": "npm:material-design-icons-iconfont@^2.0.3",
+      "node-uuid": "npm:node-uuid@^1.4.3"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
