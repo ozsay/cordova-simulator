@@ -53,7 +53,7 @@ gulp.task('plugin:add', function (cb) {
       pjson.cordovaPlugins[argv.n].url = argv.u;
     }
 
-    fs.writeFile('package.json', pjson, {spaces: 2}, function(err) {
+    fs.writeJson('package.json', pjson, {spaces: 2}, function(err) {
       cb(err);
     });
   }

@@ -58,6 +58,12 @@
   "cordovaPlugins": {
     "device": {
       "id": "cordova-plugin-device"
+    },
+    "clipboard": {
+      "url": "https://github.com/VersoSolutions/CordovaClipboard"
+    },
+    "flashlight": {
+      "url": "https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin.git"
     }
   }
 }

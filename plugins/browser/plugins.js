@@ -39,7 +39,7 @@ export default class Plugins {
   }
 
   execCommand(sender, plugin, method, args) {
-    var result = pluginsList[plugin][method](sender, args);
+    var result = pluginsList[plugin][method](sender, ...args);
 
     if (result === undefined || !angular.isFunction(result.then)) {
       var deferred = $q.defer();

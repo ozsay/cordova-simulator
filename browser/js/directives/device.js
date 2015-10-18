@@ -42,12 +42,12 @@ class DeviceCtrl {
       if (event.channel === 'cordova-simulator') {
         plugins.execCommand(this, event.args[1], event.args[2], event.args[3])
         .then((result) => {
-          if (event.args[0] !== undefined) {
+          if (event.args[0] !== null) {
             this.webViewElement.send('cordova-simulator', event.args[0], result);
           }
         })
         .catch((err) => {
-          if (event.args[0] !== undefined) {
+          if (event.args[0] !== null) {
             this.webViewElement.send('cordova-simulator', event.args[0], undefined, err);
           }
         });
@@ -82,6 +82,7 @@ class DeviceCtrl {
 
   rotateDevice() {
     this.device.status.isLandscape = !this.device.status.isLandscape;
+    configuration.save();
 
     this.resizeDevice();
   }
@@ -96,10 +97,17 @@ class DeviceCtrl {
 
   changeWifi() {
     this.device.status.wifi = !this.device.status.wifi;
+    configuration.save();
   }
 
   changeBatteryCharging() {
     this.device.status.battery.isCharging = !this.device.status.battery.isCharging;
+    configuration.save();
+  }
+
+  turnFlashLight(status) {
+    this.device.status.isFlashlightOn = status === undefined ? !this.device.status.isFlashlightOn : status;
+    configuration.save();
   }
 }
 

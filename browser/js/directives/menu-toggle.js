@@ -27,7 +27,7 @@ class MenuToggleCtrl {
   toggle() {
     this.isOpen = !this.isOpen;
     $rootScope.configuration.simulator[this.title + 'MenuToggle'] = this.isOpen;
-    configuration.save(() => {});
+    configuration.save();
   }
 }
 

@@ -138,6 +138,7 @@ export default class Configuration {
   }
 
   save(cb) {
+    cb = cb || angular.noop;
     fs.writeFile(FILE_PATH, angular.toJson(this._dataToStrings(angular.copy(configuration)), true), (err) => cb(err));
   }
 
