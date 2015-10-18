@@ -39,17 +39,19 @@ class DeviceCtrl {
     });
 
     this.webViewElement.addEventListener('ipc-message', (event) => {
-      plugins.execCommand(this, event.args[1], event.args[2], event.args[3])
-      .then((result) => {
-        if (event.args[0] !== undefined) {
-          this.webViewElement.send('cordova-simulator', event.args[0], result);
-        }
-      })
-      .catch((err) => {
-        if (event.args[0] !== undefined) {
-          this.webViewElement.send('cordova-simulator', event.args[0], undefined, err);
-        }
-      });
+      if (event.channel === 'cordova-simulator') {
+        plugins.execCommand(this, event.args[1], event.args[2], event.args[3])
+        .then((result) => {
+          if (event.args[0] !== undefined) {
+            this.webViewElement.send('cordova-simulator', event.args[0], result);
+          }
+        })
+        .catch((err) => {
+          if (event.args[0] !== undefined) {
+            this.webViewElement.send('cordova-simulator', event.args[0], undefined, err);
+          }
+        });
+      }
     });
   }
 

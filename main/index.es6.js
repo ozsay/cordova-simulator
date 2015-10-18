@@ -3,11 +3,10 @@
 let app = require('app');
 let BrowserWindow = require('browser-window');
 let menu = require('menu');
+let globalShortcut = require('global-shortcut');
 
-let path = require('path');
-let url = require('url');
-
-const CORDOVA_SCRIPT_PATH = path.normalize(__dirname + '/../browser/js/cordova.js');
+let protocolsInit = require('./protocols.js');
+let alert = require('./alert.js');
 
 var mainWindow = null;
 
@@ -18,38 +17,29 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', () => {
-  let protocol = require('protocol');
+  protocolsInit((err) => {
+    mainWindow = new BrowserWindow({
+      width: 1024,
+      height: 780
+    });
 
-  protocol.registerFileProtocol('simulator-file', (request, callback) => {
-    var filePath = url.parse(request.url);
-    var fileName = path.basename(filePath.pathname);
+    alert.setWindow(mainWindow);
 
-    var pathToServe = fileName === 'cordova.js' ? CORDOVA_SCRIPT_PATH : filePath.pathname;
+    mainWindow.setTitle('Cordova Simulator');
+    mainWindow.maximize();
 
-    callback(pathToServe);
-  }, (error) => {
-    if (error)
-    console.error('Failed to register protocol');
-  });
+    mainWindow.loadUrl('file://' + __dirname + '/../browser/index.html');
+    menu.setApplicationMenu(null);
 
-  protocol.registerStandardSchemes(['simulator-file']);
+    globalShortcut.register('ctrl+r', function() {
+      mainWindow.reload();
+    });
 
-  mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 780
-  });
+    mainWindow.openDevTools();
 
-  mainWindow.maximize();
 
-  mainWindow.loadUrl('file://' + __dirname + '/../browser/index.html');
-  //menu.setApplicationMenu(null);
-  mainWindow.openDevTools();
-
-  mainWindow.webContents.on('did-finish-load',() =>{
-    mainWindow.setTitle(app.getName());
-  });
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+    mainWindow.on('closed', () => {
+      mainWindow = null;
+    });
   });
 });
