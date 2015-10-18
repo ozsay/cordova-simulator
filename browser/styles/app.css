@@ -188,6 +188,15 @@ button.md-button-toggle {
   padding: 17px 0 0 10px;
 }
 
+.device-progress {
+  transform: scale(0.3) !important;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: 30px;
+  margin-top: -20px;
+}
+
 .device-actions {
   position: absolute;
   right: 0;

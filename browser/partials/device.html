@@ -1,6 +1,7 @@
 <div class="device md-whiteframe-1dp">
   <div class="device-header" layout="row">
     <span>{{runningDevice.device.name}} running {{runningDevice.app.name}}</span>
+    <md-progress-circular class="md-mini device-progress" md-mode="{{runningDevice.isWorking ? 'indeterminate' : ''}}"></md-progress-circular>
     <md-fab-speed-dial md-direction="down" class="md-fling device-actions">
       <md-fab-trigger>
         <md-button aria-label="menu" class="md-fab md-mini">

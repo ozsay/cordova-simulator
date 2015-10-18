@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ozsay/cordova-simulator",
   "dependencies": {
-    "jsonfile": "^2.2.2"
+    "chokidar": "^1.2.0"
   },
   "devDependencies": {
     "cordova-js": "^4.1.1",

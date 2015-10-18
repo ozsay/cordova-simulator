@@ -2,11 +2,32 @@
 
 let $q;
 let pluginsList;
+let customFeatures;
 
 export default class Plugins {
   constructor(_$q) {
-    pluginsList = {};
     $q = _$q;
+
+    pluginsList = {};
+    customFeatures = {};
+  }
+
+  destroy(sender) {
+    angular.forEach(customFeatures, (customFeature) => {
+      if (customFeature.destroy !== undefined) {
+        customFeature.destroy(sender);
+      }
+    });
+  }
+
+  registerCustomFeature(name, customFeature) {
+    customFeatures[name] = customFeature;
+  }
+
+  execCustomFeatures(sender) {
+    angular.forEach(customFeatures, (customFeature) => {
+      customFeature.exec(sender);
+    });
   }
 
   registerCommand(plugin, method, fn) {

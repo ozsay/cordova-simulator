@@ -20,8 +20,6 @@ app.on('window-all-closed', () => {
 app.on('ready', () => {
   let protocol = require('protocol');
 
-  protocol.registerStandardSchemes(['simulator-file']);
-
   protocol.registerFileProtocol('simulator-file', (request, callback) => {
     var filePath = url.parse(request.url);
     var fileName = path.basename(filePath.pathname);
@@ -33,6 +31,8 @@ app.on('ready', () => {
     if (error)
     console.error('Failed to register protocol');
   });
+
+  protocol.registerStandardSchemes(['simulator-file']);
 
   mainWindow = new BrowserWindow({
     width: 1024,

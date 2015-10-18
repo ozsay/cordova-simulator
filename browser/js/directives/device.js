@@ -1,20 +1,43 @@
 /*jshint esnext: true */
 
+let path = require('remote').require('path');
+
+let $timeout;
+
 let configuration;
 let plugins;
 
 class DeviceCtrl {
-  constructor(elem) {
+  constructor(elem, $scope) {
     this.elem = elem;
+
     this.webViewElement = angular.element(elem.children().children()[2]).children()[0];
     this.webView = angular.element(this.webViewElement);
+
+    this.device = this.runningDevice.device;
+    this.app = this.runningDevice.app;
 
     this.resizeDevice();
     this.startListening();
     this.reloadApp();
+    this.execCustomFeatures();
+
+    $scope.$on('$destroy', () => plugins.destroy(this));
+  }
+
+  sandbox(fn) {
+    $timeout(() => fn());
+  }
+
+  execCustomFeatures() {
+    plugins.execCustomFeatures(this);
   }
 
   startListening() {
+    this.webViewElement.addEventListener('dom-ready', () => {
+      this.stopWorking();
+    });
+
     this.webViewElement.addEventListener('ipc-message', (event) => {
       plugins.execCommand(this, event.args[1], event.args[2], event.args[3])
       .then((result) => {
@@ -30,9 +53,18 @@ class DeviceCtrl {
     });
   }
 
+  startWorking() {
+    this.isWorking = true;
+  }
+
+  stopWorking() {
+    this.isWorking = false;
+  }
+
   reloadApp() {
+    this.startWorking();
     if (this.app.path !== undefined) {
-      this.webViewElement.src = 'simulator-file://' + this.app.path;
+      this.webViewElement.src = 'simulator-file://' + path.join(this.app.path, 'www', 'index.html');
     }
   }
 
@@ -69,7 +101,7 @@ class DeviceCtrl {
   }
 }
 
-DeviceCtrl.$inject = ['$element'];
+DeviceCtrl.$inject = ['$element', '$scope'];
 
 export default class Device {
   constructor() {
@@ -77,15 +109,16 @@ export default class Device {
     this.restrict = 'E';
     this.scope = {};
     this.bindToController = {
-      device: "=",
-      app: "="
+      runningDevice: "="
     };
     this.controller = DeviceCtrl;
     this.controllerAs = "runningDevice";
     this.require = "device";
   }
 
-  static directiveFactory(_configuration, _plugins) {
+  static directiveFactory(_$timeout, _configuration, _plugins) {
+    $timeout = _$timeout;
+
     configuration = _configuration;
     plugins = _plugins;
 
@@ -95,4 +128,4 @@ export default class Device {
   }
 }
 
-Device.directiveFactory.$inject = ['Configuration', 'plugins'];
+Device.directiveFactory.$inject = ['$timeout', 'Configuration', 'plugins'];

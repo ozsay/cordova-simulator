@@ -1,39 +1,55 @@
 /*jshint esnext: true */
 
-export default class MenuToggle {
-  constructor() {
-    this.transclude = true;
-    this.scope = true;
-    this.templateUrl = 'partials/menu-toggle.html';
-  }
+let $rootScope;
+let configuration;
 
-  link(scope, elem, attrs) {
-    var $div = angular.element(elem.children()[1]);
+class MenuToggleCtrl {
+  constructor($scope, elem, attrs) {
+    this.$div = angular.element(elem.children()[1]);
 
-    scope.title = attrs.menuTitle;
-    scope.isOpen = false;
-    scope.height = $div.prop('scrollHeight');
+    this.title = attrs.menuTitle;
+    this.isOpen = $rootScope.configuration.simulator[this.title + 'MenuToggle'] || false;
+    this.height = this.$div.prop('scrollHeight');
 
-    scope.toggle = () => scope.isOpen = !scope.isOpen;
-
-    scope.$watch(() => {
-        scope.height = $div.children().prop('clientHeight') || 0;
+    $scope.$watch(() => {
+        this.height = this.$div.children().prop('clientHeight') || 0;
     });
 
-    scope.$watchGroup(['isOpen', 'height'], (arr) => {
+    $scope.$watchGroup(['menu.isOpen', 'menu.height'], (arr) => {
       var open = arr[0],
           height = arr[1];
 
       var targetHeight = open ? height : 0;
-      $div.css({ height: targetHeight + 'px' });
+      this.$div.css({ height: targetHeight + 'px' });
     });
   }
 
-  static directiveFactory() {
+  toggle() {
+    this.isOpen = !this.isOpen;
+    $rootScope.configuration.simulator[this.title + 'MenuToggle'] = this.isOpen;
+    configuration.save(() => {});
+  }
+}
+
+MenuToggleCtrl.$inject = ['$scope', '$element', '$attrs'];
+
+export default class MenuToggle {
+  constructor() {
+    this.transclude = true;
+    this.scope = true;
+    this.controller = MenuToggleCtrl;
+    this.controllerAs = "menu";
+    this.templateUrl = 'partials/menu-toggle.html';
+  }
+
+  static directiveFactory(_$rootScope, _configuration) {
+    $rootScope = _$rootScope;
+    configuration = _configuration;
+
     MenuToggle.instance = new MenuToggle();
 
     return MenuToggle.instance;
   }
 }
 
-//MenuToggle.directiveFactory.$inject = [];
+MenuToggle.directiveFactory.$inject = ['$rootScope', 'Configuration'];

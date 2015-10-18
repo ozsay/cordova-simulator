@@ -6,7 +6,6 @@ var exec      = require('child_process').exec,
     concat    = require('gulp-concat'),
     uglify    = require('gulp-uglify'),
     gulpif    = require('gulp-if'),
-    jsonfile  = require('jsonfile'),
     fs        = require('fs-extra'),
     yargs     = require('yargs'),
     cordova   = require('cordova-lib').cordova,
@@ -35,6 +34,13 @@ gulp.task('app:run', ['app:transpile'], function(cb) {
     });
 });
 
+gulp.task('app:debug', ['app:transpile'], function(cb) {
+  exec('electron --debug=5858 .', function(err) {
+      if (err) return cb(err);
+      cb();
+    });
+});
+
 gulp.task('plugin:add', function (cb) {
   if (argv.n !== undefined && (argv.i !== undefined || argv.u !== undefined)) {
     pjson.cordovaPlugins[argv.n] = {};
@@ -45,7 +51,7 @@ gulp.task('plugin:add', function (cb) {
       pjson.cordovaPlugins[argv.n].url = argv.u;
     }
 
-    jsonfile.writeFile('package.json', pjson, {spaces: 2}, function(err) {
+    fs.writeFile('package.json', pjson, {spaces: 2}, function(err) {
       cb(err);
     });
   }

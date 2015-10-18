@@ -2,8 +2,8 @@
 
 import {SUPPORTED_PLATFORMS, FEATURES, UUID_PATTERN} from '../globals.js';
 
-let jsonfile = require('remote').require('jsonfile');
 let path = require('remote').require('path');
+let fs = require('remote').require('fs');
 let shell = require('shell');
 let clipboard = require('clipboard');
 
@@ -46,7 +46,9 @@ export default class Configuration {
       isValid = false;
     } else {
       angular.forEach(config.simulator.runningDevices, function(runningDevice) {
-        if (isUndefined(config.apps[runningDevice.app]) || isUndefined(config.devices[runningDevice.device])) {
+        if (isUndefined(runningDevice.name) ||
+            isUndefined(config.apps[runningDevice.app]) ||
+            isUndefined(config.devices[runningDevice.device])) {
           isValid = false;
         }
       });
@@ -122,8 +124,8 @@ export default class Configuration {
   }
 
   load(cb) {
-    jsonfile.readFile(FILE_PATH, (err, config) => {
-      config = angular.copy(config);
+    fs.readFile(FILE_PATH, 'utf8', (err, config) => {
+      config = angular.fromJson(config);
       if (err) {
         alert.error('Can\'t read configuration file. Loading default configuration');
       } else if (!this._validate(config)) {
@@ -136,7 +138,7 @@ export default class Configuration {
   }
 
   save(cb) {
-    jsonfile.writeFile(FILE_PATH, this._dataToStrings(angular.copy(configuration)), {spaces: 2}, (err) => cb(err));
+    fs.writeFile(FILE_PATH, angular.toJson(this._dataToStrings(angular.copy(configuration)), true), (err) => cb(err));
   }
 
   loadFromGithub() {
@@ -193,8 +195,9 @@ export default class Configuration {
 
   addRunningDevice(deviceName, appName) {
     if (configuration.apps[appName].enabled) {
-      if (isUndefined(configuration.simulator.runningDevices[deviceName + '_' + appName])) {
-        configuration.simulator.runningDevices[deviceName + '_' + appName] = {device: configuration.devices[deviceName], app: configuration.apps[appName]};
+      var name = deviceName + '_' + appName;
+      if (isUndefined(configuration.simulator.runningDevices[name])) {
+        configuration.simulator.runningDevices[name] = {name: name, device: configuration.devices[deviceName], app: configuration.apps[appName]};
         this.save(() => {});
       } else {
         alert.warning(appName + ' is already running on ' + deviceName);
