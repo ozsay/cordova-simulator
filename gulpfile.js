@@ -21,10 +21,12 @@ gulp.task('clean', function () {
 });
 
 gulp.task('app:transpile', function() {
-  return gulp.src('main/index.es6.js')
+  return gulp.src('./**/*.es6.js')
     .pipe(babel())
-    .pipe(rename('index.js'))
-    .pipe(gulp.dest('main'));
+    .pipe(rename(function (path) {
+      path.basename = path.basename.substr(0, path.basename.length - 4);
+    }))
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('app:run', ['app:transpile'], function(cb) {
