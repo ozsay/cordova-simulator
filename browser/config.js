@@ -19,10 +19,10 @@ System.config({
     "angular-aria": "npm:angular-aria@1.4.7",
     "angular-material": "npm:angular-material@0.11.3",
     "angular-messages": "npm:angular-messages@1.4.7",
-    "babel": "npm:babel-core@5.8.25",
-    "babel-runtime": "npm:babel-runtime@5.8.25",
+    "babel": "npm:babel-core@5.8.29",
+    "babel-runtime": "npm:babel-runtime@5.8.29",
     "cordova-plugins": "plugins/browser/module",
-    "core-js": "npm:core-js@1.2.1",
+    "core-js": "npm:core-js@1.2.3",
     "css": "github:systemjs/plugin-css@0.1.18",
     "csshake": "npm:csshake@1.5.0",
     "material-design-icons-iconfont": "npm:material-design-icons-iconfont@2.0.3",
@@ -56,7 +56,7 @@ System.config({
       "angular": "github:angular/bower-angular@1.4.7",
       "angular-animate": "github:angular/bower-angular-animate@1.4.7",
       "angular-aria": "github:angular/bower-angular-aria@1.4.7",
-      "css": "github:systemjs/plugin-css@0.1.18"
+      "css": "github:systemjs/plugin-css@0.1.19"
     },
     "npm:angular@1.4.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"
@@ -64,7 +64,7 @@ System.config({
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
     },
-    "npm:babel-runtime@5.8.25": {
+    "npm:babel-runtime@5.8.29": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:buffer@3.5.1": {
@@ -72,8 +72,9 @@ System.config({
       "ieee754": "npm:ieee754@1.1.6",
       "is-array": "npm:is-array@1.0.1"
     },
-    "npm:core-js@1.2.1": {
+    "npm:core-js@1.2.3": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"
     },
