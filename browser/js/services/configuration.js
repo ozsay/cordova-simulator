@@ -1,14 +1,12 @@
 /*jshint esnext: true */
 
-import {SUPPORTED_PLATFORMS, FEATURES, UUID_PATTERN} from '../globals.js';
-
 let path = require('remote').require('path');
 let fs = require('remote').require('fs');
 let shell = require('shell');
 let clipboard = require('clipboard');
 
 const FILE_PATH = path.join(require('remote').require('os').homedir(), '.cordovaSimulatorConfig.json');
-const DEFAULT_FILE_PATH = '';
+const DEFAULT_FILE_PATH = 'defaultConfig.json';
 const GIST_URL = 'https://api.github.com/gists/6b6ae17c1997cf20703f';
 const GIST_FILE_NAME = 'cordova-simulator-config';
 
@@ -17,129 +15,105 @@ let $rootScope;
 let $mdDialog;
 let alert;
 
-let isUndefined = angular.isUndefined;
-let isNumber = angular.isNumber;
-let isBoolean  = function(val) {
-  return typeof val === 'boolean';
-};
-let isTrue  = function(val) {
-  return val === true;
-};
-let isFalse  = function(val) {
-  return val === false || isUndefined(val);
-};
-
-let configuration;
+let cordovaApp;
+let preset;
+let simulator;
+let device;
 
 export default class Configuration {
-  constructor(_$http, _$rootScope, _$mdDialog, _alert) {
+  constructor(_$http, _$rootScope, _$mdDialog, _alert, _cordovaApp, _preset, _simulator, _device) {
     $http = _$http;
     $rootScope = _$rootScope;
     $mdDialog = _$mdDialog;
+
     alert = _alert;
+    cordovaApp = _cordovaApp;
+    preset = _preset;
+    simulator = _simulator;
+    device = _device;
   }
 
-  _validate(config) {
-    var isValid = true;
+  _createConfig(rawConfig) {
+    var config = {apps: {}, presets: {}, devices: {}};
 
-    if (isUndefined(config.simulator) || isUndefined(config.simulator.runningDevices)) {
-      isValid = false;
-    } else {
-      angular.forEach(config.simulator.runningDevices, function(runningDevice) {
-        if (isUndefined(runningDevice.name) ||
-            isUndefined(config.apps[runningDevice.app]) ||
-            isUndefined(config.devices[runningDevice.device])) {
-          isValid = false;
-        }
-      });
-    }
-
-    angular.forEach(config.apps, (app) => {
-      if (isUndefined(app.name) ||
-          isTrue(app.isMeteor) && isUndefined(app.url) ||
-          isFalse(app.isMeteor) && isUndefined(app.path)) {
-          isValid = false;
-      }
+    angular.forEach(rawConfig.apps, (_app, appName) => {
+      config.apps[appName] = cordovaApp.create(_app, config);
     });
 
-    angular.forEach(config.devices, (device) => {
-      if (isUndefined(device.name) ||
-          isUndefined(config.presets[device.preset]) ||
-          isUndefined(device.uuid) ||
-          !UUID_PATTERN.test(device.uuid) ||
-          isUndefined(device.status) ||
-          !isBoolean(device.status.wifi) ||
-          !isBoolean(device.status.isFlashlightOn) ||
-          !isBoolean(device.status.isLandscape) ||
-          isUndefined(device.status.battery) ||
-          !isBoolean(device.status.battery.isCharging) ||
-          !isNumber(device.status.battery.level) ||
-          (device.status.battery.level < 0 || device.status.battery.level > 100)) {
-          isValid = false;
-      }
+    angular.forEach(rawConfig.presets, (_preset, presetName) => {
+      config.presets[presetName] = preset.create(_preset, config);
     });
 
-    angular.forEach(config.presets, (preset) => {
-      if (isUndefined(preset.name) ||
-          isUndefined(preset.width) ||
-          isUndefined(preset.height) ||
-          isUndefined(SUPPORTED_PLATFORMS[preset.platform])) {
-          isValid = false;
-      }
-
-      angular.forEach(preset.availableFeatues, (feature) => {
-        if (FEATURES.indexOf(feature) === -1) {
-          isValid = false;
-        }
-      });
+    angular.forEach(rawConfig.devices, (_device, deviceName) => {
+      config.devices[deviceName] = device.create(_device, config);
     });
 
-    return isValid;
+    config.simulator = simulator.create(rawConfig.simulator, config);
+
+    return config;
   }
 
-  _dataToStrings(config) {
-    angular.forEach(config.devices, function(device) {
-      device.preset = device.preset.name;
+  _prepareToSave(config) {
+    config = angular.copy(config);
+
+    config.simulator.prepareToSave();
+
+    angular.forEach(config.apps, (_app) => {
+      _app.prepareToSave();
     });
 
-    angular.forEach(config.simulator.runningDevices, function(runningDevice) {
-      runningDevice.app = runningDevice.app.name;
-      runningDevice.device = runningDevice.device.name;
+    angular.forEach(config.devices, (_device) => {
+      _device.prepareToSave();
+    });
+
+    angular.forEach(config.presets, (_preset) => {
+      _preset.prepareToSave();
     });
 
     return config;
   }
 
-  _stringsToData(config) {
-    angular.forEach(config.devices, function(device) {
-      device.preset = config.presets[device.preset];
-    });
+  _listenToSaveEvents() {
+    $rootScope.$on('request-to-save', () => this.save());
+  }
 
-    angular.forEach(config.simulator.runningDevices, function(runningDevice) {
-      runningDevice.app = config.apps[runningDevice.app];
-      runningDevice.device = config.devices[runningDevice.device];
+  defaultConfig(cb) {
+    fs.readFile(DEFAULT_FILE_PATH, 'utf8', (err, config) => {
+      if (!err) {
+        config = angular.fromJson(config);
+        $rootScope.configuration = this._createConfig(config);
+        cb();
+      }
     });
-
-    return config;
   }
 
   load(cb) {
-    fs.readFile(FILE_PATH, 'utf8', (err, config) => {
-      config = angular.fromJson(config);
+    cb = cb || angular.noop;
+
+    fs.access(FILE_PATH, fs.F_OK, (err) => {
       if (err) {
-        alert.error('Can\'t read configuration file. Loading default configuration');
-      } else if (!this._validate(config)) {
-          alert.error('Configuration file is not valid. Loading default configuration');
+        $rootScope.firstUse = true;
+        this.defaultConfig(cb);
       } else {
-        configuration  = $rootScope.configuration = this._stringsToData(config);
+        fs.readFile(FILE_PATH, 'utf8', (err, config) => {
+          config = angular.fromJson(config);
+          if (err) {
+            alert.error('Can\'t read configuration file. Loading default configuration');
+            this.defaultConfig(cb);
+          } else {
+            $rootScope.configuration = this._createConfig(config);
+            this._listenToSaveEvents();
+            cb();
+          }
+        });
       }
-      cb();
     });
   }
 
   save(cb) {
+    console.log('save');
     cb = cb || angular.noop;
-    fs.writeFile(FILE_PATH, angular.toJson(this._dataToStrings(angular.copy(configuration)), true), (err) => cb(err));
+    fs.writeFile(FILE_PATH, angular.toJson(this._prepareToSave($rootScope.configuration), true), (err) => cb(err));
   }
 
   loadFromGithub() {
@@ -148,17 +122,13 @@ export default class Configuration {
         try {
             var gist = angular.fromJson(data.files[GIST_FILE_NAME].content);
 
-            if (!this._validate(gist)) {
-              alert.warning('Can\'t load from Github - validation has failed.');
-            } else  {
-              angular.forEach(gist.presets, (preset, name) => {
-                  if (configuration.presets[name] === undefined) {
-                      configuration.presets[name] = preset;
-                  }
-              });
+            angular.forEach(gist.presets, (_preset, presetName) => {
+              if (configuration.presets[presetName] === undefined) {
+                  $rootScope.configuration.presets[presetName] = preset.create(_preset, $rootScope.configuration);
+              }
+            });
 
-              alert.info('Data was loaded');
-            }
+            alert.info('Data was loaded');
         } catch (e) {
             alert.warning('Can\'t load from Github - parsing has failed.');
         }
@@ -172,19 +142,15 @@ export default class Configuration {
     try {
       var configInClipboard = angular.fromJson(clipboard.readText());
 
-      if (!this._validate(configInClipboard)) {
-        alert.warning('Can\'t import - validation has failed.');
-      } else {
-        configuration = $rootScope.configuration = this._stringsToData(configInClipboard);
-        alert.info('Configuration was imported');
-      }
+      $rootScope.configuration = this._createConfig(configInClipboard);
+      alert.info('Configuration was imported');
     } catch (e) {
       alert.warning('Can\'t import - parsing has failed.');
     }
   }
 
   exportToClipboard() {
-    var config = this._dataToStrings(angular.copy(configuration));
+    var config = this._prepareToSave($rootScope.configuration);
 
     clipboard.writeText(angular.toJson(config, true));
     alert.info('Configuration was exported');
@@ -194,32 +160,7 @@ export default class Configuration {
     shell.showItemInFolder(FILE_PATH);
   }
 
-  addRunningDevice(deviceName, appName) {
-    if (configuration.apps[appName].enabled) {
-      var name = deviceName + '_' + appName;
-      if (isUndefined(configuration.simulator.runningDevices[name])) {
-        configuration.simulator.runningDevices[name] = {name: name, device: configuration.devices[deviceName], app: configuration.apps[appName]};
-        this.save(() => {});
-      } else {
-        alert.warning(appName + ' is already running on ' + deviceName);
-      }
-    } else {
-      alert.warning(appName + ' is not enabled');
-    }
-  }
-
-  removeRunningDevice(deviceName, appName) {
-    delete configuration.simulator.runningDevices[deviceName + '_' + appName];
-    this.save(() => {});
-  }
-
-  applyFields(source, target) {
-    angular.forEach(source, (val, key) => {
-      target[key] = val;
-    });
-  }
-
-  createFileFromLocation(deviceName, appLocation) {
+  _createFileFromLocation(deviceName, appLocation) {
     var locArr = appLocation.split(path.sep);
 
     if (locArr.length > 3) {
@@ -235,60 +176,34 @@ export default class Configuration {
     }
   }
 
-  isAppExists(appName) {
-    return !isUndefined(configuration.apps[appName]);
-  }
-
-  isPresetExists(presetName) {
-    return !isUndefined(configuration.presets[presetName]);
-  }
-
-  isDeviceExists(deviceName) {
-    return !isUndefined(configuration.devices[deviceName]);
-  }
-
-  changeAppState(app) {
-    app.enabled = !app.enabled;
-
-    if (!app.enabled) {
-      angular.forEach(configuration.simulator.runningDevices, (runningDevice, key) => {
-        if (runningDevice.app === app) {
-          delete configuration.simulator.runningDevices[key];
-        }
-      });
-    }
-
-    this.save(() => {});
-  }
-
   openAppConfig(_app) {
     this._openDialog(_app, 'partials/app-config.html', 'appDialog', (app) => {
       if (_app === undefined) {
-        configuration.apps[app.name] = app;
+        $rootScope.configuration.apps[app.name] = cordovaApp.create(app, $rootScope.configuration);
       } else {
-        this.applyFields(app, _app);
+        _app.apply(app);
       }
-    }, (app) => delete configuration.apps[app.name]);
+    }, (app) => delete $rootScope.configuration.apps[app.name]);
   }
 
-  openPresetConfig(_preset) {
-    this._openDialog(_preset, 'partials/preset-config.html', 'presetDialog', (preset) => {
-      if (_preset === undefined || _preset.name !== preset.name) {
-        configuration.presets[preset.name] = preset;
+  openPresetConfig(__preset) {
+    this._openDialog(__preset, 'partials/preset-config.html', 'presetDialog', (_preset) => {
+      if (__preset === undefined || __preset.name !== _preset.name) {
+        $rootScope.configuration.presets[_preset.name] = preset.create(_preset, $rootScope.configuration);
       } else {
-        this.applyFields(preset, _preset);
+        __preset.apply(_preset);
       }
-    }, (preset) => delete configuration.presets[preset.name]);
+    }, (_preset) => delete $rootScope.configuration.presets[_preset.name]);
   }
 
-  openDeviceConfig(_device) {
-    this._openDialog(_device, 'partials/device-config.html', 'deviceDialog', (device) => {
-      if (_device === undefined || _device.name !== device.name) {
-        configuration.devices[device.name] = device;
+  openDeviceConfig(__device) {
+    this._openDialog(__device, 'partials/device-config.html', 'deviceDialog', (_device) => {
+      if (__device === undefined || __device.name !== _device.name) {
+        $rootScope.configuration.devices[_device.name] = device.create(_device, $rootScope.configuration);
       } else {
-        this.applyFields(device,  _device);
+        __device.apply(_device);
       }
-    }, (device) => delete configuration.devices[device.name]);
+    }, (_device) => delete $rootScope.configuration.devices[_device.name]);
   }
 
   _openDialog(model, templateUrl, controller, applyFn, deleteFn) {
@@ -319,4 +234,4 @@ export default class Configuration {
   }
 }
 
-Configuration.$inject = ['$http', '$rootScope', '$mdDialog', 'Alert'];
+Configuration.$inject = ['$http', '$rootScope', '$mdDialog', 'Alert', 'CordovaApp', 'Preset', 'Simulator', 'Device'];

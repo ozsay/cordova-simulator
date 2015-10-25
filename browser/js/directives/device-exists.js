@@ -1,7 +1,7 @@
 /*jshint esnext: true */
 
 let $parse;
-let configuration;
+let $rootScope;
 
 export default class DeviceExists {
   constructor() {
@@ -10,13 +10,13 @@ export default class DeviceExists {
 
   link(scope, elem, attrs, ctrl) {
     ctrl.$validators.deviceExists = function(modelValue, viewValue) {
-      return $parse(attrs.ngDisabled)(scope) || !configuration.isDeviceExists(modelValue);
+      return $parse(attrs.ngDisabled)(scope) || $rootScope.configuration.devices[modelValue] === undefined;
     };
   }
 
-  static directiveFactory(_$parse, _configuration) {
+  static directiveFactory(_$parse, _$rootScope) {
     $parse = _$parse;
-    configuration = _configuration;
+    $rootScope = _$rootScope;
 
     DeviceExists.instance = new DeviceExists();
 
@@ -24,4 +24,4 @@ export default class DeviceExists {
   }
 }
 
-DeviceExists.directiveFactory.$inject = ['$parse', 'Configuration'];
+DeviceExists.directiveFactory.$inject = ['$parse', '$rootScope'];

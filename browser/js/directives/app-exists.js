@@ -1,7 +1,7 @@
 /*jshint esnext: true */
 
 let $parse;
-let configuration;
+let $rootScope;
 
 export default class AppExists {
   constructor() {
@@ -11,14 +11,14 @@ export default class AppExists {
   link(scope, elem, attrs, ctrl) {
     if (!$parse(attrs.ngDisabled)(scope)) {
       ctrl.$validators.appExists = function(modelValue, viewValue) {
-        return !configuration.isAppExists(modelValue);
+        return $rootScope.configuration.apps[modelValue] === undefined;
       };
     }
   }
 
-  static directiveFactory(_$parse, _configuration) {
+  static directiveFactory(_$parse, _$rootScope) {
     $parse = _$parse;
-    configuration = _configuration;
+    $rootScope = _$rootScope;
 
     AppExists.instance = new AppExists();
 
@@ -26,4 +26,4 @@ export default class AppExists {
   }
 }
 
-AppExists.directiveFactory.$inject = ['$parse', 'Configuration'];
+AppExists.directiveFactory.$inject = ['$parse', '$rootScope'];

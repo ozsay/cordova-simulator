@@ -2,7 +2,7 @@
 
 import BasicDialog from './basicDialog';
 import uuid from 'node-uuid';
-import {UUID_PATTERN} from '../globals.js';
+import {UUID_PATTERN, NETWORKS} from '../globals.js';
 
 const DEVICE_TEMPLATE = {
   status: {
@@ -11,8 +11,7 @@ const DEVICE_TEMPLATE = {
     battery: {
       level: 100,
       isCharging: true
-    },
-    isLandscape: false
+    }
   }
 };
 
@@ -25,7 +24,8 @@ export default class DeviceDialog extends BasicDialog {
     this.dialogType = 'device';
     this.device = this.model;
     this.presets = this.$rootScope.configuration.presets;
-    this.pattern = UUID_PATTERN;
+    this.UUID_PATTERN = UUID_PATTERN;
+    this.NETWORKS = NETWORKS;
   }
 
   apply() {

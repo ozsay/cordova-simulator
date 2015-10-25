@@ -1,0 +1,55 @@
+.dialogs {
+    background: rgb(228, 228, 228);
+    width: 200px;
+    height: 100px;
+    border-radius: 4px;
+    padding-top: 20px;
+}
+
+.dialogs-prompt {
+  height: 130px;
+}
+
+.dialogs .title, .dialogs .message {
+    text-align: center;
+    display: block;
+}
+
+.dialogs .title {
+  font-weight: bold;
+}
+
+.dialogs .message {
+  padding-top: 5px;
+  font-size: 12px;
+}
+
+.dialogs a {
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    color: rgb(3, 117, 254);
+}
+
+.dialogs-alert a , .dialogs-confirm div, .dialogs-prompt div {
+    padding-top: 10px;
+    height: 40px;
+    border-top: 1px solid rgb(203, 203, 203);
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+}
+
+.dialogs-prompt input {
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+.dialogs-confirm a, .dialogs-prompt a {
+    float: left;
+}
+
+.dialogs-confirm a:not(:last-child), .dialogs-prompt a:not(:last-child) {
+    box-shadow: inset -1px 0 0 rgb(203, 203, 203);
+}

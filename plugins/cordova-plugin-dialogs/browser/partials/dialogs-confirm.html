@@ -1,0 +1,7 @@
+<div class="dialogs dialogs-confirm">
+  <span class="title">{{title}}</span>
+  <span class="message">{{message}}</span>
+  <div>
+    <a ng-click="close($index + 1)" ng-style="{'width': (100 / buttons.length) + '%'}" ng-repeat="button in buttons">{{button}}</a>
+  </div>
+</div>

@@ -1,32 +1,47 @@
 /*jshint esnext: true */
 
+import {NETWORKS} from '../globals.js';
+
 let path = require('remote').require('path');
 
+let $rootScope;
 let $timeout;
 
-let configuration;
+let $mdDialog;
+
 let plugins;
 
 class DeviceCtrl {
   constructor(elem, $scope) {
     this.elem = elem;
+    this.$scope = $scope;
 
     this.webViewElement = angular.element(elem.children().children()[2]).children()[0];
     this.webView = angular.element(this.webViewElement);
 
+    this.backdrop = angular.element(angular.element(elem.children().children()[2]).children()[1]);
+    this.widget = angular.element(angular.element(elem.children().children()[2]).children()[2]);
+
     this.device = this.runningDevice.device;
     this.app = this.runningDevice.app;
 
-    this.resizeDevice();
+    this.logs = '';
+
     this.startListening();
     this.reloadApp();
+    this.resizeDevice();
     this.execCustomFeatures();
+    this.NETWORKS = NETWORKS;
 
     $scope.$on('$destroy', () => plugins.destroy(this));
   }
 
   sandbox(fn) {
     $timeout(() => fn());
+  }
+
+  watch(fn, cb) {
+    this.$scope.$watch(fn, cb);
   }
 
   execCustomFeatures() {
@@ -40,19 +55,27 @@ class DeviceCtrl {
 
     this.webViewElement.addEventListener('ipc-message', (event) => {
       if (event.channel === 'cordova-simulator') {
-        plugins.execCommand(this, event.args[1], event.args[2], event.args[3])
+        plugins.execCommand(this, event.args[0], event.args[1], event.args[2], event.args[3])
         .then((result) => {
           if (event.args[0] !== null) {
-            this.webViewElement.send('cordova-simulator', event.args[0], result);
+            if (result !== undefined && result.keepRequest) {
+              this.webViewElement.send('cordova-simulator', event.args[0], true, result.data);
+            } else {
+              this.webViewElement.send('cordova-simulator', event.args[0], false, result);
+            }
           }
         })
         .catch((err) => {
           if (event.args[0] !== null) {
-            this.webViewElement.send('cordova-simulator', event.args[0], undefined, err);
+            this.webViewElement.send('cordova-simulator', event.args[0], false, undefined, err);
           }
         });
       }
     });
+  }
+
+  sendToDevice(id, keepRequest, successArgs) {
+    this.webViewElement.send('cordova-simulator', id, keepRequest, successArgs);
   }
 
   startWorking() {
@@ -64,27 +87,61 @@ class DeviceCtrl {
   }
 
   reloadApp() {
+    this.hideWidget();
     this.startWorking();
+
+    this.orientation = 'all';
+
+    angular.forEach(this.app.configXml.widget.preference, (preference) => {
+      if (preference.$.name === 'Orientation') {
+        this.orientation = preference.$.value;
+      }
+    });
+
+    if (this.orientation === 'landscape') {
+      this.isLandscape = true;
+    } else if (this.orientation === 'portrait') {
+      this.isLandscape = false;
+    }
+
     if (this.app.path !== undefined) {
       this.webViewElement.src = 'simulator-file://' + path.join(this.app.path, 'www', 'index.html');
     }
   }
 
   resizeDevice() {
-    if (this.device.status.isLandscape) {
-      this.elem.children().css({width: this.device.preset.height + 'px', height: (this.device.preset.width + 100) + 'px'});
-      this.webView.css({width: this.device.preset.height + 'px', height: this.device.preset.width + 'px'});
+    var height = this.device.preset.height;
+    var width = this.device.preset.width;
+
+    if (this.isLandscape) {
+      this.elem.children().css({width: height + 'px', height: (width + 100) + 'px'});
+      this.webView.css({width: height + 'px', height: width + 'px'});
     } else {
-      this.elem.children().css({width: this.device.preset.width + 'px', height: (this.device.preset.height + 100) + 'px'});
-      this.webView.css({width: this.device.preset.width + 'px', height: this.device.preset.height + 'px'});
+      this.elem.children().css({width: width + 'px', height: (height + 100) + 'px'});
+      this.webView.css({width: width + 'px', height: height + 'px'});
     }
   }
 
   rotateDevice() {
-    this.device.status.isLandscape = !this.device.status.isLandscape;
-    configuration.save();
+    this.isLandscape = !this.isLandscape;
 
     this.resizeDevice();
+  }
+
+  showLogs() {
+    var logs = this.logs;
+
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      templateUrl: 'partials/device-logs.html',
+      controllerAs: 'dialog',
+      controller: function () {
+        this.logs = logs;
+        this.discard = () => {
+          $mdDialog.hide();
+        };
+      }
+    });
   }
 
   openDevTools() {
@@ -92,22 +149,38 @@ class DeviceCtrl {
   }
 
   closeApp() {
-    configuration.removeRunningDevice(this.device.name, this.app.name);
+    $rootScope.configuration.simulator.removeRunningDevice(this.app, this.device);
   }
 
-  changeWifi() {
-    this.device.status.wifi = !this.device.status.wifi;
-    configuration.save();
+  showWidget(element, css, backdrop, backdropClick) {
+    this.widgetData = {element: element, backdrop: backdrop, backdropClick: backdropClick};
+
+    this.widget.append(element);
+    this.widget.css(css);
+    this.widget.addClass('on');
+
+    if (backdrop) {
+      this.backdrop.addClass('on');
+    }
   }
 
-  changeBatteryCharging() {
-    this.device.status.battery.isCharging = !this.device.status.battery.isCharging;
-    configuration.save();
+  hideWidget() {
+    if (this.widgetData) {
+      if (this.widgetData.backdrop) {
+        this.backdrop.removeClass('on');
+      }
+
+      delete this.widgetData;
+      this.widget.empty();
+      this.widget.removeAttr('style');
+      this.widget.removeClass('on');
+    }
   }
 
-  turnFlashLight(status) {
-    this.device.status.isFlashlightOn = status === undefined ? !this.device.status.isFlashlightOn : status;
-    configuration.save();
+  backdropClick() {
+    if (this.widgetData.backdropClick) {
+      this.widgetData.backdropClick();
+    }
   }
 }
 
@@ -126,10 +199,12 @@ export default class Device {
     this.require = "device";
   }
 
-  static directiveFactory(_$timeout, _configuration, _plugins) {
+  static directiveFactory(_$rootScope, _$timeout, _$mdDialog, _plugins) {
+    $rootScope = _$rootScope;
     $timeout = _$timeout;
 
-    configuration = _configuration;
+    $mdDialog = _$mdDialog;
+
     plugins = _plugins;
 
     Device.instance = new Device();
@@ -138,4 +213,4 @@ export default class Device {
   }
 }
 
-Device.directiveFactory.$inject = ['$timeout', 'Configuration', 'plugins'];
+Device.directiveFactory.$inject = ['$rootScope', '$timeout', '$mdDialog', 'plugins'];

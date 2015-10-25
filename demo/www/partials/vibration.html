@@ -1,0 +1,29 @@
+<ion-view view-title="Vibration">
+    <ion-content>
+        <div class="list card">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Duration</span>
+                <input type="number" placeholder="Duration" ng-model="duration">
+            </label>
+            <div class="padding">
+                <button class="button button-block button-balanced" ng-click="vibrate(duration)">
+                    Vibrate
+                </button>
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Pattern [1000, 1000, 1000]</span>
+                <input type="text" placeholder="Duration" ng-model="pattern">
+            </label>
+            <div class="padding">
+                <button class="button button-block button-balanced" ng-click="vibrateWithPattern(pattern)">
+                    Vibrate with pattern
+                </button>
+            </div>
+            <div class="padding">
+                <button class="button button-block button-balanced" ng-click="cancelVibration()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

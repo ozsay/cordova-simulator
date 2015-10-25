@@ -7,6 +7,7 @@ let globalShortcut = require('global-shortcut');
 
 let protocolsInit = require('./protocols.js');
 let alert = require('./alert.js');
+let versions = require('./versions.js');
 
 var mainWindow = null;
 
@@ -36,7 +37,6 @@ app.on('ready', () => {
     });
 
     mainWindow.openDevTools();
-
 
     mainWindow.on('closed', () => {
       mainWindow = null;

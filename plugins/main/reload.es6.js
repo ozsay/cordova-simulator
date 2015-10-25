@@ -5,8 +5,10 @@ let chokidar = require('chokidar');
 let watchers = {};
 
 let startListening = (runningDevice, appPath, cb) => {
-  var watcher = chokidar.watch(appPath).on('all', (event, path) => {
-    cb();
+  var watcher = chokidar.watch(appPath);
+
+  watcher.on('ready', () => {
+    watcher.on('all', (event, path) => cb());
   });
 
   if (watchers[runningDevice] !== undefined) {

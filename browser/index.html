@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html ng-app="cordova-simulator">
+<html ng-app="cordova-simulator" ng-controller="appCtrl as app">
 <head>
   <meta name="viewport" content="initial-scale=1"/>
+  <title ng-bind="'Cordova Simulator - ' + globals.SIMULATOR_VERSION"></title>
   <script src="../jspm_packages/system.js"></script>
   <script src="config.js"></script>
   <script>
     System.import('material-design-icons-iconfont/dist/material-design-icons.css!');
+    System.import('csshake/dist/csshake.css!');
     System.import('./styles/app.css!');
     System.import('./js/app');
   </script>
 </head>
-<body layout="row" ng-controller="appCtrl as app">
+<body layout="row">
   <ng-include flex ng-if="!app.appReady" src="'partials/loading.html'"></ng-include>
   <ng-include ng-if="app.appReady" src="'partials/sidenav.html'" class="sidenav-container"></ng-include>
   <div flex layout="column" ng-if="app.appReady">

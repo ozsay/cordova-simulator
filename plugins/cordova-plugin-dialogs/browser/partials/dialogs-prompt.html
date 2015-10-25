@@ -1,0 +1,8 @@
+<div class="dialogs dialogs-prompt">
+  <span class="title">{{title}}</span>
+  <span class="message">{{message}}</span>
+  <input type="text" ng-model="text" value="{{defaultText}}" size="17">
+  <div>
+    <a ng-click="close($index + 1, text)" ng-style="{'width': (100 / buttons.length) + '%'}" ng-repeat="button in buttons">{{button}}</a>
+  </div>
+</div>

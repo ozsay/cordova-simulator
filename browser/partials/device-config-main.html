@@ -12,7 +12,7 @@
       </md-input-container>
       <md-input-container flex>
         <label>UUID</label>
-        <input name="uuid" ng-model="dialog.device.uuid"  ng-pattern="dialog.pattern">
+        <input name="uuid" ng-model="dialog.device.uuid"  ng-pattern="dialog.UUID_PATTERN">
         <div ng-messages="{pattern: deviceForm.mainForm.uuid.$error.pattern, empty: !dialog.device.uuid}">
           <div ng-message="pattern">UUID must be valid.</div>
           <div ng-message="empty" class="ng-messages-info">If UUID will not be set, the simulator will generate it.</div>

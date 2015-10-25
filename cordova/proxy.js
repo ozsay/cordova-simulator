@@ -9,18 +9,20 @@
 
   window.cordova.require('cordova/channel').onNativeReady.fire();
 
-  ipc.on('cordova-simulator', function(id, successArgs, failArgs) {
+  ipc.on('cordova-simulator', function(id, keepRequest, successArgs, failArgs) {
     if (failArgs !== undefined) {
       calls[id].fail(failArgs);
     } else {
       calls[id].success(successArgs);
     }
 
-    delete calls[id];
+    if (!keepRequest) {
+      delete calls[id];
+    }
   });
 
   window.simulatorExec = function(success, fail, service, action, args) {
-    var inputOnly = success === undefined && fail === undefined;
+    var inputOnly = (success === undefined || success === null) && (fail === undefined || fail === null);
     var id;
 
     if (!inputOnly) {

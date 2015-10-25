@@ -15,10 +15,10 @@ export default class FlashlightPlugin {
       return true;
   }
   switchOn(sender) {
-    sender.sandbox(() => sender.turnFlashLight(true));
+    sender.sandbox(() => sender.device.status.turnFlashLight(true));
   }
   switchOff(sender) {
-      sender.sandbox(() => sender.turnFlashLight(false));
+      sender.sandbox(() => sender.device.status.turnFlashLight(false));
   }
 }
 

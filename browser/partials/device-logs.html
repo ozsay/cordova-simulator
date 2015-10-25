@@ -1,0 +1,17 @@
+<md-dialog flex="30">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Device logs (current app)</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="dialog.discard()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <md-input-container>
+    <label></label>
+    <textarea ng-model="dialog.logs"></textarea>
+  </md-input-container>
+  </md-dialog-content>
+</md-dialog>

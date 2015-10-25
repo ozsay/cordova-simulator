@@ -1,7 +1,14 @@
 /*jshint esnext: true */
 
+import {SITE, REPOSITORY, ISSUES, NEW_ISSUE} from '../globals.js';
+
+let app = require('remote').require('app');
+let browserWindow = require('remote').getCurrentWindow();
+
 export default class ToolbarCtrl {
-  constructor(config) {
+  constructor($rootScope, $mdDialog, config) {
+    this.$rootScope = $rootScope;
+    this.$mdDialog = $mdDialog;
     this.config = config;
   }
 
@@ -36,6 +43,41 @@ export default class ToolbarCtrl {
   showConfigFile() {
     this.config.showConfigFile();
   }
+
+  reload() {
+    browserWindow.reload();
+  }
+
+  openDevTools() {
+    browserWindow.openDevTools();
+  }
+
+  openCordovaDetails() {
+    this.$mdDialog.show({
+      clickOutsideToClose: true,
+      templateUrl: 'partials/cordova-details.html',
+      controllerAs: 'dialog',
+      scope: this.$rootScope,
+      preserveScope: true,
+      controller: ['$mdDialog', function ($mdDialog) {
+        this.discard = () => {
+          $mdDialog.hide();
+        };
+      }]
+    });
+  }
+
+  openAbout() {
+
+  }
+
+  openReleaseNotes() {
+
+  }
+
+  quit() {
+    app.quit();
+  }
 }
 
-ToolbarCtrl.$inject = ['Configuration'];
+ToolbarCtrl.$inject = ['$rootScope', '$mdDialog', 'Configuration'];

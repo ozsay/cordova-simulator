@@ -1,0 +1,75 @@
+{
+  "simulator": {
+    "runningDevices": {
+      "Nexus 5_Demo": {
+        "name": "Nexus 5_Demo",
+        "device": "Nexus 5",
+        "app": "Demo"
+      },
+      "Iphone 6_Demo": {
+        "name": "Iphone 6_Demo",
+        "device": "Iphone 6",
+        "app": "Demo"
+      }
+    }
+  },
+  "apps": {
+    "Demo": {
+      "isMeteor": false,
+      "name": "Demo",
+      "path": "demo\\",
+      "enabled": true,
+      "immutable": "true"
+    }
+  },
+  "devices": {
+    "Nexus 5": {
+      "status": {
+        "wifi": false,
+        "isFlashlightOn": false,
+        "battery": {
+          "level": 100,
+          "isCharging": true
+        },
+        "network": "3g"
+      },
+      "preset": "Generic Android",
+      "name": "Nexus 5",
+      "uuid": "1a7bd670-f6d8-49c4-a830-74f371853cbc"
+    },
+    "Iphone 6": {
+      "status": {
+        "wifi": false,
+        "isFlashlightOn": false,
+        "battery": {
+          "level": 100,
+          "isCharging": true
+        },
+        "network": "3g"
+      },
+      "preset": "Generic Iphone",
+      "name": "Iphone 6",
+      "uuid": "3d002211-30d1-4acd-92b2-7b8643866998"
+    }
+  },
+  "presets": {
+    "Generic Android": {
+      "availableFeatues": [],
+      "name": "Generic Android",
+      "width": 337,
+      "height": 667,
+      "platform": "android",
+      "platformVersion": "5",
+      "model": "Nexus 5"
+    },
+    "Generic Iphone": {
+      "availableFeatues": [],
+      "name": "Generic Iphone",
+      "width": 337,
+      "height": 667,
+      "platform": "ios",
+      "platformVersion": "8",
+      "model": "Iphone 6"
+    }
+  }
+}

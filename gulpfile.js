@@ -44,11 +44,12 @@ gulp.task('app:debug', ['app:transpile'], function(cb) {
 });
 
 gulp.task('plugin:add', function (cb) {
-  if (argv.n !== undefined && (argv.i !== undefined || argv.u !== undefined)) {
+  if (argv.n !== undefined && ((argv.i !== undefined && argv.v !== undefined) || argv.u !== undefined)) {
     pjson.cordovaPlugins[argv.n] = {};
 
     if (argv.i !== undefined) {
       pjson.cordovaPlugins[argv.n].id = argv.i;
+      pjson.cordovaPlugins[argv.n].version = argv.v;
     } else {
       pjson.cordovaPlugins[argv.n].url = argv.u;
     }
@@ -62,8 +63,14 @@ gulp.task('plugin:add', function (cb) {
 gulp.task('cordova:create', ['clean'], function (cb) {
   var plugins = [];
   for (var key in pjson.cordovaPlugins) {
-    if(pjson.cordovaPlugins.hasOwnProperty(key)){
-      plugins.push(pjson.cordovaPlugins[key].id ||  pjson.cordovaPlugins[key].url);
+    if(pjson.cordovaPlugins.hasOwnProperty(key)) {
+      var plugin = pjson.cordovaPlugins[key].id ||  pjson.cordovaPlugins[key].url;
+
+      if (pjson.cordovaPlugins[key].id !== undefined) {
+        plugin += "@" + pjson.cordovaPlugins[key].version;
+      }
+
+      plugins.push(plugin);
     }
   }
 

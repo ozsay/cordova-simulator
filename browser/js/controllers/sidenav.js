@@ -1,11 +1,11 @@
 /*jshint esnext: true */
 
-const SITE = 'https://github.com/ozsay/cordova-simulator';
-
-var shell = require('shell');
+import {SITE} from '../globals.js';
 
 export default class SidenavCtrl {
-  constructor(configuration) {
+  constructor($rootScope, configuration) {
+    this.$rootScope = $rootScope;
+
     this.configuration = configuration;
   }
 
@@ -22,20 +22,18 @@ export default class SidenavCtrl {
   }
 
   changeAppState(app) {
-    this.configuration.changeAppState(app);
+    app.changeAppState();
   }
 
-  dropApp(deviceName, appName, files) {
+  dropApp(device, appName, files) {
     if (files.length > 0) {
       this.configuration.createFileFromLocation(deviceName, files[0].path);
     } else {
-      this.configuration.addRunningDevice(deviceName, appName);
-    }
-  }
+      var app = this.$rootScope.configuration.apps[appName];
 
-  openSite() {
-    shell.openExternal(SITE);
+      this.$rootScope.configuration.simulator.addRunningDevice(app, device);
+    }
   }
 }
 
-SidenavCtrl.$inject = ['Configuration'];
+SidenavCtrl.$inject = ['$rootScope', 'Configuration'];

@@ -27,10 +27,18 @@
         </div>
       </md-input-container>
     </div>
-    <div flex>
-      <md-checkbox ng-model="dialog.device.status.isLandscape">
-        {{ dialog.device.status.isLandscape ? 'Orientation is landscape' : 'Orientation is portrait' }}
-      </md-checkbox>
+    <div layout="row">
+      <md-input-container flex>
+        <label>Network</label>
+        <md-select name="network" ng-model="dialog.device.status.network" required>
+          <md-option ng-repeat="item in dialog.NETWORKS" value="{{item}}">
+            {{item}}
+          </md-option>
+        </md-select>
+        <div ng-messages="deviceForm.statusForm.network.$error">
+          <div ng-message="required">Required.</div>
+        </div>
+      </md-input-container>
     </div>
   </ng-form>
 </md-content>

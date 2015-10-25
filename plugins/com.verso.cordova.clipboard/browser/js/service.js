@@ -11,11 +11,11 @@ export default class ClipboardPlugin {
   }
 
   copy(sender, text) {
-    sender._clipboard = text;
+    sender.device.status.clipboard = text;
   }
 
   paste(sender) {
-    return sender._clipboard;
+    return sender.device.status.clipboard;
   }
 }
 

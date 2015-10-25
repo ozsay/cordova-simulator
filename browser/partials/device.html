@@ -12,7 +12,8 @@
         </md-button>
       </md-fab-trigger>
       <md-fab-actions>
-        <md-button aria-label="Rotation" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.rotateDevice()">
+        <md-button aria-label="Rotation" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.rotateDevice()"
+                   ng-disabled="runningDevice.orientation !== 'default' && runningDevice.orientation !== 'all'">
           <md-tooltip>
             Rotate screen
           </md-tooltip>
@@ -23,6 +24,12 @@
             Reload app
           </md-tooltip>
           <md-icon aria-label="Refresh">refresh</md-icon>
+        </md-button>
+        <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.showLogs()">
+          <md-tooltip>
+            Open device logs
+          </md-tooltip>
+          <md-icon aria-label="Refresh">developer_board</md-icon>
         </md-button>
         <md-button aria-label="Refresh" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.openDevTools()">
           <md-tooltip>
@@ -46,14 +53,31 @@
       </md-tooltip>
       <md-icon md-svg-src="{{runningDevice.device.status.isFlashlightOn ? 'partials/icons/flashlight.svg' : 'partials/icons/flashlight-off.svg'}}"></md-icon>
     </md-button>
-    <md-button class="md-icon-button md-mini device-controls-button" ng-click="runningDevice.changeWifi()">
+    <md-button class="md-icon-button md-mini device-controls-button" ng-click="runningDevice.device.status.changeWifi()">
       <md-tooltip>
         Turn Wifi {{runningDevice.device.status.wifi ? 'off' : 'on'}}
       </md-tooltip>
       <md-icon>{{runningDevice.device.status.wifi ? 'network_wifi' : 'signal_wifi_off'}}</md-icon>
     </md-button>
+    <md-menu class="device-controls-network-menu">
+      <md-button aria-label="Open demo menu" class="device-controls-button" ng-click="$mdOpenMenu($event)">
+        <md-tooltip>
+          Click to change network
+        </md-tooltip>
+        {{runningDevice.device.status.network}}
+      </md-button>
+      <md-menu-content>
+        <md-input-container class="device-controls-network-input">
+          <label>Network</label>
+          <md-select ng-model="runningDevice.device.status.network">
+            <md-option ng-value="item" ng-repeat="item in runningDevice.NETWORKS">{{item}}</md-option>
+          </md-select>
+        </md-input-container>
+      </md-menu-content>
+    </md-menu>
     <md-menu class="device-controls-battery-menu">
-      <md-button aria-label="Open demo menu" class="md-icon-button md-mini device-controls-button" ng-click="$mdOpenMenu($event)" right-click="runningDevice.changeBatteryCharging()">
+      <md-button aria-label="Open demo menu" class="md-icon-button md-mini device-controls-button" ng-click="$mdOpenMenu($event)"
+                 right-click="runningDevice.device.status.changeBatteryCharging()">
         <md-tooltip>
           Left click: level, Right click: charging
         </md-tooltip>
@@ -69,5 +93,7 @@
   </div>
   <div class="device-content">
     <webview nodeintegration></webview>
+    <div class="backdrop" ng-click="runningDevice.backdropClick()"></div>
+    <div class="widget"></div>
   </div>
 </div>

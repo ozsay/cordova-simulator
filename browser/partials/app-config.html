@@ -48,11 +48,11 @@
      Discard
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew" ng-disabled="!dialog.canDelete()" type="button">
+    <md-button ng-click="dialog.delete()" ng-if="!dialog.isNew" ng-disabled="!dialog.canDelete() || dialog.app.immutable" type="button">
      Delete
     </md-button>
     <span flex></span>
-    <md-button ng-click="dialog.apply()" ng-disabled="appForm.$invalid">
+    <md-button ng-click="dialog.apply()" ng-disabled="appForm.$invalid || dialog.app.immutable">
       Apply
     </md-button>
   </div>

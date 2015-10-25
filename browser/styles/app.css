@@ -210,6 +210,10 @@ button.md-button-toggle {
   margin: 0 !important;
 }
 
+.device-controls-network-input {
+  padding-bottom: 0;
+}
+
 .device-controls-battery-menu {
   padding: 0 !important;
 }
@@ -219,9 +223,37 @@ button.md-button-toggle {
   width: 100px;
 }
 
+.device-content {
+  position: relative;
+}
+
 .device-content webview {
   display: block;
   transition: 0.75s;
+}
+
+.device-content .backdrop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+  background-color: black;
+  display: none;
+}
+
+.device-content .backdrop.on {
+  display: block;
+}
+
+.device-content .widget {
+  position: absolute;
+  display: none;
+}
+
+.device-content .widget.on {
+  display: block;
 }
 
 /* device end */

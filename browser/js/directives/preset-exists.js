@@ -1,7 +1,7 @@
 /*jshint esnext: true */
 
 let $parse;
-let configuration;
+let $rootScope;
 
 export default class PresetExists {
   constructor() {
@@ -10,13 +10,13 @@ export default class PresetExists {
 
   link(scope, elem, attrs, ctrl) {
     ctrl.$validators.presetExists = function(modelValue, viewValue) {
-      return $parse(attrs.ngDisabled)(scope) || !configuration.isPresetExists(modelValue);
+      return $parse(attrs.ngDisabled)(scope) || $rootScope.configuration.presets[modelValue] === undefined;
     };
   }
 
-  static directiveFactory(_$parse, _configuration) {
+  static directiveFactory(_$parse, _$rootScope) {
     $parse = _$parse;
-    configuration = _configuration;
+    $rootScope = _$rootScope;
 
     PresetExists.instance = new PresetExists();
 
@@ -24,4 +24,4 @@ export default class PresetExists {
   }
 }
 
-PresetExists.directiveFactory.$inject = ['$parse', 'Configuration'];
+PresetExists.directiveFactory.$inject = ['$parse', '$rootScope'];

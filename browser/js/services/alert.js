@@ -20,7 +20,6 @@ export default class Alert {
           this.error(message);
           break;
         default:
-
       }
     });
 

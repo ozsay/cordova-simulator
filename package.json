@@ -23,11 +23,12 @@
   },
   "homepage": "https://github.com/ozsay/cordova-simulator",
   "dependencies": {
-    "chokidar": "^1.2.0"
+    "chokidar": "^1.2.0",
+    "xml2js": "^0.4.13"
   },
   "devDependencies": {
-    "cordova-js": "^4.1.1",
-    "cordova-lib": "^5.3.3",
+    "cordova-js": "4.1.1",
+    "cordova-lib": "5.3.3",
     "del": "^2.0.2",
     "fs-extra": "^0.24.0",
     "gulp": "^3.9.0",
@@ -46,8 +47,10 @@
       "angular-aria": "npm:angular-aria@^1.4.7",
       "angular-material": "npm:angular-material@^0.11.3",
       "angular-messages": "npm:angular-messages@^1.4.7",
+      "csshake": "npm:csshake@^1.5.0",
       "material-design-icons-iconfont": "npm:material-design-icons-iconfont@^2.0.3",
-      "node-uuid": "npm:node-uuid@^1.4.3"
+      "node-uuid": "npm:node-uuid@^1.4.3",
+      "text": "github:systemjs/plugin-text@^0.0.2"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
@@ -57,13 +60,47 @@
   },
   "cordovaPlugins": {
     "device": {
-      "id": "cordova-plugin-device"
+      "id": "cordova-plugin-device",
+      "version": "1.0.1",
+      "url": "https://github.com/apache/cordova-plugin-device"
     },
     "clipboard": {
       "url": "https://github.com/VersoSolutions/CordovaClipboard"
     },
     "flashlight": {
-      "url": "https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin.git"
+      "id": "cordova-plugin-flashlight",
+      "version": "3.0.0",
+      "url": "https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin"
+    },
+    "appVersion": {
+      "id": "cordova-plugin-app-version",
+      "version": "0.1.7",
+      "url": "https://github.com/whiteoctober/cordova-plugin-app-version"
+    },
+    "vibration": {
+      "id": "cordova-plugin-vibration",
+      "version": "1.2.0",
+      "url": "https://github.com/apache/cordova-plugin-vibration"
+    },
+    "actionSheet": {
+      "id": "cordova-plugin-actionsheet",
+      "version": "2.0.1",
+      "url": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet"
+    },
+    "dialogs": {
+      "id": "cordova-plugin-dialogs",
+      "version": "1.1.1",
+      "url": "https://github.com/apache/cordova-plugin-dialogs"
+    },
+    "batteryStatus": {
+      "id": "cordova-plugin-battery-status",
+      "version": "1.1.0",
+      "url": "https://github.com/apache/cordova-plugin-battery-status"
+    },
+    "networkInformation": {
+      "id": "cordova-plugin-network-information",
+      "version": "1.0.1",
+      "url": "https://github.com/apache/cordova-plugin-network-information"
     }
   }
 }

@@ -1,0 +1,21 @@
+<md-dialog flex="30">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Cordova details</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="dialog.discard()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column" layout-padding>
+    <p>Followed Cordova 5.1.1 specification.</p>
+    <p>Running CordovaJs version {{globals.CORDOVA_VERSION}}.</p>
+    <p>
+      Plugins:
+      <ul>
+        <li ng-repeat="(pluginName, plugin) in globals.CORDOVA_PLUGINS"><a ng-href="{{plugin.url}}" external-link>{{pluginName + (plugin.version ? '@' + plugin.version : '')}}</a></li>
+      </ul>
+    </p>
+  </md-dialog-content>
+</md-dialog>

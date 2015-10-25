@@ -1,0 +1,8 @@
+<div ng-class="['actionsheet', 'platform-' + platform]">
+  <h6 ng-if="title !== undefined">{{title}}</h6>
+  <a ng-if="addDestructiveButtonWithLabel !== undefined" class="destructive" ng-click="close(0)">{{addDestructiveButtonWithLabel}}</a>
+  <a ng-repeat="button in buttonLabels" ng-click="close($index + 1)">{{button}}</a>
+  <div class="cancelButtonContainer" ng-if="addCancelButtonWithLabel !== undefined">
+    <button class="cancelButton" ng-click="close(buttonLabels.length + 1)">{{addCancelButtonWithLabel}}</button>
+  </div>
+</div>

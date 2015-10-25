@@ -21,8 +21,7 @@ export default class AppDialog extends BasicDialog {
 
   openFileDialog() {
     fileDialog.showOpenDialog(null, {
-      filters: [{name: 'HTML files', extensions: ['html']}],
-      properties: ['openFile']
+      properties: ['openDirectory']
     }, (files) => {
       if (files) {
         this.$timeout(() => this.app.path = files[0], 0);

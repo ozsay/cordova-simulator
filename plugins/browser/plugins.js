@@ -30,16 +30,22 @@ export default class Plugins {
     });
   }
 
-  registerCommand(plugin, method, fn) {
+  registerCommand(plugin, method, fn, keepRequest) {
     if (pluginsList[plugin] === undefined) {
         pluginsList[plugin] = {};
     }
 
-    pluginsList[plugin][method] = fn;
+    pluginsList[plugin][method] = {fn: fn, keepRequest: keepRequest};
   }
 
-  execCommand(sender, plugin, method, args) {
-    var result = pluginsList[plugin][method](sender, ...args);
+  execCommand(sender, request, plugin, method, args) {
+    var result;
+
+    if (pluginsList[plugin][method].keepRequest) {
+      result = pluginsList[plugin][method].fn(sender, request, ...args);
+    } else {
+      result = pluginsList[plugin][method].fn(sender, ...args);
+    }
 
     if (result === undefined || !angular.isFunction(result.then)) {
       var deferred = $q.defer();

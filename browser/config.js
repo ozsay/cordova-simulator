@@ -24,8 +24,10 @@ System.config({
     "cordova-plugins": "plugins/browser/module",
     "core-js": "npm:core-js@1.2.1",
     "css": "github:systemjs/plugin-css@0.1.18",
+    "csshake": "npm:csshake@1.5.0",
     "material-design-icons-iconfont": "npm:material-design-icons-iconfont@2.0.3",
     "node-uuid": "npm:node-uuid@1.4.3",
+    "text": "github:systemjs/plugin-text@0.0.2",
     "github:angular/bower-angular-animate@1.4.7": {
       "angular": "github:angular/bower-angular@1.4.7"
     },
