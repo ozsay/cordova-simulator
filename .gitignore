@@ -2,7 +2,7 @@ node_modules/
 npm-debug.log
 
 jspm_packages/
-browser/js/cordova.js
+renderer/js/cordova.js
 
 main/alert.js
 main/index.js
