@@ -1,6 +1,6 @@
 /*jshint esnext: true */
 
-let reloadMain = require('remote').require('./../plugins/main/reload');
+let reloadMain = require('remote').require('./../plugins/browser/reload');
 let plugins;
 
 export default class ReloadFeature {

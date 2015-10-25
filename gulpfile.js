@@ -17,7 +17,7 @@ var argv = yargs.argv;
 var env = argv.p ? 'prod' : 'dev';
 
 gulp.task('clean', function () {
-    return del(['main/index.js', 'tmp', 'renderer/js/cordova.js', 'node_modules/cordova-js/src/legacy-exec/simulator']);
+    return del(['browser/index.js', 'tmp', 'renderer/js/cordova.js', 'node_modules/cordova-js/src/legacy-exec/simulator']);
 });
 
 gulp.task('app:transpile', function() {
