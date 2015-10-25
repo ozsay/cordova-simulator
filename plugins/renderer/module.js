@@ -8,15 +8,15 @@ import AngularMessageFeature from './angularMessage';
 import PlatformClassFeature from './platformClass';
 import ReloadFeature from './reload';
 
-import ActionSheetPlugin from '../cordova-plugin-actionsheet/browser/js/service';
-import AppVersionPlugin from '../cordova-plugin-app-version/browser/js/service';
-import BetteryStatusPlugin from '../cordova-plugin-battery-status/browser/js/service';
-import ClipboardPlugin from '../com.verso.cordova.clipboard/browser/js/service';
-import DevicePlugin from '../cordova-plugin-device/browser/js/service';
-import DialogsPlugin from '../cordova-plugin-dialogs/browser/js/service';
-import FlashlightPlugin from '../nl.x-services.plugins.flashlight/browser/js/service';
-import NetworkInformationPlugin from '../cordova-plugin-network-information/browser/js/service';
-import VibrationPlugin from '../cordova-plugin-vibration/browser/js/service';
+import ActionSheetPlugin from '../cordova-plugin-actionsheet/renderer/js/service';
+import AppVersionPlugin from '../cordova-plugin-app-version/renderer/js/service';
+import BetteryStatusPlugin from '../cordova-plugin-battery-status/renderer/js/service';
+import ClipboardPlugin from '../com.verso.cordova.clipboard/renderer/js/service';
+import DevicePlugin from '../cordova-plugin-device/renderer/js/service';
+import DialogsPlugin from '../cordova-plugin-dialogs/renderer/js/service';
+import FlashlightPlugin from '../nl.x-services.plugins.flashlight/renderer/js/service';
+import NetworkInformationPlugin from '../cordova-plugin-network-information/renderer/js/service';
+import VibrationPlugin from '../cordova-plugin-vibration/renderer/js/service';
 
 angular.module('cordova-simulator.plugins', [])
   .service('plugins', Plugins)

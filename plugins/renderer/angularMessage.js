@@ -10,7 +10,7 @@ export default class AngularMessageFeature {
   constructor(_plugins) {
     plugins = _plugins;
 
-    fs.readFile('./plugins/browser/angularMessageInject.js', 'utf8', (err, data) => {
+    fs.readFile('./plugins/renderer/angularMessageInject.js', 'utf8', (err, data) => {
       if (err) {
         console.log(err.path);
       } else {

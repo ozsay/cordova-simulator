@@ -10,7 +10,7 @@ export default class PlatformClassFeature {
   constructor(_plugins) {
     plugins = _plugins;
 
-    fs.readFile('./plugins/browser/platformClassInject.js', 'utf8', (err, data) => {
+    fs.readFile('./plugins/renderer/platformClassInject.js', 'utf8', (err, data) => {
       if (err) {
         console.log(err.path);
       } else {

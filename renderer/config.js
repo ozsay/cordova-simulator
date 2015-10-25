@@ -21,7 +21,7 @@ System.config({
     "angular-messages": "npm:angular-messages@1.4.7",
     "babel": "npm:babel-core@5.8.29",
     "babel-runtime": "npm:babel-runtime@5.8.29",
-    "cordova-plugins": "plugins/browser/module",
+    "cordova-plugins": "plugins/renderer/module",
     "core-js": "npm:core-js@1.2.3",
     "css": "github:systemjs/plugin-css@0.1.18",
     "csshake": "npm:csshake@1.5.0",

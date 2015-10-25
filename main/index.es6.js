@@ -29,7 +29,7 @@ app.on('ready', () => {
     mainWindow.setTitle('Cordova Simulator');
     mainWindow.maximize();
 
-    mainWindow.loadUrl('file://' + __dirname + '/../browser/index.html');
+    mainWindow.loadUrl('file://' + __dirname + '/../renderer/index.html');
     menu.setApplicationMenu(null);
 
     globalShortcut.register('ctrl+r', function() {

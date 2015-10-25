@@ -17,7 +17,7 @@ var argv = yargs.argv;
 var env = argv.p ? 'prod' : 'dev';
 
 gulp.task('clean', function () {
-    return del(['main/index.js', 'tmp', 'browser/js/cordova.js', 'node_modules/cordova-js/src/legacy-exec/simulator']);
+    return del(['main/index.js', 'tmp', 'renderer/js/cordova.js', 'node_modules/cordova-js/src/legacy-exec/simulator']);
 });
 
 gulp.task('app:transpile', function() {
@@ -111,7 +111,7 @@ gulp.task('cordovaJs:copy', ['cordovaJs:create'], function () {
                      'cordova/proxy.js'])
         .pipe(concat('cordova.js'))
         .pipe(gulpif(env !== "dev", uglify()))
-        .pipe(gulp.dest('browser/js/'));
+        .pipe(gulp.dest('renderer/js/'));
 });
 
 gulp.task('build', ['cordovaJs:copy'], function() {

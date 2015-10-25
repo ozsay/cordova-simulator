@@ -3,7 +3,7 @@
 let path = require('path');
 let url = require('url');
 
-const CORDOVA_SCRIPT_PATH = path.normalize(__dirname + '/../browser/js/cordova.js');
+const CORDOVA_SCRIPT_PATH = path.normalize(__dirname + '/../renderer/js/cordova.js');
 
 export default function(cb) {
   let protocol = require('protocol');
