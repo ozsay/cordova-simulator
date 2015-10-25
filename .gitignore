@@ -4,10 +4,10 @@ npm-debug.log
 jspm_packages/
 renderer/js/cordova.js
 
-main/alert.js
-main/index.js
-main/protocols.js
-main/versions.js
-plugins/main/reload.js
+browser/alert.js
+browser/index.js
+browser/protocols.js
+browser/versions.js
+plugins/browser/reload.js
 
 tmp/
