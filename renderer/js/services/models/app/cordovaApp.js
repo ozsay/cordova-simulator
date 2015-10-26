@@ -3,17 +3,24 @@
 let fs = require('remote').require('fs');
 let path = require('remote').require('path');
 let parser = require('remote').require('xml2js').Parser();
+let chokidar = require('remote').require('chokidar');
 
 import {isTrue} from '../../../globals.js';
 
+import PlatformClassFeature from '../utils/platformClass';
+//import AngularMessageFeature from '../utils/angularMessage';
 import {_App} from './app.js';
+
+let safetyShutdown;
+
+let watchers = {};
 
 class _CordovaApp extends _App {
   constructor(rawCordovaApp, config) {
     super(rawCordovaApp, config);
 
     this.type = 'cordova';
-    this.loadConfigXml();
+    this.loadConfigXml(() => this.fieldsFromConfigXml());
     this.checkIndexFile();
   }
 
@@ -22,8 +29,48 @@ class _CordovaApp extends _App {
 
     this.type = 'cordova';
 
-    this.loadConfigXml();
+    this.loadConfigXml(() => this.fieldsFromConfigXml());
     this.checkIndexFile();
+  }
+
+  startWatching() {
+    super.startWatching();
+
+    if (watchers[this.name] === undefined) {
+      watchers[this.name] = chokidar.watch(path.join(this.path, 'config.xml'));
+
+      watchers[this.name].on('change', () => {
+        this.loadConfigXml(() => {
+          this.fieldsFromConfigXml();
+          super.reload();
+        });
+      });
+    }
+  }
+
+  stopWatching() {
+    super.stopWatching();
+
+    if (watchers[this.name] !== undefined) {
+      watchers[this.name].close();
+      delete watchers[this.name];
+    }
+  }
+
+  run(runningDeviceCtrl) {
+    //AngularMessageFeature.start(runningDeviceCtrl);
+    PlatformClassFeature.start(runningDeviceCtrl);
+  }
+
+  fieldsFromConfigXml() {
+    this.properties = {};
+    this.properties.orientation = 'all';
+
+    angular.forEach(this.configXml.widget.preference, (preference) => {
+      if (preference.$.name === 'Orientation') {
+        this.properties.orientation = preference.$.value;
+      }
+    });
   }
 
   loadConfigXml(cb) {
@@ -46,9 +93,17 @@ class _CordovaApp extends _App {
     });
   }
 
+  getPath() {
+    return path.join(this.path, 'www' || this.serveDir);
+  }
+
+  getMain() {
+    return 'simulator-file://' + path.join(this.getPath(), 'index.html');
+  }
+
   checkIndexFile(cb) {
     cb = cb || angular.noop;
-    fs.access(path.join(this.path, 'www' || this.serveDir, 'index.html'), fs.F_OK, (err) => {
+    fs.access(this.getPath(), fs.F_OK, (err) => {
       if (err) {
         this.locationErr = true;
       }
@@ -60,6 +115,7 @@ class _CordovaApp extends _App {
   prepareToSave() {
     super.prepareToSave();
 
+    delete this.properties;
     delete this.configXml;
     delete this.parseErr;
     delete this.readErr;
@@ -74,9 +130,17 @@ class _CordovaApp extends _App {
 }
 
 export default class CordovaApp {
+  constructor(_safetyShutdown) {
+    safetyShutdown = _safetyShutdown;
+
+    safetyShutdown.register(() => {
+      angular.forEach(watchers, (watcher) => watcher.close());
+    });
+  }
+
   create(rawCordovaApp, config) {
       return new _CordovaApp(rawCordovaApp, config);
   }
 }
 
-//CordovaApp.$inject = [];
+CordovaApp.$inject = ['SafetyShutdown'];

@@ -25,6 +25,7 @@ import RightClick from './directives/right-click';
 import ObjectToArrayFilter from './filters/objectToArray';
 import Configuration from './services/configuration';
 import Alert from './services/alert';
+import SafetyShutdown from './services/safetyShutdown';
 import Simulator from './services/models/simulator/simulator';
 import RunningDevice from './services/models/simulator/runningDevice';
 import {App} from './services/models/app/app';
@@ -52,6 +53,7 @@ angular.module('cordova-simulator', ['ngMessages', 'ngMaterial', 'cordova-simula
   .filter('objectToArray', ObjectToArrayFilter.Factory)
   .service('Configuration', Configuration)
   .service('Alert', Alert)
+  .service('SafetyShutdown', SafetyShutdown)
   .service('Simulator', Simulator)
   .service('RunningDevice', RunningDevice)
   .service('CordovaApp', CordovaApp)

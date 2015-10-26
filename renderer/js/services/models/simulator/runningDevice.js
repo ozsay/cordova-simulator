@@ -2,6 +2,8 @@
 
 import {isUndefined} from '../../../globals.js';
 
+let controllers = {};
+
 class _RunningDevice {
   constructor(rawRunningDevice, config) {
     this.name = rawRunningDevice.name;
@@ -13,6 +15,18 @@ class _RunningDevice {
   prepareToSave() {
     this.app = this.app.name;
     this.device = this.device.name;
+  }
+
+  setController(ctrl) {
+    controllers[this.name] = ctrl;
+  }
+
+  removeController() {
+    delete controllers[this.name];
+  }
+
+  getController() {
+    return controllers[this.name];
   }
 
   validate(config) {

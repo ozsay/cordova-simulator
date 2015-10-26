@@ -2,8 +2,6 @@
 
 import {NETWORKS} from '../globals.js';
 
-let path = require('remote').require('path');
-
 let $rootScope;
 let $timeout;
 
@@ -24,16 +22,20 @@ class DeviceCtrl {
 
     this.device = this.runningDevice.device;
     this.app = this.runningDevice.app;
+    this.runningDevice.setController(this);
 
     this.logs = '';
 
+    this.app.run(this);
     this.startListening();
     this.reloadApp();
-    this.resizeDevice();
     this.execCustomFeatures();
     this.NETWORKS = NETWORKS;
 
-    $scope.$on('$destroy', () => plugins.destroy(this));
+    $scope.$on('$destroy', () => {
+      plugins.destroy(this);
+      this.runningDevice.removeController();
+    });
   }
 
   sandbox(fn) {
@@ -90,23 +92,14 @@ class DeviceCtrl {
     this.hideWidget();
     this.startWorking();
 
-    this.orientation = 'all';
-
-    angular.forEach(this.app.configXml.widget.preference, (preference) => {
-      if (preference.$.name === 'Orientation') {
-        this.orientation = preference.$.value;
-      }
-    });
-
-    if (this.orientation === 'landscape') {
+    if (this.app.properties.orientation === 'landscape') {
       this.isLandscape = true;
-    } else if (this.orientation === 'portrait') {
+    } else if (this.app.properties.orientation === 'portrait') {
       this.isLandscape = false;
     }
 
-    if (this.app.path !== undefined) {
-      this.webViewElement.src = 'simulator-file://' + path.join(this.app.path, 'www', 'index.html');
-    }
+    this.resizeDevice();
+    this.webViewElement.src = this.app.getMain();
   }
 
   resizeDevice() {

@@ -4,10 +4,6 @@ import angular from 'angular';
 
 import Plugins from './plugins';
 
-import AngularMessageFeature from './angularMessage';
-import PlatformClassFeature from './platformClass';
-import ReloadFeature from './reload';
-
 import ActionSheetPlugin from '../cordova-plugin-actionsheet/renderer/js/service';
 import AppVersionPlugin from '../cordova-plugin-app-version/renderer/js/service';
 import BetteryStatusPlugin from '../cordova-plugin-battery-status/renderer/js/service';
@@ -20,9 +16,6 @@ import VibrationPlugin from '../cordova-plugin-vibration/renderer/js/service';
 
 angular.module('cordova-simulator.plugins', [])
   .service('plugins', Plugins)
-  .service('angularMessage', AngularMessageFeature)
-  .service('platformClass', PlatformClassFeature)
-  .service('reload', ReloadFeature)
 
   .service('actionSheetPlugin', ActionSheetPlugin)
   .service('appVersionPlugin', AppVersionPlugin)
@@ -34,10 +27,6 @@ angular.module('cordova-simulator.plugins', [])
   .service('networkInformationPlugin', NetworkInformationPlugin)
   .service('vibrationPlugin', VibrationPlugin)
   .run(['$injector', ($injector) => {
-    $injector.instantiate(PlatformClassFeature);
-    $injector.instantiate(AngularMessageFeature);
-    $injector.instantiate(ReloadFeature);
-
     $injector.instantiate(ActionSheetPlugin);
     $injector.instantiate(AppVersionPlugin);
     $injector.instantiate(BetteryStatusPlugin);

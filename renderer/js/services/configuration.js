@@ -111,7 +111,6 @@ export default class Configuration {
   }
 
   save(cb) {
-    console.log('save');
     cb = cb || angular.noop;
     fs.writeFile(FILE_PATH, angular.toJson(this._prepareToSave($rootScope.configuration), true), (err) => cb(err));
   }

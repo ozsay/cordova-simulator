@@ -13,7 +13,7 @@
       </md-fab-trigger>
       <md-fab-actions>
         <md-button aria-label="Rotation" class="md-fab md-raised md-mini md-primary" ng-click="runningDevice.rotateDevice()"
-                   ng-disabled="runningDevice.orientation !== 'default' && runningDevice.orientation !== 'all'">
+                   ng-disabled="runningDevice.app.properties.orientation !== 'default' && runningDevice.app.properties.orientation !== 'all'">
           <md-tooltip>
             Rotate screen
           </md-tooltip>

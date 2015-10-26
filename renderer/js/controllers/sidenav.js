@@ -1,7 +1,5 @@
 /*jshint esnext: true */
 
-import {SITE} from '../globals.js';
-
 export default class SidenavCtrl {
   constructor($rootScope, configuration) {
     this.$rootScope = $rootScope;

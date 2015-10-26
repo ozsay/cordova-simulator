@@ -8,6 +8,5 @@ browser/alert.js
 browser/index.js
 browser/protocols.js
 browser/versions.js
-plugins/browser/reload.js
 
 tmp/

@@ -1,15 +1,14 @@
 /*jshint esnext: true */
 
-import {SITE, REPOSITORY, ISSUES, NEW_ISSUE} from '../globals.js';
-
 let app = require('remote').require('app');
 let browserWindow = require('remote').getCurrentWindow();
 
 export default class ToolbarCtrl {
-  constructor($rootScope, $mdDialog, config) {
+  constructor($rootScope, $mdDialog, config, safetyShutdown) {
     this.$rootScope = $rootScope;
     this.$mdDialog = $mdDialog;
     this.config = config;
+    this.safetyShutdown = safetyShutdown;
   }
 
   openAppConfig(app) {
@@ -45,7 +44,9 @@ export default class ToolbarCtrl {
   }
 
   reload() {
-    browserWindow.reload();
+    this.safetyShutdown.exec().finally(() => {
+      browserWindow.reload();
+    });
   }
 
   openDevTools() {
@@ -80,4 +81,4 @@ export default class ToolbarCtrl {
   }
 }
 
-ToolbarCtrl.$inject = ['$rootScope', '$mdDialog', 'Configuration'];
+ToolbarCtrl.$inject = ['$rootScope', '$mdDialog', 'Configuration', 'SafetyShutdown'];
