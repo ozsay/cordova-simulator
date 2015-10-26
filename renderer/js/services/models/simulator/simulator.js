@@ -23,11 +23,12 @@ class _Simulator {
 
     if (this.runningDevices[name] !== undefined) {
       throw new Error(device.name + ' is already running ' + app.name);
+    } else if (!app.enabled) {
+      throw new Error(app.name + ' is disabled');
     } else {
       this.runningDevices[name] = runningDevice.createFromDeviceAndApp(name, app, device);
+      $rootScope.$emit('request-to-save');
     }
-
-    $rootScope.$emit('request-to-save');
   }
 
   removeRunningDevice(app, device) {

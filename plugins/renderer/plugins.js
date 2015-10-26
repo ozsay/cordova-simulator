@@ -12,24 +12,6 @@ export default class Plugins {
     customFeatures = {};
   }
 
-  destroy(sender) {
-    angular.forEach(customFeatures, (customFeature) => {
-      if (customFeature.destroy !== undefined) {
-        customFeature.destroy(sender);
-      }
-    });
-  }
-
-  registerCustomFeature(name, customFeature) {
-    customFeatures[name] = customFeature;
-  }
-
-  execCustomFeatures(sender) {
-    angular.forEach(customFeatures, (customFeature) => {
-      customFeature.exec(sender);
-    });
-  }
-
   registerCommand(plugin, method, fn, keepRequest) {
     if (pluginsList[plugin] === undefined) {
         pluginsList[plugin] = {};

@@ -29,11 +29,9 @@ class DeviceCtrl {
     this.app.run(this);
     this.startListening();
     this.reloadApp();
-    this.execCustomFeatures();
     this.NETWORKS = NETWORKS;
 
     $scope.$on('$destroy', () => {
-      plugins.destroy(this);
       this.runningDevice.removeController();
     });
   }
@@ -44,10 +42,6 @@ class DeviceCtrl {
 
   watch(fn, cb) {
     this.$scope.$watch(fn, cb);
-  }
-
-  execCustomFeatures() {
-    plugins.execCustomFeatures(this);
   }
 
   startListening() {

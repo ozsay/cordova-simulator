@@ -16,16 +16,6 @@ import VibrationPlugin from '../cordova-plugin-vibration/renderer/js/service';
 
 angular.module('cordova-simulator.plugins', [])
   .service('plugins', Plugins)
-
-  .service('actionSheetPlugin', ActionSheetPlugin)
-  .service('appVersionPlugin', AppVersionPlugin)
-  .service('betteryStatusPlugin', BetteryStatusPlugin)
-  .service('clipboardPlugin', ClipboardPlugin)
-  .service('devicePlugin', DevicePlugin)
-  .service('dialogsPlugin', DialogsPlugin)
-  .service('flashlightPlugin', FlashlightPlugin)
-  .service('networkInformationPlugin', NetworkInformationPlugin)
-  .service('vibrationPlugin', VibrationPlugin)
   .run(['$injector', ($injector) => {
     $injector.instantiate(ActionSheetPlugin);
     $injector.instantiate(AppVersionPlugin);

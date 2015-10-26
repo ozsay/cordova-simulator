@@ -1,9 +1,10 @@
 /*jshint esnext: true */
 
 export default class SidenavCtrl {
-  constructor($rootScope, configuration) {
+  constructor($rootScope, configuration, alert) {
     this.$rootScope = $rootScope;
 
+    this.alert = alert;
     this.configuration = configuration;
   }
 
@@ -29,9 +30,13 @@ export default class SidenavCtrl {
     } else {
       var app = this.$rootScope.configuration.apps[appName];
 
-      this.$rootScope.configuration.simulator.addRunningDevice(app, device);
+      try {
+        this.$rootScope.configuration.simulator.addRunningDevice(app, device);
+      } catch (e) {
+        this.alert.warning(e.message);
+      }
     }
   }
 }
 
-SidenavCtrl.$inject = ['$rootScope', 'Configuration'];
+SidenavCtrl.$inject = ['$rootScope', 'Configuration', 'Alert'];
