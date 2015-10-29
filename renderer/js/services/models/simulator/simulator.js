@@ -6,7 +6,7 @@ let $rootScope;
 
 let runningDevice;
 
-class _Simulator {
+export default class Simulator {
   constructor(rawSimulator, config) {
     this.AppsMenuToggle = rawSimulator.AppsMenuToggle;
     this.DevicesMenuToggle = rawSimulator.DevicesMenuToggle;
@@ -54,18 +54,18 @@ class _Simulator {
 
     return isValid;
   }
-}
 
-export default class Simulator {
-  constructor(_$rootScope, _runningDevice) {
+  static create(rawSimulator, config) {
+    return new Simulator(rawSimulator, config);
+  }
+
+  static factory(_$rootScope, _runningDevice) {
     $rootScope = _$rootScope;
 
     runningDevice = _runningDevice;
-  }
 
-  create(rawSimulator, config) {
-    return new _Simulator(rawSimulator, config);
+    return Simulator;
   }
 }
 
-Simulator.$inject = ['$rootScope', 'RunningDevice'];
+Simulator.factory.$inject = ['$rootScope', 'RunningDevice'];

@@ -8,14 +8,14 @@ let chokidar = require('remote').require('chokidar');
 import {isTrue} from '../../../globals.js';
 
 import PlatformClassFeature from '../utils/platformClass';
-//import AngularMessageFeature from '../utils/angularMessage';
-import {_App} from './app.js';
+import AngularMessageFeature from '../utils/angularMessage';
+import App from './app.js';
 
 let safetyShutdown;
 
 let watchers = {};
 
-class _CordovaApp extends _App {
+export default class CordovaApp extends App {
   constructor(rawCordovaApp, config) {
     super(rawCordovaApp, config);
 
@@ -58,7 +58,7 @@ class _CordovaApp extends _App {
   }
 
   run(runningDeviceCtrl) {
-    //AngularMessageFeature.start(runningDeviceCtrl);
+    AngularMessageFeature.start(runningDeviceCtrl);
     PlatformClassFeature.start(runningDeviceCtrl);
   }
 
@@ -127,20 +127,20 @@ class _CordovaApp extends _App {
                                        isTrue(this.readErr) ||
                                        isTrue(this.locationErr)));
   }
-}
 
-export default class CordovaApp {
-  constructor(_safetyShutdown) {
+  static create(rawCordovaApp, config) {
+      return new CordovaApp(rawCordovaApp, config);
+  }
+  
+  static factory(_safetyShutdown) {
     safetyShutdown = _safetyShutdown;
 
     safetyShutdown.register(() => {
       angular.forEach(watchers, (watcher) => watcher.close());
     });
-  }
 
-  create(rawCordovaApp, config) {
-      return new _CordovaApp(rawCordovaApp, config);
+    return CordovaApp;
   }
 }
 
-CordovaApp.$inject = ['SafetyShutdown'];
+CordovaApp.factory.$inject = ['SafetyShutdown'];

@@ -2,7 +2,7 @@
 
 import {SUPPORTED_PLATFORMS, FEATURES, isUndefined} from '../../globals.js';
 
-class _Preset {
+export default class Preset {
   constructor(rawPreset, config) {
     this.apply(rawPreset);
   }
@@ -33,12 +33,14 @@ class _Preset {
 
     return isValid;
   }
-}
 
-export default class Preset {
-  create(rawPreset, config) {
-    return new _Preset(rawPreset, config);
+  static create(rawPreset, config) {
+    return new Preset(rawPreset, config);
+  }
+
+  static factory() {
+    return Preset;
   }
 }
 
-//Preset.$inject = [];
+//Preset.factory.$inject = [];

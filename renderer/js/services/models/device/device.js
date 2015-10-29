@@ -2,38 +2,22 @@
 
 import {UUID_PATTERN, isUndefined} from '../../../globals.js';
 
-import {_DeviceStatus} from './status';
+import DeviceStatus from './status';
 
-let $timeout;
+import ActionSheet from './actionsheet';
+import Vibration from './vibration';
 
-class _Device {
+let $injector;
+
+export default class Device {
   constructor(rawDevice, config) {
     this.name = rawDevice.name;
     this.uuid = rawDevice.uuid;
 
     this.preset = config.presets[rawDevice.preset];
-    this.status = new _DeviceStatus(rawDevice, config);
-  }
+    this.status = new DeviceStatus(rawDevice, config);
 
-  vibrate(sender, duration, cb) {
-    cb = cb || angular.noop;
-    if (sender.vibration !== undefined) {
-        $timeout.cancel(sender.vibration);
-    }
-
-    sender.elem.addClass("shake shake-constant");
-
-    sender.vibration = $timeout(function() {
-        sender.elem.removeClass("shake shake-constant");
-        cb();
-    }, duration);
-  }
-
-  cancelVibration(sender) {
-      if (sender.vibration !== undefined) {
-          $timeout.cancel(sender.vibration);
-          sender.elem.removeClass("shake shake-constant");
-      }
+    this.setActions();
   }
 
   apply(device) {
@@ -54,16 +38,29 @@ class _Device {
             !UUID_PATTERN.test(this.uuid)) &&
             this.status.validate());
   }
-}
 
-export default class Device {
-  constructor(_$timeout) {
-    $timeout = _$timeout;
+  setActions() {
+    this.showActionSheet = ActionSheet.show;
+    this.hideActionSheet = ActionSheet.hide;
+
+    this.vibrate = Vibration.vibrate;
+    this.cancelVibration = Vibration.cancelVibration;
   }
 
-  create(rawDevice, config) {
-    return new _Device(rawDevice, config);
+  static create(rawDevice, config) {
+    return new Device(rawDevice, config);
+  }
+
+  static factory(_$injector) {
+    $injector = _$injector;
+
+    $injector.instantiate(DeviceStatus.factory);
+
+    $injector.instantiate(ActionSheet.factory);
+    $injector.instantiate(Vibration.factory);
+
+    return Device;
   }
 }
 
-Device.$inject = ['$timeout'];
+Device.factory.$inject = ['$injector'];

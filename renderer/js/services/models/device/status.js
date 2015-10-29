@@ -4,7 +4,7 @@ import {NETWORKS, isUndefined, isBoolean, isNumber} from '../../../globals.js';
 
 let $rootScope;
 
-export class _DeviceStatus {
+export default class DeviceStatus {
   constructor(rawDevice, config) {
     this.apply(rawDevice);
   }
@@ -50,13 +50,10 @@ export class _DeviceStatus {
             !isNumber(this.battery.level) ||
             (this.battery.level < 0 || this.battery.level > 100));
   }
-}
 
-
-export class DeviceStatus {
-  constructor(_$rootScope) {
+  static factory(_$rootScope) {
     $rootScope = _$rootScope;
   }
 }
 
-DeviceStatus.$inject = ['$rootScope'];
+DeviceStatus.factory.$inject = ['$rootScope'];

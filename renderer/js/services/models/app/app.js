@@ -10,7 +10,7 @@ let safetyShutdown;
 
 let watchers = {};
 
-export class _App {
+export default class App {
   constructor(rawApp, config) {
     this.name = rawApp.name;
 
@@ -95,10 +95,8 @@ export class _App {
     return !(isUndefined(this.name) ||
              isUndefined(this.path));
   }
-}
 
-export class App {
-  constructor(_$rootScope, _safetyShutdown) {
+  static factory(_$rootScope, _safetyShutdown) {
     $rootScope = _$rootScope;
 
     safetyShutdown = _safetyShutdown;
@@ -109,4 +107,4 @@ export class App {
   }
 }
 
-App.$inject = ['$rootScope', 'SafetyShutdown'];
+App.factory.$inject = ['$rootScope', 'SafetyShutdown'];

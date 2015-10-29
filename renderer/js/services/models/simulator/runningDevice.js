@@ -4,7 +4,7 @@ import {isUndefined} from '../../../globals.js';
 
 let controllers = {};
 
-class _RunningDevice {
+export default class RunningDevice {
   constructor(rawRunningDevice, config) {
     this.name = rawRunningDevice.name;
 
@@ -35,21 +35,23 @@ class _RunningDevice {
             isUndefined(config.devices[this.device]));
 
   }
-}
 
-export default class RunningDevice {
-  create(rawRunningDevice, config) {
-    return new _RunningDevice(rawRunningDevice, config);
+  static create(rawRunningDevice, config) {
+    return new RunningDevice(rawRunningDevice, config);
   }
 
-  createFromDeviceAndApp(name, app, device) {
+  static createFromDeviceAndApp(name, app, device) {
     var raw = {name: name, app: app.name, device: device.name};
     var config = {apps: {}, devices: {}};
     config.apps[app.name] = app;
     config.devices[device.name] = device;
 
-    return new _RunningDevice(raw, config);
+    return new RunningDevice(raw, config);
+  }
+
+  static factory() {
+    return RunningDevice;
   }
 }
 
-//RunningDevice.$inject = [];
+//RunningDevice.factory.$inject = [];

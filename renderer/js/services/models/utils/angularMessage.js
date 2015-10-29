@@ -1,6 +1,6 @@
 /*jshint esnext: true */
 
-import angularMessageInject from './lalaland.txt!text';
+import angularMessageInject from './angularMessageInject.js!text';
 
 export default class AngularMessageFeature {
   static start(runningDeviceCtrl) {

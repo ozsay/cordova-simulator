@@ -28,11 +28,10 @@ import Alert from './services/alert';
 import SafetyShutdown from './services/safetyShutdown';
 import Simulator from './services/models/simulator/simulator';
 import RunningDevice from './services/models/simulator/runningDevice';
-import {App} from './services/models/app/app';
+import App from './services/models/app/app';
 import CordovaApp from './services/models/app/cordovaApp';
 import Preset from './services/models/preset';
 import DeviceModel from './services/models/device/device';
-import {DeviceStatus} from './services/models/device/status';
 
 angular.module('cordova-simulator', ['ngMessages', 'ngMaterial', 'cordova-simulator.plugins'])
   .controller('appCtrl', AppCtrl)
@@ -54,19 +53,18 @@ angular.module('cordova-simulator', ['ngMessages', 'ngMaterial', 'cordova-simula
   .service('Configuration', Configuration)
   .service('Alert', Alert)
   .service('SafetyShutdown', SafetyShutdown)
-  .service('Simulator', Simulator)
-  .service('RunningDevice', RunningDevice)
-  .service('CordovaApp', CordovaApp)
-  .service('Preset', Preset)
-  .service('Device', DeviceModel)
+  .service('Simulator', Simulator.factory)
+  .service('RunningDevice', RunningDevice.factory)
+  .service('CordovaApp', CordovaApp.factory)
+  .service('Preset', Preset.factory)
+  .service('Device', DeviceModel.factory)
   .config(['$sceProvider', ($sceProvider) => {
     $sceProvider.enabled(false);
   }])
   .run(['$rootScope', '$injector', ($rootScope, $injector) => {
     $rootScope.globals = globals;
 
-    $injector.instantiate(App);
-    $injector.instantiate(DeviceStatus);
+    $injector.instantiate(App.factory);
   }])
   .run(['Configuration', (configuration) => {
     configuration.load();
