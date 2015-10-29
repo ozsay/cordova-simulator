@@ -5,6 +5,7 @@ import {UUID_PATTERN, isUndefined} from '../../../globals.js';
 import DeviceStatus from './status';
 
 import ActionSheet from './actionsheet';
+import Dialogs from './dialogs';
 import Vibration from './vibration';
 
 let $injector;
@@ -40,6 +41,11 @@ export default class Device {
   }
 
   setActions() {
+    this.alert = Dialogs.alert;
+    this.confirm = Dialogs.confirm;
+    this.prompt = Dialogs.prompt;
+    this.beep = Dialogs.beep;
+
     this.showActionSheet = ActionSheet.show;
     this.hideActionSheet = ActionSheet.hide;
 
@@ -57,6 +63,7 @@ export default class Device {
     $injector.instantiate(DeviceStatus.factory);
 
     $injector.instantiate(ActionSheet.factory);
+    $injector.instantiate(Dialogs.factory);
     $injector.instantiate(Vibration.factory);
 
     return Device;

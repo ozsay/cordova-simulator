@@ -1,6 +1,6 @@
 /*jshint esnext: true */
 
-import template from '../../../../partials/device/actionsheet.html!text';
+import template from 'renderer/partials/device/actionsheet.html!text';
 
 let $compile;
 let $q;

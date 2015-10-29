@@ -19,6 +19,7 @@ System.config({
     "angular-aria": "npm:angular-aria@1.4.7",
     "angular-material": "npm:angular-material@0.11.3",
     "angular-messages": "npm:angular-messages@1.4.7",
+    "audio": "github:ozsay/plugin-audio@0.0.1",
     "babel": "npm:babel-core@5.8.29",
     "babel-runtime": "npm:babel-runtime@5.8.29",
     "cordova-plugins": "plugins/renderer/module",

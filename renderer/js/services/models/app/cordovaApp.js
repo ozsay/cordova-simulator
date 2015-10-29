@@ -11,6 +11,8 @@ import PlatformClassFeature from '../utils/platformClass';
 import AngularMessageFeature from '../utils/angularMessage';
 import App from './app.js';
 
+let $injector;
+
 let safetyShutdown;
 
 let watchers = {};
@@ -131,9 +133,13 @@ export default class CordovaApp extends App {
   static create(rawCordovaApp, config) {
       return new CordovaApp(rawCordovaApp, config);
   }
-  
-  static factory(_safetyShutdown) {
+
+  static factory(_$injector, _safetyShutdown) {
+    $injector = _$injector;
+
     safetyShutdown = _safetyShutdown;
+
+    $injector.instantiate(AngularMessageFeature.factory);
 
     safetyShutdown.register(() => {
       angular.forEach(watchers, (watcher) => watcher.close());
@@ -143,4 +149,4 @@ export default class CordovaApp extends App {
   }
 }
 
-CordovaApp.factory.$inject = ['SafetyShutdown'];
+CordovaApp.factory.$inject = ['$injector', 'SafetyShutdown'];
