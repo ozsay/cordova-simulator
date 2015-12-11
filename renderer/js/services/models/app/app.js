@@ -2,11 +2,11 @@
 
 import {isUndefined} from '../../../globals.js';
 
-let chokidar = require('remote').require('chokidar');
-
 let $rootScope;
 
-let safetyShutdown;
+let chokidar;
+
+let safeShutdown;
 
 let watchers = {};
 
@@ -96,15 +96,17 @@ export default class App {
              isUndefined(this.path));
   }
 
-  static factory(_$rootScope, _safetyShutdown) {
+  static factory(_$rootScope, _chokidar, _safeShutdown) {
     $rootScope = _$rootScope;
 
-    safetyShutdown = _safetyShutdown;
+    chokidar = _chokidar;
 
-    safetyShutdown.register(() => {
+    safeShutdown = _safeShutdown;
+
+    safeShutdown.register(() => {
       angular.forEach(watchers, (watcher) => watcher.close());
     });
   }
 }
 
-App.factory.$inject = ['$rootScope', 'SafetyShutdown'];
+App.factory.$inject = ['$rootScope', 'chokidar', 'safeShutdown'];

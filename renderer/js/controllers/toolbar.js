@@ -1,14 +1,12 @@
 /*jshint esnext: true */
 
-let app = require('remote').require('app');
-let browserWindow = require('remote').getCurrentWindow();
-
 export default class ToolbarCtrl {
-  constructor($rootScope, $mdDialog, config, safetyShutdown) {
+  constructor($rootScope, $mdDialog, app, currentWindow, config) {
     this.$rootScope = $rootScope;
     this.$mdDialog = $mdDialog;
     this.config = config;
-    this.safetyShutdown = safetyShutdown;
+    this.app = app;
+    this.currentWindow = currentWindow;
   }
 
   openAppConfig(app) {
@@ -44,13 +42,11 @@ export default class ToolbarCtrl {
   }
 
   reload() {
-    this.safetyShutdown.exec().finally(() => {
-      browserWindow.reload();
-    });
+    this.currentWindow.safeReload();
   }
 
   openDevTools() {
-    browserWindow.openDevTools();
+    this.currentWindow.openDevTools();
   }
 
   openCordovaDetails() {
@@ -77,8 +73,8 @@ export default class ToolbarCtrl {
   }
 
   quit() {
-    app.quit();
+    this.app.safeQuit();
   }
 }
 
-ToolbarCtrl.$inject = ['$rootScope', '$mdDialog', 'Configuration', 'SafetyShutdown'];
+ToolbarCtrl.$inject = ['$rootScope', '$mdDialog', 'app', 'currentWindow', 'Configuration'];

@@ -2,14 +2,16 @@
 
 import BasicDialog from './basicDialog';
 
-let fileDialog = require('remote').require('dialog');
-
 export default class AppDialog extends BasicDialog {
-  constructor($rootScope, $timeout, $mdDialog, app) {
+  constructor($rootScope, $timeout, $mdDialog, fileDialog, app) {
     super($mdDialog, app === undefined, app !== undefined ? angular.copy(app) : {});
 
     this.$timeout = $timeout;
     this.$rootScope = $rootScope;
+
+    this.fileDialog = fileDialog;
+
+    console.log(fileDialog);
 
     this.dialogType = 'app';
     this.app = this.model;
@@ -20,7 +22,7 @@ export default class AppDialog extends BasicDialog {
   }
 
   openFileDialog() {
-    fileDialog.showOpenDialog(null, {
+    this.fileDialog.showOpenDialog(null, {
       properties: ['openDirectory']
     }, (files) => {
       if (files) {
@@ -42,4 +44,4 @@ export default class AppDialog extends BasicDialog {
   }
 }
 
-AppDialog.$inject = ['$rootScope', '$timeout', '$mdDialog', 'model'];
+AppDialog.$inject = ['$rootScope', '$timeout', '$mdDialog', 'dialog', 'model'];

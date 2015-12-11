@@ -1,12 +1,14 @@
 /*jshint esnext: true */
 
-let ipc = require('ipc');
-
 let $mdToast;
 
+let ipc;
+
 export default class Alert {
-  constructor(_$mdToast) {
+  constructor(_$mdToast, _ipc) {
     $mdToast = _$mdToast;
+    
+    ipc = _ipc;
 
     ipc.on('alert-from-main', (type, title, message) => {
       switch (type) {
@@ -39,4 +41,4 @@ export default class Alert {
   }
 }
 
-Alert.$inject = ['$mdToast'];
+Alert.$inject = ['$mdToast', 'ipc'];

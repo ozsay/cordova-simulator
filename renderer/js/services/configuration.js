@@ -1,11 +1,7 @@
 /*jshint esnext: true */
 
-let path = require('remote').require('path');
-let fs = require('remote').require('fs');
-let shell = require('shell');
-let clipboard = require('clipboard');
 
-const FILE_PATH = path.join(require('remote').require('os').homedir(), '.cordovaSimulatorConfig.json');
+let FILE_PATH;
 const DEFAULT_FILE_PATH = 'defaultConfig.json';
 const GIST_URL = 'https://api.github.com/gists/6b6ae17c1997cf20703f';
 const GIST_FILE_NAME = 'cordova-simulator-config';
@@ -15,22 +11,37 @@ let $rootScope;
 let $mdDialog;
 let alert;
 
+let path;
+let fs;
+let os;
+let shell;
+let clipboard;
+
 let cordovaApp;
 let preset;
 let simulator;
 let device;
 
 export default class Configuration {
-  constructor(_$http, _$rootScope, _$mdDialog, _alert, _cordovaApp, _preset, _simulator, _device) {
+  constructor(_$http, _$rootScope, _$mdDialog, _path, _fs, _os, _shell, _clipboard, _alert, _cordovaApp, _preset, _simulator, _device) {
     $http = _$http;
     $rootScope = _$rootScope;
     $mdDialog = _$mdDialog;
+
+    path = _path;
+    fs = _fs;
+    shell = _shell;
+    os = _os;
+    clipboard = _clipboard;
 
     alert = _alert;
     cordovaApp = _cordovaApp;
     preset = _preset;
     simulator = _simulator;
     device = _device;
+
+    FILE_PATH = path.join(os.homedir(), '.cordovaSimulatorConfig.json');
+    console.log(FILE_PATH);
   }
 
   _createConfig(rawConfig) {
@@ -233,4 +244,4 @@ export default class Configuration {
   }
 }
 
-Configuration.$inject = ['$http', '$rootScope', '$mdDialog', 'Alert', 'CordovaApp', 'Preset', 'Simulator', 'Device'];
+Configuration.$inject = ['$http', '$rootScope', '$mdDialog', 'path', 'fs', 'os', 'shell', 'clipboard', 'Alert', 'CordovaApp', 'Preset', 'Simulator', 'Device'];

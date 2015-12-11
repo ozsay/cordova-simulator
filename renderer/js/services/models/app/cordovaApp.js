@@ -1,9 +1,5 @@
 /*jshint esnext: true */
 
-let fs = require('remote').require('fs');
-let path = require('remote').require('path');
-let parser = require('remote').require('xml2js').Parser();
-let chokidar = require('remote').require('chokidar');
 
 import {isTrue} from '../../../globals.js';
 
@@ -13,7 +9,12 @@ import App from './app.js';
 
 let $injector;
 
-let safetyShutdown;
+let fs;
+let path;
+let parser;
+let chokidar;
+
+let safeShutdown;
 
 let watchers = {};
 
@@ -24,12 +25,14 @@ export default class CordovaApp extends App {
     this.type = 'cordova';
     this.loadConfigXml(() => this.fieldsFromConfigXml());
     this.checkIndexFile();
+    this.angularMessage = rawCordovaApp.angularMessage;
   }
 
   apply(app) {
     super.apply(app);
 
     this.type = 'cordova';
+    this.angularMessage = app.angularMessage;
 
     this.loadConfigXml(() => this.fieldsFromConfigXml());
     this.checkIndexFile();
@@ -134,14 +137,19 @@ export default class CordovaApp extends App {
       return new CordovaApp(rawCordovaApp, config);
   }
 
-  static factory(_$injector, _safetyShutdown) {
+  static factory(_$injector, _fs, _path, _xml2js, _chokidar, _safeShutdown) {
     $injector = _$injector;
 
-    safetyShutdown = _safetyShutdown;
+    fs = _fs;
+    path = _path;
+    parser = new _xml2js.Parser();
+    chokidar = _chokidar;
+
+    safeShutdown = _safeShutdown;
 
     $injector.instantiate(AngularMessageFeature.factory);
 
-    safetyShutdown.register(() => {
+    safeShutdown.register(() => {
       angular.forEach(watchers, (watcher) => watcher.close());
     });
 
@@ -149,4 +157,4 @@ export default class CordovaApp extends App {
   }
 }
 
-CordovaApp.factory.$inject = ['$injector', 'SafetyShutdown'];
+CordovaApp.factory.$inject = ['$injector', 'fs', 'path', 'xml2js', 'chokidar', 'safeShutdown'];

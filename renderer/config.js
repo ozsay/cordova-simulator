@@ -17,6 +17,7 @@ System.config({
     "angular": "npm:angular@1.4.7",
     "angular-animate": "npm:angular-animate@1.4.7",
     "angular-aria": "npm:angular-aria@1.4.7",
+    "angular-electron": "npm:angular-electron@0.1.11",
     "angular-material": "npm:angular-material@0.11.3",
     "angular-messages": "npm:angular-messages@1.4.7",
     "audio": "github:ozsay/plugin-audio@0.0.1",
@@ -51,6 +52,10 @@ System.config({
       "util": "npm:util@0.10.3"
     },
     "npm:angular-animate@1.4.7": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:angular-electron@0.1.11": {
+      "angular": "npm:angular@1.4.7",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:angular-material@0.11.3": {
